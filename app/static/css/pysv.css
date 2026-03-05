@@ -1,0 +1,694 @@
+/* ==========================================================================
+   Python SV — Tierra de Volcanes
+   Salvadoran volcanic identity + clean community energy
+   ========================================================================== */
+
+:root {
+  --pysv-cobalt: #0F1F42;
+  --pysv-cobalt-dark: #080F22;
+  --pysv-blue: #4A88D9;
+  --pysv-crater: #00B4D8;
+  --pysv-gold: #E8A817;
+  --pysv-volcanic: #D4553A;
+  --pysv-tropical: #2A9D6E;
+  --pysv-amber: #F0C050;
+
+  --pysv-cream: #FAF8F4;
+  --pysv-sand: #F0EDE6;
+  --pysv-warm-300: #A09889;
+  --pysv-warm-400: #7A7265;
+  --pysv-warm-700: #231F1B;
+  --pysv-white: #ffffff;
+  --pysv-white-5: rgba(255,255,255,0.05);
+  --pysv-white-6: rgba(255,255,255,0.06);
+  --pysv-white-8: rgba(255,255,255,0.08);
+  --pysv-white-10: rgba(255,255,255,0.10);
+  --pysv-white-15: rgba(255,255,255,0.15);
+  --pysv-white-20: rgba(255,255,255,0.20);
+  --pysv-white-30: rgba(255,255,255,0.30);
+  --pysv-white-35: rgba(255,255,255,0.35);
+  --pysv-white-45: rgba(255,255,255,0.45);
+  --pysv-white-50: rgba(255,255,255,0.50);
+  --pysv-white-55: rgba(255,255,255,0.55);
+  --pysv-white-60: rgba(255,255,255,0.60);
+  --pysv-white-70: rgba(255,255,255,0.70);
+
+  --font-display: 'Bricolage Grotesque', 'Georgia', serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+
+  --section-py: 7rem;
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-full: 9999px;
+
+  --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-gold: 0 8px 32px rgba(232,168,23,0.2);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration: 0.4s;
+}
+
+/* Skip link — accessible, hidden until focused */
+.pysv-skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  background: var(--pysv-gold);
+  color: var(--pysv-cobalt);
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: top 0.2s var(--ease);
+}
+.pysv-skip-link:focus {
+  top: 0.75rem;
+  outline: 2px solid var(--pysv-gold);
+  outline-offset: 2px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--pysv-warm-700);
+  background: var(--pysv-cream);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; }
+
+a {
+  color: var(--pysv-blue);
+  text-decoration: none;
+  transition: color var(--duration) var(--ease);
+}
+a:hover { color: var(--pysv-gold); }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Grain overlay — shared texture */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+
+/* ==========================================================================
+   Navbar — minimal, transparent-feeling
+   ========================================================================== */
+
+.pysv-navbar {
+  background: var(--pysv-cobalt);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--pysv-white-6);
+}
+
+.pysv-navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pysv-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--pysv-white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.pysv-navbar .navbar-brand:hover { color: var(--pysv-gold); }
+
+.pysv-navbar .nav-link {
+  color: var(--pysv-white-50) !important;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 1rem 0.75rem !important;
+  transition: color var(--duration) var(--ease);
+}
+.pysv-navbar .nav-link:hover { color: var(--pysv-white) !important; }
+
+/* Language toggle */
+.pysv-lang-toggle {
+  background: var(--pysv-white-8);
+  border: none;
+  color: var(--pysv-white-60);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.pysv-lang-toggle:hover {
+  background: var(--pysv-white-15);
+  color: var(--pysv-white);
+}
+
+
+/* ==========================================================================
+   Hero — centered, dramatic, full presence
+   ========================================================================== */
+
+.pysv-hero {
+  background: url('/static/img/hero-izalco.jpg') center 40% / cover no-repeat;
+  color: var(--pysv-white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Dark overlay for text readability */
+.pysv-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15,31,66,0.70) 0%,
+    rgba(15,31,66,0.55) 50%,
+    rgba(15,31,66,1) 100%
+  );
+  pointer-events: none;
+}
+
+.pysv-hero .container { position: relative; z-index: 10; }
+
+.pysv-hero h1 {
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 0 auto 1.5rem;
+  line-height: 1.05;
+  max-width: 800px;
+}
+
+.pysv-hero h1 strong {
+  color: var(--pysv-gold);
+  font-weight: 800;
+  position: relative;
+}
+
+/* Underline glow on "Python" — volcanic */
+.pysv-hero h1 strong::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--pysv-gold), var(--pysv-volcanic));
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+.pysv-hero .lead {
+  font-size: 1.15rem;
+  color: var(--pysv-white-70);
+  max-width: 480px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+.pysv-hero .lead p { margin-bottom: 0; }
+
+/* Scroll hint — bouncing chevron at bottom of hero */
+.pysv-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--pysv-white-60);
+  z-index: 10;
+  animation: scroll-bounce 2s var(--ease) infinite;
+  transition: color var(--duration) var(--ease), opacity var(--duration) var(--ease);
+  text-decoration: none;
+}
+.pysv-scroll-hint:hover { color: var(--pysv-white); }
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn-pysv-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--pysv-gold);
+  color: var(--pysv-cobalt);
+  border: none;
+  padding: 0.85rem 2.25rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: var(--radius-full);
+  transition: all var(--duration) var(--ease);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+}
+.btn-pysv-gold:hover {
+  background: var(--pysv-amber);
+  color: var(--pysv-cobalt);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold), 0 4px 16px rgba(212,85,58,0.12);
+}
+
+/* ==========================================================================
+   Sections
+   ========================================================================== */
+
+.pysv-section {
+  padding: var(--section-py) 0;
+  position: relative;
+}
+
+.pysv-section-dark {
+  background: var(--pysv-cobalt);
+  color: var(--pysv-white);
+}
+
+/* Photo background sections */
+.pysv-section-photo {
+  background-color: var(--pysv-cobalt);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--pysv-white);
+  position: relative;
+  transition: background-image 0.5s ease;
+}
+.pysv-section-photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(15,31,66,1) 0%,
+    rgba(15,31,66,0.78) 15%,
+    rgba(15,31,66,0.78) 85%,
+    rgba(15,31,66,1) 100%
+  );
+  pointer-events: none;
+}
+#contacto.pysv-section-photo::before {
+  background: rgba(15,31,66,0.88);
+}
+.pysv-section-photo .container {
+  position: relative;
+  z-index: 1;
+}
+
+.pysv-section-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pysv-gold);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.pysv-section-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  color: var(--pysv-warm-700);
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+}
+
+.pysv-section-dark .pysv-section-title,
+.pysv-section-photo .pysv-section-title { color: var(--pysv-white); }
+
+.pysv-section-subtitle {
+  color: var(--pysv-warm-400);
+  font-size: 1.05rem;
+  margin-bottom: 3rem;
+  max-width: 460px;
+  line-height: 1.7;
+}
+.pysv-section-dark .pysv-section-subtitle,
+.pysv-section-photo .pysv-section-subtitle { color: var(--pysv-white-45); }
+
+/* ==========================================================================
+   Context Timeline — numbered, vertical, dramatic
+   ========================================================================== */
+
+.pysv-context-timeline {
+  position: relative;
+  padding-left: 4rem;
+  margin: 2.5rem auto 0;
+  max-width: 640px;
+}
+
+.pysv-context-timeline::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--pysv-volcanic), var(--pysv-gold), var(--pysv-tropical));
+}
+
+.context-item {
+  position: relative;
+  padding-bottom: 3rem;
+}
+.context-item:last-child { padding-bottom: 0; }
+
+.context-marker {
+  position: absolute;
+  left: -4rem;
+  top: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--pysv-white);
+  z-index: 1;
+}
+.context-marker--problem {
+  background: var(--pysv-volcanic);
+  box-shadow: 0 0 0 4px rgba(15,31,66,0.5);
+}
+.context-marker--proof {
+  background: var(--pysv-gold);
+  color: var(--pysv-cobalt);
+  box-shadow: 0 0 0 4px rgba(15,31,66,0.5);
+}
+.context-marker--ask {
+  background: var(--pysv-tropical);
+  box-shadow: 0 0 0 4px rgba(15,31,66,0.5);
+}
+
+.context-content h5 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--pysv-white);
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+.context-content p {
+  font-size: 0.95rem;
+  color: var(--pysv-white-60);
+  margin-bottom: 0;
+  line-height: 1.75;
+}
+
+.context-content a {
+  color: var(--pysv-crater);
+  text-decoration: underline;
+  text-decoration-color: rgba(0,180,216,0.3);
+  text-underline-offset: 2px;
+  transition: color var(--duration) var(--ease), text-decoration-color var(--duration) var(--ease);
+}
+.context-content a:hover {
+  color: var(--pysv-volcanic);
+  text-decoration-color: var(--pysv-volcanic);
+}
+
+/* ==========================================================================
+   Interest form
+   ========================================================================== */
+
+.pysv-interest-form {
+  background: var(--pysv-cobalt-dark);
+  border: none;
+  border-left: 3px solid var(--pysv-gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 2.25rem 2.25rem 2.25rem 2.5rem;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.3);
+}
+
+.pysv-interest-form .form-control,
+.pysv-interest-form .form-select {
+  background: var(--pysv-white-5);
+  border: 1px solid var(--pysv-white-8);
+  border-radius: 0.4rem;
+  box-shadow: none;
+  color: var(--pysv-white);
+  padding: 0.8rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.93rem;
+  outline: none;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.pysv-interest-form .form-control::placeholder {
+  color: var(--pysv-warm-300);
+}
+
+.pysv-interest-form .form-select {
+  color: var(--pysv-warm-300);
+}
+
+.pysv-interest-form .form-select option {
+  background: var(--pysv-cobalt-dark);
+  color: var(--pysv-white);
+}
+
+.pysv-interest-form .form-select.has-value {
+  color: var(--pysv-white);
+}
+
+.pysv-interest-form .form-control:focus,
+.pysv-interest-form .form-select:focus {
+  border-color: rgba(232,168,23,0.4);
+  background: var(--pysv-white-8);
+  box-shadow: none;
+  color: var(--pysv-white);
+  outline: none;
+}
+
+/* Inline validation — shown after first submit attempt */
+.pysv-interest-form.was-submitted .form-control:invalid,
+.pysv-interest-form.was-submitted .form-select:invalid {
+  border-color: var(--pysv-volcanic);
+  box-shadow: none;
+}
+
+/* "Other" city — smooth reveal */
+.pysv-other-city {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.35s var(--ease), opacity 0.3s var(--ease), margin 0.35s var(--ease);
+  margin-bottom: 0;
+}
+.pysv-other-city.is-open {
+  max-height: 5rem;
+  opacity: 1;
+  margin-bottom: 1rem;
+}
+
+/* Form responses — share the card treatment */
+.pysv-form-done,
+.pysv-form-exists,
+.pysv-form-error {
+  background: var(--pysv-cobalt-dark);
+  border-left: 3px solid var(--pysv-gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.3);
+  text-align: center;
+  padding: 2.5rem 2rem;
+}
+
+.pysv-form-done p {
+  color: var(--pysv-white-60);
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+}
+
+.pysv-form-done strong {
+  color: var(--pysv-white);
+}
+
+.pysv-form-exists {
+  color: var(--pysv-white-50);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.pysv-form-exists p {
+  margin-bottom: 1.5rem;
+}
+
+.pysv-form-exists a:not(.btn-pysv-whatsapp) {
+  color: var(--pysv-gold);
+  text-decoration: underline;
+  text-decoration-color: rgba(232,168,23,0.3);
+  text-underline-offset: 3px;
+}
+.pysv-form-exists a:not(.btn-pysv-whatsapp):hover {
+  color: var(--pysv-amber);
+  text-decoration-color: var(--pysv-amber);
+}
+
+.pysv-form-error {
+  border-left-color: var(--pysv-volcanic);
+  color: var(--pysv-white-60);
+  font-size: 0.95rem;
+}
+
+.pysv-form-error p { margin: 0; }
+
+/* Success checkmark animation */
+.pysv-checkmark { margin-bottom: 1rem; }
+.pysv-checkmark-circle {
+  stroke-dasharray: 138;
+  stroke-dashoffset: 138;
+  animation: checkmark-circle 0.6s var(--ease) forwards;
+}
+.pysv-checkmark-tick {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: checkmark-tick 0.4s var(--ease) 0.4s forwards;
+}
+@keyframes checkmark-circle { to { stroke-dashoffset: 0; } }
+@keyframes checkmark-tick { to { stroke-dashoffset: 0; } }
+
+.btn-pysv-whatsapp {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  background: #25D366;
+  color: var(--pysv-white);
+  padding: 0.7rem 1.75rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.88rem;
+  transition: all var(--duration) var(--ease);
+}
+.btn-pysv-whatsapp:hover {
+  background: #20BD5A;
+  color: var(--pysv-white);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(37,211,102,0.25);
+}
+
+.pysv-spinner { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.htmx-indicator { display: none; }
+.htmx-request .htmx-indicator { display: inline-block; margin-right: 0.5rem; }
+.htmx-request { opacity: 0.7; pointer-events: none; }
+
+/* ==========================================================================
+   Footer — simple, quiet
+   ========================================================================== */
+
+.pysv-footer {
+  background: var(--pysv-cobalt-dark);
+  color: var(--pysv-white-35);
+  padding: 3rem 0 2rem;
+  font-size: 0.85rem;
+}
+
+.pysv-footer a {
+  color: var(--pysv-white-35);
+}
+.pysv-footer a:hover { color: var(--pysv-gold); }
+
+.pysv-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pysv-footer .social-links {
+  display: flex;
+  gap: 0.5rem;
+}
+.pysv-footer .social-links a {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--pysv-white-8);
+  font-size: 0.9rem;
+  transition: all var(--duration) var(--ease);
+}
+.pysv-footer .social-links a:hover {
+  border-color: var(--pysv-volcanic);
+  color: var(--pysv-volcanic);
+  background: rgba(212,85,58,0.08);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 991.98px) {
+  :root { --section-py: 5rem; }
+  .pysv-hero { padding: 7rem 0 6rem; }
+}
+
+@media (max-width: 767.98px) {
+  :root { --section-py: 3.5rem; }
+  .pysv-hero { padding: 5rem 0 4rem; }
+  .pysv-hero h1 { font-size: 2.2rem; }
+  .pysv-context-timeline { padding-left: 3.25rem; }
+  .context-marker { left: -3.25rem; width: 34px; height: 34px; font-size: 0.75rem; }
+  .pysv-footer-inner { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 575.98px) {
+  .pysv-hero h1 { font-size: 1.8rem; }
+  .pysv-navbar .nav-link { padding: 0.5rem 0.7rem !important; }
+  .pysv-interest-form { padding: 1.5rem 1.25rem 1.5rem 1.5rem; }
+}
+
+/* Noscript — hide language toggle when JS is unavailable */
+noscript .pysv-lang-toggle { display: none; }

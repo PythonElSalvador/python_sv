@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<section class="pysv-section pysv-section-dark" style="min-height: 60vh; display: flex; align-items: center;">
+  <div class="container text-center">
+    <h1 class="pysv-section-title" style="font-size: 4rem;">{{ code }}</h1>
+    <p class="pysv-section-subtitle" style="margin: 0 auto;" data-i18n="error_message">{{ message }}</p>
+    <a href="/" class="btn-pysv-gold" data-i18n="error_back">Volver al inicio</a>
+  </div>
+</section>
+{% endblock %}

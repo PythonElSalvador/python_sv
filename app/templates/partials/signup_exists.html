@@ -1,0 +1,7 @@
+{% from "partials/_icons.html" import whatsapp %}
+<div class="pysv-form-exists" role="status" aria-live="polite">
+  <p data-i18n="form_exists_msg">Ese correo ya está en la lista.</p>
+  <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="btn-pysv-whatsapp">
+    {{ whatsapp() }} <span data-i18n="form_whatsapp">Únete al grupo</span>
+  </a>
+</div>

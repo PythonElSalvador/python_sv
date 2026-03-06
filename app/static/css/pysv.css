@@ -202,7 +202,7 @@ h1, h2, h3, h4, h5, h6 {
    ========================================================================== */
 
 .pysv-hero {
-  background: url('/static/img/hero-izalco.jpg') center 40% / cover no-repeat;
+  background: url('/static/img/hero-izalco.webp') center 40% / cover no-repeat;
   color: var(--pysv-white);
   min-height: 100vh;
   display: flex;

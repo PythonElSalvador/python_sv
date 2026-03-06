@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     mongo_uri: str = "mongodb://localhost:27017"
     mongo_db: str = "pythonsv"
     whatsapp_url: str = "https://chat.whatsapp.com/Ly7exFkvNe0AJ8dFR2utwp"
-    base_url: str = "https://python.sv"
+    base_url: str = "https://pythonsv.com"
     allowed_hosts: list[str] = ["localhost", "127.0.0.1"]
     log_level: str = "INFO"
     csrf_secret: str = secrets.token_hex(32)

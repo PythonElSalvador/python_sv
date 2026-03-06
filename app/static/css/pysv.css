@@ -157,6 +157,26 @@ h1, h2, h3, h4, h5, h6 {
 }
 .pysv-navbar .nav-link:hover { color: var(--pysv-white) !important; }
 
+/* Navbar right group */
+.pysv-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pysv-navbar-link {
+  color: var(--pysv-white);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color var(--duration) var(--ease);
+}
+.pysv-navbar-link:hover {
+  color: var(--pysv-white);
+}
+
 /* Language toggle */
 .pysv-lang-toggle {
   background: var(--pysv-white-8);

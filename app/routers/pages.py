@@ -48,6 +48,9 @@ async def sitemap_xml(settings: Annotated[Settings, Depends(get_settings)]):
         "  <url>\n"
         f"    <loc>{settings.base_url}/</loc>\n"
         "  </url>\n"
+        "  <url>\n"
+        f"    <loc>{settings.base_url}/codigo-de-conducta</loc>\n"
+        "  </url>\n"
         "</urlset>\n"
     )
 
@@ -62,6 +65,14 @@ async def home(request: Request):
             "body": page_content["body"],
             "csrf_token": new_csrf_token(),
         },
+    )
+
+
+@router.get("/codigo-de-conducta", response_class=HTMLResponse)
+async def code_of_conduct(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="codigo-de-conducta.html",
     )
 
 

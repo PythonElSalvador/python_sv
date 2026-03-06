@@ -189,7 +189,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 6rem 0 4rem;
+  padding: 6rem 0 6rem;
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -209,7 +209,7 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
 }
 
-.pysv-hero .container { position: relative; z-index: 10; }
+.pysv-hero .container { position: relative; z-index: 10; margin-top: auto; }
 
 .pysv-hero h1 {
   font-size: clamp(2.8rem, 6vw, 4.5rem);
@@ -248,22 +248,21 @@ h1, h2, h3, h4, h5, h6 {
 
 .pysv-hero .lead p { margin-bottom: 0; }
 
-/* Scroll hint — bouncing chevron at bottom of hero */
+/* Scroll hint — bouncing chevron below hero content */
 .pysv-scroll-hint {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--pysv-white-60);
+  margin-top: auto;
+  padding-bottom: 2rem;
+  color: var(--pysv-white);
   z-index: 10;
   animation: scroll-bounce 2s var(--ease) infinite;
-  transition: color var(--duration) var(--ease), opacity var(--duration) var(--ease);
+  transition: opacity var(--duration) var(--ease);
   text-decoration: none;
+  opacity: 0.7;
 }
-.pysv-scroll-hint:hover { color: var(--pysv-white); }
+.pysv-scroll-hint:hover { opacity: 1; color: var(--pysv-white); }
 @keyframes scroll-bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(8px); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
 }
 
 /* ==========================================================================
@@ -664,6 +663,293 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--pysv-volcanic);
   color: var(--pysv-volcanic);
   background: rgba(212,85,58,0.08);
+}
+
+/* ==========================================================================
+   Code of Conduct
+   ========================================================================== */
+
+.pysv-coc {
+  padding-top: 6rem;
+}
+
+.pysv-coc-header {
+  margin-bottom: 3rem;
+}
+
+.pysv-coc-note {
+  color: var(--pysv-white-45);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.pysv-coc-note a {
+  color: var(--pysv-crater);
+  text-decoration: underline;
+  text-decoration-color: rgba(0,180,216,0.3);
+  text-underline-offset: 2px;
+}
+.pysv-coc-note a:hover {
+  color: var(--pysv-gold);
+  text-decoration-color: var(--pysv-gold);
+}
+
+.pysv-coc-updated {
+  color: var(--pysv-white-30);
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+/* Two-column layout: TOC + body */
+.pysv-coc-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Sidebar TOC */
+.pysv-coc-toc {
+  position: sticky;
+  top: 5rem;
+}
+
+.pysv-coc-toc-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pysv-white-35);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.pysv-coc-toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 1px solid var(--pysv-white-8);
+}
+
+.pysv-coc-toc li {
+  margin: 0;
+}
+
+.pysv-coc-toc a {
+  display: block;
+  padding: 0.4rem 0 0.4rem 1rem;
+  font-size: 0.82rem;
+  color: var(--pysv-white-45);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.pysv-coc-toc a:hover {
+  color: var(--pysv-white-70);
+}
+
+.pysv-coc-toc a.active {
+  color: var(--pysv-gold);
+  border-left-color: var(--pysv-gold);
+}
+
+/* Body content */
+.pysv-coc-body {
+  max-width: 720px;
+}
+
+.pysv-coc-body p {
+  color: var(--pysv-white-60);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.pysv-coc-body h2 {
+  font-size: 1.3rem;
+  color: var(--pysv-white);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--pysv-white-8);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  scroll-margin-top: 5rem;
+}
+
+.pysv-coc-icon {
+  color: var(--pysv-gold);
+  flex-shrink: 0;
+}
+
+/* Value cards */
+.pysv-coc-values {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.pysv-coc-value {
+  background: var(--pysv-white-5);
+  border: 1px solid var(--pysv-white-6);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--pysv-white-60);
+}
+
+.pysv-coc-value strong {
+  color: var(--pysv-white);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* Lists */
+.pysv-coc-body ul {
+  padding-left: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.pysv-coc-body li {
+  color: var(--pysv-white-60);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  margin-bottom: 0.6rem;
+}
+
+.pysv-coc-body li strong {
+  color: var(--pysv-white);
+}
+
+/* Ordered steps */
+.pysv-coc-steps {
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+  counter-reset: step;
+  list-style: none;
+}
+
+.pysv-coc-steps li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.75rem;
+  margin-bottom: 1rem;
+  color: var(--pysv-white-60);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.pysv-coc-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--pysv-white-8);
+  color: var(--pysv-gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Links */
+.pysv-coc-body a {
+  color: var(--pysv-crater);
+  text-decoration: underline;
+  text-decoration-color: rgba(0,180,216,0.3);
+  text-underline-offset: 2px;
+}
+.pysv-coc-body a:hover {
+  color: var(--pysv-gold);
+  text-decoration-color: var(--pysv-gold);
+}
+
+/* Contact card */
+.pysv-coc-contact-card {
+  background: var(--pysv-white-5);
+  border: 1px solid var(--pysv-white-8);
+  border-left: 3px solid var(--pysv-gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 1.75rem 2rem;
+  margin-top: 0.5rem;
+}
+
+.pysv-coc-contact-card p {
+  margin-bottom: 0.75rem;
+}
+
+.pysv-coc-email {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--pysv-gold) !important;
+  text-decoration: none !important;
+  margin-bottom: 0.75rem;
+  transition: color var(--duration) var(--ease);
+}
+.pysv-coc-email:hover {
+  color: var(--pysv-amber) !important;
+}
+
+.pysv-coc-contact-note {
+  color: var(--pysv-white-35) !important;
+  font-size: 0.85rem !important;
+  margin-bottom: 0 !important;
+}
+
+.pysv-coc-back {
+  margin-top: 3rem;
+}
+
+.pysv-footer-links {
+  display: flex;
+  gap: 1rem;
+}
+
+/* CoC responsive */
+@media (max-width: 991.98px) {
+  .pysv-coc-layout {
+    grid-template-columns: 180px 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .pysv-coc-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .pysv-coc-toc {
+    position: static;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--pysv-white-8);
+  }
+  .pysv-coc-toc ul {
+    border-left: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+  }
+  .pysv-coc-toc a {
+    border-left: none;
+    padding: 0.25rem 0;
+  }
+  .pysv-coc-values {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ==========================================================================

@@ -1,11 +1,26 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<section class="pysv-section pysv-section-dark" style="min-height: 60vh; display: flex; align-items: center;">
-  <div class="container text-center">
-    <h1 class="pysv-section-title" style="font-size: 4rem;">{{ code }}</h1>
-    <p class="pysv-section-subtitle" style="margin: 0 auto;" data-i18n="error_message">{{ message }}</p>
-    <a href="/" class="btn-pysv-gold" data-i18n="error_back">Volver al inicio</a>
+<section class="pysv-error pysv-error--terminal">
+  <div class="container">
+    <div class="pysv-terminal">
+      <div class="pysv-terminal-bar">
+        <span class="pysv-terminal-dot pysv-terminal-dot--red"></span>
+        <span class="pysv-terminal-dot pysv-terminal-dot--yellow"></span>
+        <span class="pysv-terminal-dot pysv-terminal-dot--green"></span>
+        <span class="pysv-terminal-title">python — pythonsv.com</span>
+      </div>
+      <div class="pysv-terminal-body">
+        <pre><code><span class="pysv-term-prompt">&gt;&gt;&gt;</span> <span class="pysv-term-input">import pagina</span>
+Traceback (most recent call last):
+  File "pythonsv.com", line {{ code }}
+<span class="pysv-term-error">PageNotFoundError: esta página no existe</span>
+<span class="pysv-term-prompt">&gt;&gt;&gt;</span> <span class="pysv-term-cursor"></span></code></pre>
+      </div>
+    </div>
+    <div class="text-center">
+      <a href="/" class="btn-pysv-gold" data-i18n="error_back">Volver al inicio</a>
+    </div>
   </div>
 </section>
 {% endblock %}

@@ -87,6 +87,15 @@
             <input type="text" name="other_city" id="other-city-input" class="form-control" data-i18n-placeholder="form_ph_other_city" placeholder="¿Cuál ciudad?">
           </div>
           <div class="mb-3">
+            <select name="member_type" class="form-select" required>
+              <option value="" disabled selected data-i18n="form_opt_member_type">¿Cómo te identificas?</option>
+              <option value="individual" data-i18n="form_opt_individual">Individual</option>
+              <option value="student" data-i18n="form_opt_student">Estudiante</option>
+              <option value="company" data-i18n="form_opt_company">Empresa</option>
+              <option value="other" data-i18n="form_opt_member_other">Otro</option>
+            </select>
+          </div>
+          <div class="mb-3">
             <select name="role" class="form-select" required>
               <option value="" disabled selected data-i18n="form_opt_role">¿Qué te gustaría hacer?</option>
               <option value="attend" data-i18n="form_opt_attend">Quiero participar en meetups</option>
@@ -186,6 +195,11 @@
     form_subtitle: 'First meetup: Saturday, March 14th. Sign up to get the details.',
     form_opt_city: 'What city are you in?',
     form_opt_other: 'Other',
+    form_opt_member_type: 'How do you identify?',
+    form_opt_individual: 'Individual',
+    form_opt_student: 'Student',
+    form_opt_company: 'Company',
+    form_opt_member_other: 'Other',
     form_opt_role: 'What would you like to do?',
     form_opt_attend: 'I want to attend meetups',
     form_opt_speak: 'I want to give a talk',

@@ -9,7 +9,7 @@ from app.config import get_settings
 logger = logging.getLogger("pythonsv")
 
 
-def notify_signup(name: str, email: str, city: str, role: str) -> None:
+def notify_signup(name: str, email: str, city: str, member_type: str, role: str) -> None:
     settings = get_settings()
     if not settings.resend_api_key or not settings.notification_to:
         return
@@ -24,7 +24,7 @@ def notify_signup(name: str, email: str, city: str, role: str) -> None:
                 "subject": f"New signup: {name}",
                 "html": (
                     f"<p><strong>{name}</strong> ({email})</p>"
-                    f"<p>City: {city}<br>Role: {role}</p>"
+                    f"<p>City: {city}<br>Type: {member_type}<br>Role: {role}</p>"
                 ),
             }
         )

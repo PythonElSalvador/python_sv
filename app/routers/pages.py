@@ -83,6 +83,7 @@ async def signup(
     name: str = Form(),
     email: str = Form(),
     city: str = Form(),
+    member_type: str = Form(),
     role: str = Form(),
     other_city: str = Form(""),
     csrf_token: str = Form(""),
@@ -99,6 +100,7 @@ async def signup(
             name=name,
             email=email,
             city=city,
+            member_type=member_type,
             role=role,
             other_city=other_city,
             csrf_token=csrf_token,
@@ -129,6 +131,7 @@ async def signup(
         "name": form.name.strip(),
         "email": form.email,
         "city": form.other_city.strip() if form.city == "Other" else form.city.strip(),
+        "member_type": form.member_type.strip(),
         "role": form.role.strip(),
         "created_at": datetime.now(timezone.utc),
     }
@@ -143,7 +146,7 @@ async def signup(
 
     logger.info("New signup from %s", doc["city"])
     background_tasks.add_task(
-        notify_signup, doc["name"], doc["email"], doc["city"], doc["role"]
+        notify_signup, doc["name"], doc["email"], doc["city"], doc["member_type"], doc["role"]
     )
     return templates.TemplateResponse(
         request=request,

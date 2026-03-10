@@ -37,6 +37,7 @@ class SignupForm(BaseModel):
     name: str = Field(max_length=MAX_FIELD_LEN)
     email: EmailStr
     city: str = Field(max_length=MAX_FIELD_LEN)
+    member_type: str = Field(max_length=MAX_FIELD_LEN)
     role: str = Field(max_length=MAX_FIELD_LEN)
     other_city: str = Field("", max_length=MAX_FIELD_LEN)
     csrf_token: str = ""

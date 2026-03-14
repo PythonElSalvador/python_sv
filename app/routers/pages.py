@@ -1,25 +1,16 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
 from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Form, Request
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse
-from pydantic import ValidationError
-from pymongo.errors import DuplicateKeyError
 
 from app.config import Settings, get_settings
-import app.dependencies as deps
 from app.dependencies import (
-    SignupForm,
-    check_rate_limit,
-    new_csrf_token,
     page_content,
     templates,
-    verify_csrf_token,
 )
-from app.notifications import notify_signup
 
 logger = logging.getLogger("pythonsv")
 
@@ -28,11 +19,7 @@ router = APIRouter()
 
 @router.get("/health")
 async def health():
-    try:
-        await deps.db.command("ping")
-        return {"status": "ok"}
-    except Exception:
-        return {"status": "degraded", "reason": "database unavailable"}
+    return {"status": "ok"}
 
 
 @router.get("/robots.txt", response_class=PlainTextResponse)
@@ -63,7 +50,6 @@ async def home(request: Request):
         context={
             "title": page_content["title"],
             "body": page_content["body"],
-            "csrf_token": new_csrf_token(),
         },
     )
 
@@ -76,82 +62,3 @@ async def code_of_conduct(request: Request):
     )
 
 
-@router.post("/signups", response_class=HTMLResponse)
-async def signup(
-    request: Request,
-    background_tasks: BackgroundTasks,
-    name: str = Form(),
-    email: str = Form(),
-    city: str = Form(),
-    member_type: str = Form(),
-    role: str = Form(),
-    other_city: str = Form(""),
-    csrf_token: str = Form(""),
-):
-    if not verify_csrf_token(csrf_token):
-        return templates.TemplateResponse(
-            request=request,
-            name="partials/signup_error.html",
-            context={"message": "Session expired. Reload the page and try again."},
-        )
-
-    try:
-        form = SignupForm(
-            name=name,
-            email=email,
-            city=city,
-            member_type=member_type,
-            role=role,
-            other_city=other_city,
-            csrf_token=csrf_token,
-        )
-    except ValidationError:
-        return templates.TemplateResponse(
-            request=request,
-            name="partials/signup_error.html",
-            context={"message": "Invalid email. Please check and try again."},
-        )
-
-    ip = request.client.host if request.client else "unknown"
-    if not check_rate_limit(ip):
-        return templates.TemplateResponse(
-            request=request,
-            name="partials/signup_error.html",
-            context={"message": "Too many attempts. Please wait a few minutes."},
-        )
-
-    if form.city == "Other" and not form.other_city.strip():
-        return templates.TemplateResponse(
-            request=request,
-            name="partials/signup_error.html",
-            context={"message": "Please specify your city."},
-        )
-
-    doc = {
-        "name": form.name.strip(),
-        "email": form.email,
-        "city": form.other_city.strip() if form.city == "Other" else form.city.strip(),
-        "member_type": form.member_type.strip(),
-        "role": form.role.strip(),
-        "created_at": datetime.now(timezone.utc),
-    }
-
-    try:
-        await deps.db.signups.insert_one(doc)
-    except DuplicateKeyError:
-        return templates.TemplateResponse(
-            request=request,
-            name="partials/signup_exists.html",
-        )
-
-    logger.info("New signup from %s", doc["city"])
-    background_tasks.add_task(
-        notify_signup, doc["name"], doc["email"], doc["city"], doc["member_type"], doc["role"]
-    )
-    return templates.TemplateResponse(
-        request=request,
-        name="partials/signup_success.html",
-        context={
-            "name": doc["name"],
-        },
-    )

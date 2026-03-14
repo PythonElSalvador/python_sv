@@ -16,7 +16,6 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 from uvicorn.logging import DefaultFormatter
 
 from app.config import BASE_DIR, get_settings
-import app.dependencies as deps
 from app.dependencies import page_content, templates
 from app.routers.pages import router
 
@@ -115,15 +114,8 @@ async def lifespan(app: FastAPI):
 
     templates.env.globals["static_url"] = static_url
 
-    import motor.motor_asyncio
-
-    deps.mongo_client = motor.motor_asyncio.AsyncIOMotorClient(settings.mongo_uri)
-    deps.db = deps.mongo_client[settings.mongo_db]
-    await deps.db.signups.create_index("email", unique=True)
-
     logger.info("pythonsv started")
     yield
-    deps.mongo_client.close()
     logger.info("pythonsv shutting down")
 
 

@@ -7,7 +7,8 @@
   <div class="container">
     <h1 data-i18n="hero_title">Estamos creando la comunidad de <strong>Python</strong> en El Salvador</h1>
     <div class="lead" data-i18n="hero_lead">{{ body | safe }}</div>
-    <p class="pysv-hero-date" data-i18n="hero_date">Primer meetup — sábado 14 de marzo, 2026</p>
+    <p class="pysv-hero-date" data-i18n="hero_date">Sábado 14 de marzo, 2PM–5PM — Alveare, San Salvador</p>
+    <a href="https://www.meetup.com/san-salvador-python-meetup-group/events/313772673/" target="_blank" rel="noopener" class="btn-pysv-gold" style="margin-top: 1.5rem; display: inline-block;" data-i18n="hero_meetup">Confirmar en Meetup</a>
   </div>
   <a href="#contexto" class="pysv-scroll-hint" aria-label="Scroll down">
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -45,71 +46,6 @@
       </div>
     </div>
 
-    <div class="text-center mt-5 reveal">
-      <a href="#unete" class="btn-pysv-gold" data-i18n="hero_cta">Quiero ir</a>
-    </div>
-  </div>
-</section>
-
-<section class="pysv-section pysv-section-photo grain" id="unete" data-bg="{{ static_url('img/section-izalco-green.webp') }}">
-  <div class="container">
-    <div class="reveal">
-      <span class="pysv-section-label" data-i18n="form_label">Únete</span>
-      <h2 class="pysv-section-title" data-i18n="form_title">Quiero estar</h2>
-      <p class="pysv-section-subtitle" data-i18n="form_subtitle">Primer meetup: sábado 14 de marzo. Registrate para recibir los detalles.</p>
-    </div>
-
-    <div class="row justify-content-center reveal">
-      <div class="col-lg-5 col-md-8" id="form-wrapper">
-        <form class="pysv-interest-form"
-              hx-post="/signups"
-              hx-target="#form-wrapper"
-              hx-swap="innerHTML">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-          <div class="mb-3">
-            <input type="text" name="name" class="form-control" data-i18n-placeholder="form_ph_name" placeholder="Tu nombre" required>
-          </div>
-          <div class="mb-3">
-            <input type="email" name="email" class="form-control" data-i18n-placeholder="form_ph_email" placeholder="Tu correo" required
-                   pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                   title="Ingresa un correo válido (ejemplo: nombre@correo.com)">
-          </div>
-          <div class="mb-3">
-            <select name="city" id="city-select" class="form-select" required>
-              <option value="" disabled selected data-i18n="form_opt_city">¿En qué ciudad estás?</option>
-              <option value="San Salvador">San Salvador</option>
-              <option value="San Miguel">San Miguel</option>
-              <option value="Santa Ana">Santa Ana</option>
-              <option value="Other" data-i18n="form_opt_other">Otra</option>
-            </select>
-          </div>
-          <div class="pysv-other-city" id="other-city">
-            <input type="text" name="other_city" id="other-city-input" class="form-control" data-i18n-placeholder="form_ph_other_city" placeholder="¿Cuál ciudad?">
-          </div>
-          <div class="mb-3">
-            <select name="member_type" class="form-select" required>
-              <option value="" disabled selected data-i18n="form_opt_member_type">¿Cómo te identificas?</option>
-              <option value="individual" data-i18n="form_opt_individual">Individual</option>
-              <option value="student" data-i18n="form_opt_student">Estudiante</option>
-              <option value="company" data-i18n="form_opt_company">Empresa</option>
-              <option value="other" data-i18n="form_opt_member_other">Otro</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <select name="role" class="form-select" required>
-              <option value="" disabled selected data-i18n="form_opt_role">¿Qué te gustaría hacer?</option>
-              <option value="attend" data-i18n="form_opt_attend">Quiero participar en meetups</option>
-              <option value="speak" data-i18n="form_opt_speak">Quiero dar una charla</option>
-              <option value="organize" data-i18n="form_opt_organize">Quiero ayudar a organizar</option>
-            </select>
-          </div>
-          <button type="submit" class="btn-pysv-gold w-100" data-i18n="form_submit">
-            <span class="htmx-indicator"><svg class="pysv-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg></span>
-            Quiero ir
-          </button>
-        </form>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -119,33 +55,6 @@
 {{ super() }}
 <script nonce="{{ csp_nonce }}">
 (function() {
-  // "Other" city — smooth reveal with class toggle
-  var citySelect = document.getElementById('city-select');
-  var otherCity = document.getElementById('other-city');
-  var otherInput = document.getElementById('other-city-input');
-  if (citySelect) {
-    citySelect.addEventListener('change', function() {
-      var show = this.value === 'Other';
-      otherCity.classList.toggle('is-open', show);
-      otherInput.required = show;
-    });
-  }
-
-  // Mark selects with a value class for styling (#1)
-  document.querySelectorAll('.pysv-interest-form .form-select').forEach(function(sel) {
-    sel.addEventListener('change', function() {
-      this.classList.toggle('has-value', this.value !== '');
-    });
-  });
-
-  // Add .was-submitted on first submit attempt for validation styling (#2)
-  var form = document.querySelector('.pysv-interest-form');
-  if (form) {
-    form.addEventListener('submit', function() {
-      this.classList.add('was-submitted');
-    });
-  }
-
   // Reveal animations
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
@@ -177,11 +86,10 @@
   // Bilingual toggle (ES/EN)
   var en = {
     nav_contexto: 'Context',
-    nav_unete: 'Join',
     hero_title: 'We\'re building the <strong>Python</strong> community in El Salvador',
     hero_lead: '<p>We\'re starting a Python community in El Salvador\u2009—\u2009talks, meetups, and workshops for all levels. If you\'re into Python and you\'re in the country, join us.</p>',
-    hero_date: 'First meetup — Saturday, March 14th, 2026',
-    hero_cta: 'I want to go',
+    hero_date: 'Saturday, March 14th, 2PM–5PM — Alveare, San Salvador',
+    hero_meetup: 'Confirm on Meetup',
     ctx_label: 'Context',
     ctx_title: 'Why now',
     ctx_1_title: 'The communities disappeared',
@@ -190,38 +98,13 @@
     ctx_2_body: 'In the Dominican Republic we helped organize <a href="https://pyday.do" target="_blank" rel="noopener">PyDay DO</a>\u2009—\u2009students, professors, professionals, and companies in a single event. The same is happening in Colombia, Mexico, and other countries. Communities are coming back.',
     ctx_3_title: 'El Salvador is next',
     ctx_3_body: 'We\'re putting together the first meetup\u2009—\u2009San Salvador, San Miguel, or wherever there are people. If you use Python, you\'re learning, or you\'re just curious, this is for you.',
-    form_label: 'Join',
-    form_title: 'I want in',
-    form_subtitle: 'First meetup: Saturday, March 14th. Sign up to get the details.',
-    form_opt_city: 'What city are you in?',
-    form_opt_other: 'Other',
-    form_opt_member_type: 'How do you identify?',
-    form_opt_individual: 'Individual',
-    form_opt_student: 'Student',
-    form_opt_company: 'Company',
-    form_opt_member_other: 'Other',
-    form_opt_role: 'What would you like to do?',
-    form_opt_attend: 'I want to attend meetups',
-    form_opt_speak: 'I want to give a talk',
-    form_opt_organize: 'I want to help organize',
-    form_submit: '<span class="htmx-indicator"><svg class="pysv-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg></span> I want to go',
     footer: 'Python SV &copy; {{ current_year }} \u2014 Made with Python and FastAPI in El Salvador.',
-    form_done: 'you\'re on the list.',
-    form_whatsapp: 'Join the group',
-    form_exists_msg: 'That email is already on the list.',
     error_back: 'Back to home',
     footer_coc: 'Code of Conduct',
     nav_coc: 'Code of Conduct'
   };
 
-  var enPlaceholders = {
-    form_ph_name: 'Your name',
-    form_ph_email: 'Your email',
-    form_ph_other_city: 'Which city?'
-  };
-
   var esCache = {};
-  var esPlaceholderCache = {};
   var currentLang = 'es';
   var btn = document.getElementById('langToggle');
 
@@ -231,21 +114,12 @@
       if (!esCache[key]) esCache[key] = el.innerHTML;
       if (en[key]) el.innerHTML = en[key];
     });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
-      var key = el.getAttribute('data-i18n-placeholder');
-      if (!esPlaceholderCache[key]) esPlaceholderCache[key] = el.placeholder;
-      if (enPlaceholders[key]) el.placeholder = enPlaceholders[key];
-    });
   }
 
   function applyES() {
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
       var key = el.getAttribute('data-i18n');
       if (esCache[key]) el.innerHTML = esCache[key];
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
-      var key = el.getAttribute('data-i18n-placeholder');
-      if (esPlaceholderCache[key]) el.placeholder = esPlaceholderCache[key];
     });
   }
 
@@ -263,10 +137,6 @@
     }
   });
 
-  // Re-apply translations to HTMX-injected content
-  document.body.addEventListener('htmx:afterSwap', function() {
-    if (currentLang === 'en') applyEN();
-  });
 })();
 </script>
 {% endblock %}

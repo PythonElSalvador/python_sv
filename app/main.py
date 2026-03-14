@@ -78,9 +78,9 @@ class SecurityHeadersMiddleware:
                             b"content-security-policy",
                             (
                                 f"default-src 'self'; "
-                                f"script-src 'self' 'nonce-{nonce}' https://unpkg.com; "
-                                f"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
-                                f"font-src 'self' https://fonts.gstatic.com; "
+                                f"script-src 'self' 'nonce-{nonce}'; "
+                                f"style-src 'self' 'unsafe-inline'; "
+                                f"font-src 'self'; "
                                 f"img-src 'self' data:; "
                                 f"connect-src 'self'; "
                                 f"frame-ancestors 'none'; "

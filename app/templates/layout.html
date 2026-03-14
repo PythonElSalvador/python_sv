@@ -27,13 +27,9 @@
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='56' font-size='56'%3E🐍%3C/text%3E%3C/svg%3E">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="{{ static_url('css/pysv.css') }}" />
+  <link rel="stylesheet" href="{{ static_url('css/pysv.min.css') }}" />
   <link rel="preload" href="{{ static_url('img/hero-izalco.webp') }}" as="image" type="image/webp">
-  <script nonce="{{ csp_nonce }}" src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous" defer></script>
+  <script nonce="{{ csp_nonce }}" src="{{ static_url('js/htmx.min.js') }}" defer></script>
   {% block extra_head %}{% endblock %}
 </head>
 

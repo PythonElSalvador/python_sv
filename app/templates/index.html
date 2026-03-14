@@ -5,38 +5,53 @@
 
 <section class="pysv-hero grain">
   <div class="container">
-    <span class="pysv-hero-label" data-i18n="hero_label">Primer meetup</span>
     <h1 data-i18n="hero_title">Estamos creando la comunidad de <strong>Python</strong> en El Salvador</h1>
-    <p class="pysv-hero-date" data-i18n="hero_date">Sábado 14 de marzo, 2PM–5PM — Alveare, San Salvador</p>
+    <p class="pysv-hero-date" data-i18n="hero_date">Sábado 14 de marzo, 2PM–5PM — Millenium Plaza, Alveare, San Salvador</p>
 
-    <div class="pysv-hero-speakers">
-      <div class="pysv-hero-speaker">
-        <img class="pysv-hero-speaker-photo" src="{{ static_url('img/nelson-zepeda.jpg') }}" alt="Nelson Zepeda" width="48" height="48" loading="eager">
-        <div>
-          <strong data-i18n="talk_1_title">Procesamiento de Datos con Pandas vs Polars</strong>
-          <span>Nelson Zepeda</span>
+    <div class="pysv-speakers">
+      <div class="pysv-speaker-card pysv-speaker-card--accent">
+        <img class="pysv-speaker-photo" src="{{ static_url('img/nelson-zepeda.jpg') }}" alt="Nelson Zepeda" width="72" height="72" loading="eager">
+        <div class="pysv-speaker-info">
+          <h3 class="pysv-talk-title" data-i18n="talk_1_title">Procesamiento de Datos con Pandas vs Polars</h3>
+          <p class="pysv-speaker-name"><strong>Nelson Zepeda</strong> · Chief Data Officer, datasphere.tech</p>
+          <div class="pysv-talk-meta">
+            <span class="pysv-tag pysv-tag--time">2:30 PM · 40 min</span>
+            <span class="pysv-tag pysv-tag--qa">+ Q&amp;A 5 min</span>
+          </div>
         </div>
       </div>
-      <div class="pysv-hero-speaker">
-        <img class="pysv-hero-speaker-photo" src="{{ static_url('img/daniel-zaldana.jpg') }}" alt="Daniel Zaldaña" width="48" height="48" loading="eager">
-        <div>
-          <strong data-i18n="talk_2_title">Introducción al forecasting con Python</strong>
-          <span>Daniel Zaldaña</span>
+
+      <div class="pysv-speaker-card pysv-speaker-card--tropical">
+        <img class="pysv-speaker-photo" src="{{ static_url('img/daniel-zaldana.jpg') }}" alt="Daniel Zaldaña" width="72" height="72" loading="eager">
+        <div class="pysv-speaker-info">
+          <h3 class="pysv-talk-title" data-i18n="talk_2_title">Introducción al forecasting con Python</h3>
+          <p class="pysv-speaker-name"><strong>Daniel Zaldaña</strong> · AI &amp; Data Science, PAILL Laboratorios</p>
+          <div class="pysv-talk-meta">
+            <span class="pysv-tag pysv-tag--time">3:25 PM · 45 min</span>
+            <span class="pysv-tag pysv-tag--qa">+ Q&amp;A 5 min</span>
+          </div>
         </div>
       </div>
-      <div class="pysv-hero-speaker">
-        <img class="pysv-hero-speaker-photo" src="{{ static_url('img/kevin-turcios.jpg') }}" alt="Kevin Turcios" width="48" height="48" loading="eager">
-        <div>
-          <strong data-i18n="talk_3_title">Optimización de Código con IA</strong>
-          <span>Kevin Turcios</span>
+
+      <div class="pysv-speaker-card pysv-speaker-card--volcanic">
+        <img class="pysv-speaker-photo" src="{{ static_url('img/kevin-turcios.jpg') }}" alt="Kevin Turcios" width="72" height="72" loading="eager">
+        <div class="pysv-speaker-info">
+          <h3 class="pysv-talk-title" data-i18n="talk_3_title">Optimización de Código con IA</h3>
+          <p class="pysv-speaker-name"><strong>Kevin Turcios</strong> · Founding SWE @ Codeflash</p>
+          <div class="pysv-talk-meta">
+            <span class="pysv-tag pysv-tag--time">4:15 PM · 20 min</span>
+            <span class="pysv-tag pysv-tag--qa">+ Q&amp;A 5 min</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <a href="https://www.meetup.com/san-salvador-python-meetup-group/events/313772673/" target="_blank" rel="noopener" class="btn-pysv-gold" style="margin-top: 2rem; display: inline-block;" data-i18n="hero_meetup">Registrarse en Meetup</a>
+    <div class="pysv-hero-actions">
+      <a href="https://www.meetup.com/san-salvador-python-meetup-group/events/313772673/" target="_blank" rel="noopener" class="btn-pysv-gold" data-i18n="hero_meetup">Registrarse en Meetup</a>
+      <a href="#horario" class="pysv-hero-schedule-link" data-i18n="hero_schedule">Ver horario completo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+    </div>
   </div>
   <a href="#horario" class="pysv-scroll-hint" aria-label="Scroll down">
-    <span class="pysv-scroll-hint-text" data-i18n="hero_schedule">Ver horario completo</span>
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
   </a>
 </section>
@@ -95,53 +110,6 @@
 
     <div class="reveal" style="text-align: center; margin-top: 3rem;">
       <a href="https://www.meetup.com/san-salvador-python-meetup-group/events/313772673/" target="_blank" rel="noopener" class="btn-pysv-gold" data-i18n="schedule_meetup">Registrarse en Meetup</a>
-    </div>
-  </div>
-</section>
-
-<section class="pysv-section pysv-section-photo grain" id="ponentes" data-bg="{{ static_url('img/section-izalco-green.webp') }}">
-  <div class="container">
-    <div class="reveal">
-      <span class="pysv-section-label" data-i18n="speakers_label">Ponentes &amp; charlas</span>
-      <h2 class="pysv-section-title" data-i18n="speakers_title">Primer meetup</h2>
-    </div>
-
-    <div class="pysv-speakers reveal">
-      <div class="pysv-speaker-card pysv-speaker-card--accent">
-        <img class="pysv-speaker-photo" src="{{ static_url('img/nelson-zepeda.jpg') }}" alt="Nelson Zepeda" width="72" height="72" loading="lazy">
-        <div class="pysv-speaker-info">
-          <h3 class="pysv-talk-title" data-i18n="talk_1_title">Procesamiento de Datos con Pandas vs Polars</h3>
-          <p class="pysv-speaker-name"><strong>Nelson Zepeda</strong> · Chief Data Officer, datasphere.tech</p>
-          <div class="pysv-talk-meta">
-            <span class="pysv-tag pysv-tag--time">2:30 PM · 40 min</span>
-            <span class="pysv-tag pysv-tag--qa">+ Q&amp;A 5 min</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="pysv-speaker-card pysv-speaker-card--tropical">
-        <img class="pysv-speaker-photo" src="{{ static_url('img/daniel-zaldana.jpg') }}" alt="Daniel Zaldaña" width="72" height="72" loading="lazy">
-        <div class="pysv-speaker-info">
-          <h3 class="pysv-talk-title" data-i18n="talk_2_title">Introducción al forecasting con Python</h3>
-          <p class="pysv-speaker-name"><strong>Daniel Zaldaña</strong> · AI &amp; Data Science, PAILL Laboratorios</p>
-          <div class="pysv-talk-meta">
-            <span class="pysv-tag pysv-tag--time">3:25 PM · 45 min</span>
-            <span class="pysv-tag pysv-tag--qa">+ Q&amp;A 5 min</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="pysv-speaker-card pysv-speaker-card--volcanic">
-        <img class="pysv-speaker-photo" src="{{ static_url('img/kevin-turcios.jpg') }}" alt="Kevin Turcios" width="72" height="72" loading="lazy">
-        <div class="pysv-speaker-info">
-          <h3 class="pysv-talk-title" data-i18n="talk_3_title">Optimización de Código con IA</h3>
-          <p class="pysv-speaker-name"><strong>Kevin Turcios</strong> · Founding SWE @ Codeflash</p>
-          <div class="pysv-talk-meta">
-            <span class="pysv-tag pysv-tag--time">4:15 PM · 20 min</span>
-            <span class="pysv-tag pysv-tag--qa">+ Q&amp;A 5 min</span>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -217,13 +185,10 @@
   // Bilingual toggle (ES/EN)
   var en = {
     nav_contexto: 'Context',
-    hero_label: 'First meetup',
     hero_title: 'We\'re building the <strong>Python</strong> community in El Salvador',
     hero_schedule: 'See full schedule',
-    hero_date: 'Saturday, March 14th, 2PM\u20135PM \u2014 Alveare, San Salvador',
+    hero_date: 'Saturday, March 14th, 2PM\u20135PM \u2014 Millenium Plaza, Alveare, San Salvador',
     hero_meetup: 'Register on Meetup',
-    speakers_label: 'Speakers & talks',
-    speakers_title: 'First meetup',
     talk_1_title: 'Data Processing with Pandas vs Polars',
     talk_2_title: 'Introduction to Forecasting with Python',
     talk_3_title: 'Code Optimization with AI',

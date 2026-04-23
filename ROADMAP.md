@@ -141,6 +141,12 @@ Also mentioned but no active lead:
   - hola@pythonsv.com — general contact
   - conduct@pythonsv.com — Code of Conduct reports
   - kevinturcios@pythonsv.com — organizer
+  - emilioserrano@pythonsv.com — organizer
+- [x] Linear: workspace at linear.app/python-sv (kevinturcios@pythonsv.com)
+  - GitHub integration connected (PythonElSalvador org)
+  - Emilio invited
+- [x] Notion: workspace "Python SV" (kevinturcios@pythonsv.com, free plan)
+  - Emilio invited
 
 ### Pending
 

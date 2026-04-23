@@ -12,8 +12,6 @@ BASE_DIR = Path(__file__).resolve().parent
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
-    mongo_uri: str = "mongodb://localhost:27017"
-    mongo_db: str = "pythonsv"
     whatsapp_url: str = "https://chat.whatsapp.com/Ly7exFkvNe0AJ8dFR2utwp"
     base_url: str = "https://pythonsv.com"
     allowed_hosts: list[str] = ["localhost", "127.0.0.1"]

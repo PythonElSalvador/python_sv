@@ -13,10 +13,7 @@ dependencies = [
     "pydantic-settings>=2.0",
     "python-multipart>=0.0.18",
     "markdown>=3.7",
-    "motor>=3.6",
     "resend>=2.23.0",
-    "pymongo[srv]>=4.16.0",
-    "textual-image>=0.8.5",
 ]
 
 [dependency-groups]
@@ -25,7 +22,6 @@ dev = [
     "httpx>=0.28.1",
     "pytest>=9.0.2",
     "pytest-anyio>=0.0.0",
-    "mongomock-motor>=0.0.34",
     "ruff>=0.11",
 ]
 

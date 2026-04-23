@@ -39,6 +39,8 @@ Kevin
 | `{event_date}`         | Event date in Spanish                | Sábado 2 de mayo, 2026       |
 | `{university_short}`   | Short name of the university         | la UEES                       |
 
+**Note:** The template assumes a first contact or cold outreach. For existing WhatsApp threads, drop the "Como le comenté" intro — jump straight to the event details.
+
 ---
 
 ## Sent Messages
@@ -89,8 +91,40 @@ Kevin
 - **University:** Universidad Francisco Gavidia (UFG)
 - **Contact:** Dr. Víctor Manuel Cuchilla
 - **Platform:** WhatsApp DM
-- **Date sent:** Pending
-- **Context:** Confirmed "si tenemos salones." Supports open source communities. Referred by Denis of BRI Sistemas via Marco Gonzalez. Last contact 3/16.
+- **Date sent:** 2026-04-23
+- **Context:** Confirmed "si tenemos salones." Supports open source communities. Referred by Denis of BRI Sistemas via Marco Gonzalez. Last contact 3/16. Existing WhatsApp DM thread — no need for re-introduction. Message positions UEES as priority for May 2, UFG as backup for May or first choice for June (monthly rotation).
+
+**Message sent:**
+
+```
+Hola Dr. Cuchilla, buenas tardes!
+
+Espero que esté bien
+Ya estamos organizando nuestro próximo evento y quería compartirle los detalles:
+
+Fecha: Estamos coordinando con la UEES para el sábado 2 de mayo, que fue la primera universidad que nos contactó. Si no se concreta con ellos, nos encantaría hacerlo en la UFG para esa fecha. Y si sí se concreta, queremos proponerle la UFG como sede para el evento de junio — queremos hacer eventos mensuales y rotar entre universidades.
+
+Formato: Podemos adaptarnos a lo que más les convenga:
+- Meetup (2-3 horas): 2-3 charlas cortas + networking
+- Workshop (3-4 horas): sesión práctica donde los asistentes programan en vivo
+- Combinación de ambos: charlas + un taller hands-on
+- PyDay (día completo, 6-8 horas): varias charlas, talleres, y networking
+
+Nos encantaría que la universidad le consulte a sus estudiantes qué formato y temas les gustaría ver, y nosotros buscamos speakers para eso. Queremos que sea colaborativo.
+Asistentes estimados: Mínimo 40 personas, pero queremos atraer la mayor cantidad posible — eso lo coordinamos con ustedes según la capacidad del espacio
+Costo: Gratuito y abierto al público
+
+Si hay estudiantes que quieran dar una charla corta o un demo, con mucho gusto les damos ese espacio. La idea es que se sienta como un evento de la comunidad y de la universidad.
+
+Necesitaríamos un espacio con proyector y capacidad para unas 40-50 personas. También estamos planeando ofrecer comida a los asistentes — ¿sería posible coordinar eso dentro del espacio?
+
+Con gusto los mencionamos como sede oficial en toda la promoción del evento (redes sociales, sitio web pythonsv.com, y durante el evento).
+
+Quedo atento, muchas gracias!
+Kevin
+```
+
+- **Response:** Pending
 
 ### 3. UCA — via Emilio
 

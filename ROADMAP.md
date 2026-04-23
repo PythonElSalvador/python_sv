@@ -45,11 +45,23 @@ The CD pipeline (`.github/workflows/deploy.yml`) builds and pushes to ACR but do
              --image pythonsvcr.azurecr.io/pythonsv:${{ github.sha }}
    ```
 
-## Migrate MongoDB to PythonSV org account
+5. Add a deploy job to `.github/workflows/staging.yml`:
+   ```yaml
+   deploy:
+     needs: build
+     runs-on: ubuntu-latest
+     steps:
+       - uses: azure/login@v2
+         with:
+           creds: ${{ secrets.AZURE_CREDENTIALS }}
+       - run: |
+           az containerapp update \
+             --name pythonsv-staging \
+             --resource-group pythonsv \
+             --image pythonsvcr.azurecr.io/pythonsv:staging-${{ github.sha }}
+   ```
 
-Migrate the pythonsv database from the personal Atlas account to an org / pythonsv account in MongoDB Atlas.
-
-## Auto-deploy: manual deploy (current workaround)
+## Manual deploy (current workaround)
 
 Production:
 ```
@@ -59,20 +71,4 @@ az containerapp update --name pythonsv --resource-group pythonsv --image pythons
 Staging:
 ```
 az containerapp update --name pythonsv-staging --resource-group pythonsv --image pythonsvcr.azurecr.io/pythonsv:staging-<sha>
-```
-
-Once auto-deploy is unblocked, add a deploy job to `.github/workflows/staging.yml` as well:
-```yaml
-deploy:
-  needs: build
-  runs-on: ubuntu-latest
-  steps:
-    - uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - run: |
-        az containerapp update \
-          --name pythonsv-staging \
-          --resource-group pythonsv \
-          --image pythonsvcr.azurecr.io/pythonsv:staging-${{ github.sha }}
 ```

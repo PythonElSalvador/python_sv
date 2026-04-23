@@ -88,12 +88,28 @@ Also mentioned but no active lead:
 
 ### Channels
 
-- [x] WhatsApp group (active)
+- [x] WhatsApp Community (active — needs restructuring, see docs/whatsapp-community-analysis.md)
 - [ ] Meetup.com group (blocked on account restore)
 - [ ] Twitter/X (@pythonsv)
 - [ ] LinkedIn page
 - [ ] Discord or Slack (evaluate after 50+ members)
 - [ ] YouTube channel for recordings
+
+### WhatsApp Community Structure
+
+Current state: 3 groups (Announcements, Python SV general, Fotos). General dormant since 4/4, Fotos low-value.
+
+- [ ] Restructure Python SV WhatsApp Community (see docs/whatsapp-community-analysis.md)
+  - Rename "Python SV general" to "☕ Charla General"
+  - Replace "Fotos" with "🐍 Ayuda & Código" (tech questions, debugging, code review)
+  - Add "📅 Eventos" group (meetup logistics, RSVPs, post-event links)
+  - Add "💼 Oportunidades" group (jobs, freelance, internships)
+- [ ] Set up weekly engagement rhythm
+  - Monday: Python challenge (Exercism, LeetCode Easy)
+  - Friday: Show & Tell / solutions
+  - Post-event: recap + photos in Announcements
+- [ ] Pin welcome message and rules in each group
+- [ ] Audit communities we're active in (Ai /abs, PyCon Colombia, Python Colombia) for cross-promotion opportunities
 
 ### Content
 
@@ -124,7 +140,7 @@ Also mentioned but no active lead:
 - [ ] Food sponsors (easier ask — free food in exchange for publicity): Pollo Campero, Campestre, local restaurants
   - If cash sponsorship is hard to get, in-kind food donations are a lower barrier
   - Offer logo on event materials, social media shoutouts, mention during event
-- [ ] Regional Python communities: Python Guatemala, Python Costa Rica, Python Colombia
+- [ ] Regional Python communities: Python Guatemala, Python Costa Rica, Python Colombia (already in their WhatsApp Community)
 - [ ] PyCon Latam participation or satellite event
 
 ---
@@ -138,7 +154,6 @@ Also mentioned but no active lead:
 - [x] CI/CD: GitHub Actions builds on push to main
 - [x] ACR: pythonsvcr.azurecr.io
 - [x] Email: Google Workspace (pythonsv.com domain)
-  - hola@pythonsv.com — general contact
   - conduct@pythonsv.com — Code of Conduct reports
   - kevinturcios@pythonsv.com — organizer
   - emilioserrano@pythonsv.com — organizer
@@ -157,6 +172,7 @@ Also mentioned but no active lead:
     --role Contributor \
     --scope /subscriptions/923d59dc-54b7-47d4-ab81-c7cb9061dac5/resourceGroups/pythonsv
   ```
+- [ ] Email: create hola@pythonsv.com (general contact alias or mailbox)
 - [ ] Resend: configure for pythonsv.com domain (DNS records)
 - [ ] Monitoring/alerting: uptime checks, error tracking
 - [ ] Backup strategy for content/data

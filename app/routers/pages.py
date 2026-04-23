@@ -60,5 +60,3 @@ async def code_of_conduct(request: Request):
         request=request,
         name="codigo-de-conducta.html",
     )
-
-

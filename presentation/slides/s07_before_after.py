@@ -7,7 +7,7 @@ from rich.syntax import Syntax
 from rich.text import Text
 
 from slides._deck import deck
-from slides._theme import ACCENT, FLASH, SUCCESS, WARN
+from slides._theme import ACCENT, SUCCESS, WARN
 
 BEFORE_CODE = """\
 def build_report(items):

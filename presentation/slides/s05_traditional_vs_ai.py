@@ -5,7 +5,7 @@ from rich.table import Table
 from rich.text import Text
 
 from slides._deck import deck
-from slides._theme import ACCENT, FLASH, MUTED, SUCCESS, TEXT, WARN
+from slides._theme import ACCENT, MUTED, SUCCESS, WARN
 
 
 @deck.slide(title="Tradicional vs IA")

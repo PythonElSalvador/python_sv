@@ -2,9 +2,9 @@ from rich.style import Style
 
 # Codeflash branding
 BG = "#0D0D1A"
-PRIMARY = "#6C5CE7"       # electric purple
-ACCENT = "#00D2FF"        # cyan flash
-FLASH = "#FFD700"         # golden lightning
+PRIMARY = "#6C5CE7"  # electric purple
+ACCENT = "#00D2FF"  # cyan flash
+FLASH = "#FFD700"  # golden lightning
 TEXT = "#E8E8F0"
 MUTED = "#8888AA"
 SUCCESS = "#00E676"

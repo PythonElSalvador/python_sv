@@ -1,12 +1,11 @@
 from pyfiglet import figlet_format
 from rich.align import Align
-from rich.columns import Columns
 from rich.console import Group, RenderableType
 from rich.table import Table
 from rich.text import Text
 
 from slides._deck import deck
-from slides._theme import ACCENT, FLASH, MUTED, TEXT
+from slides._theme import ACCENT, FLASH, TEXT
 
 
 @deck.slide(title="Agenda")

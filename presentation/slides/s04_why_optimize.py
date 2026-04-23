@@ -19,9 +19,7 @@ def why_optimize_slide() -> RenderableType:
     body.append("  🌱 Rendimiento = Sostenibilidad\n", style=f"bold {SUCCESS}")
     body.append("     Menos CPU = menos energía = menos CO₂\n\n", style=f"{MUTED}")
     body.append("  🐍 Python es muy dinámico\n", style=f"bold {WARN}")
-    body.append(
-        "     Hay mil maneras de hacer la misma cosa\n\n", style=f"{MUTED}"
-    )
+    body.append("     Hay mil maneras de hacer la misma cosa\n\n", style=f"{MUTED}")
     body.append("  🧠 El código más rápido no siempre es obvio\n", style=f"bold {TEXT}")
     body.append(
         "     Estructuras de datos, built-ins, vectorización...", style=f"{MUTED}"

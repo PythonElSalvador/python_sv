@@ -11,7 +11,8 @@ logconfig_dict = {
     "disable_existing_loggers": False,
     "formatters": {
         "json": {
-            "()": "app.main.JSONFormatter",
+            "()": "uvicorn.logging.DefaultFormatter",
+            "fmt": "%(levelprefix)s %(message)s",
         },
         "access": {
             "()": "uvicorn.logging.AccessFormatter",

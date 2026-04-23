@@ -36,6 +36,9 @@ async def sitemap_xml(settings: Annotated[Settings, Depends(get_settings)]):
         f"    <loc>{settings.base_url}/</loc>\n"
         "  </url>\n"
         "  <url>\n"
+        f"    <loc>{settings.base_url}/calendario</loc>\n"
+        "  </url>\n"
+        "  <url>\n"
         f"    <loc>{settings.base_url}/codigo-de-conducta</loc>\n"
         "  </url>\n"
         "</urlset>\n"
@@ -59,4 +62,39 @@ async def code_of_conduct(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="codigo-de-conducta.html",
+    )
+
+
+EVENTS = [
+    {
+        "title": "Python SV Meetup — AI, Memory & Security",
+        "month": "May",
+        "year": "2026",
+        "date_display": "Sábado 2 de mayo, 2026",
+        "location": "Presencial — lugar por confirmar",
+        "topics": ["AI", "Memory", "Security"],
+        "description": "Nuestro primer meetup presencial. Charlas y demos sobre inteligencia artificial, manejo de memoria y seguridad en Python.",
+        "link": None,
+        "link_text": "",
+    },
+    {
+        "title": "Python SV Meetup — Virtual",
+        "month": "Jun",
+        "year": "2026",
+        "date_display": "Fecha por confirmar",
+        "location": "Virtual",
+        "topics": [],
+        "description": "Meetup virtual de la comunidad. Tema por confirmar.",
+        "link": None,
+        "link_text": "",
+    },
+]
+
+
+@router.get("/calendario", response_class=HTMLResponse)
+async def calendar(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="calendario.html",
+        context={"events": EVENTS},
     )

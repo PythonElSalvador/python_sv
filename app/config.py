@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     whatsapp_url: str = "https://chat.whatsapp.com/Ly7exFkvNe0AJ8dFR2utwp"
     base_url: str = "https://pythonsv.com"

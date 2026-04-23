@@ -1355,5 +1355,146 @@ h1, h2, h3, h4, h5, h6 {
   .pysv-interest-form { padding: 1.5rem 1.25rem 1.5rem 1.5rem; }
 }
 
+/* ==========================================================================
+   Calendar
+   ========================================================================== */
+
+.pysv-calendar { padding-bottom: 4rem; }
+
+.pysv-calendar-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pysv-calendar-subtitle {
+  color: var(--pysv-white-55);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+.pysv-calendar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.pysv-event-card {
+  display: flex;
+  gap: 1.5rem;
+  background: var(--pysv-white-5);
+  border: 1px solid var(--pysv-white-10);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  transition: border-color 0.2s;
+}
+
+.pysv-event-card:hover {
+  border-color: var(--pysv-white-20);
+}
+
+.pysv-event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  padding: 0.75rem;
+  background: var(--pysv-white-8);
+  border-radius: var(--radius-sm);
+}
+
+.pysv-event-month {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--pysv-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pysv-event-year {
+  font-size: 0.85rem;
+  color: var(--pysv-white-45);
+}
+
+.pysv-event-details { flex: 1; }
+
+.pysv-event-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--pysv-white);
+  margin: 0 0 0.75rem;
+}
+
+.pysv-event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.pysv-event-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--pysv-white-55);
+}
+
+.pysv-event-meta-item svg {
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.pysv-event-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.pysv-event-tag {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: rgba(232, 168, 23, 0.12);
+  color: var(--pysv-amber);
+  letter-spacing: 0.02em;
+}
+
+.pysv-event-desc {
+  font-size: 0.95rem;
+  color: var(--pysv-white-55);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pysv-event-btn {
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.pysv-calendar-back {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+@media (max-width: 575.98px) {
+  .pysv-event-card {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .pysv-event-date {
+    flex-direction: row;
+    gap: 0.5rem;
+    min-width: auto;
+    width: fit-content;
+  }
+}
+
 /* Noscript — hide language toggle when JS is unavailable */
 noscript .pysv-lang-toggle { display: none; }

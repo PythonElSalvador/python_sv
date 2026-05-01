@@ -39,28 +39,28 @@
 
 ### Confirmed
 
-- **May 2, 2026** — Python SV Meetup: AI, Memory & Security (in-person, venue TBD)
-- **June 2026** — Python SV Meetup: Virtual (date & topic TBD)
+- **May 9, 2026** — Python SV Workshop (in-person @ UEES, ~3–4 hours, topic TBD with university)
+- **June 2026** — Python SV Meetup (in-person @ UFG, date & format TBD)
 
 ### Venue Leads (contact in this order)
 
-1. **Universidad Evangélica de El Salvador (UEES)** — they contacted us first
+1. **Universidad Evangélica de El Salvador (UEES)** — May 2026 venue (confirmed)
    - Contact: Miguel Angel Chavez, coordinador académico (+503 6434 3705, miguel.chavez@uees.edu.sv)
-   - Status: Very interested. Reached out proactively (3/16), followed up again (4/1). Will pass info to dean for logistics.
-   - Last contact: 4/14 — we said we'd start organizing again
-   - Action: Follow up with May 2 date
+   - Status: Confirmed for May 9. Sent formal proposal 4/23, Miguel asked to push one week (4/26), confirmed May 9 (4/28). Waiting on schedule, room, and topic preferences.
+   - Last contact: 5/1 — sent message asking for horario, salón, and topics
+   - Action: Wait for Miguel's reply on logistics
 
-2. **Universidad Francisco Gavidia (UFG)** — confirmed rooms available
+2. **Universidad Francisco Gavidia (UFG)** — June 2026 venue (proposed)
    - Contact: Dr. Víctor Manuel Cuchilla (WhatsApp DM)
-   - Status: Confirmed "si tenemos salones." Supports open source communities. Referred by Denis of BRI Sistemas via Marco Gonzalez.
-   - Last contact: 3/16 — waiting for us to send dates
-   - Action: Message him with May 2 date
+   - Status: Confirmed rooms available. Prefers 3–4 hour workshop format. Proposed as June venue on 5/1 per monthly rotation plan.
+   - Last contact: 5/1 — sent June event proposal
+   - Action: Wait for Cuchilla's reply on June date and logistics
 
 3. **UCA (Universidad Centroamericana José Simeón Cañas)** — contact through Emilio
    - Contact: Emilio knows the department head of electronics & informatics (his former professor)
    - Status: Emilio went in person, sent formal email. Couldn't do one specific Saturday (no staff), but relationship is open.
    - Last contact: 3/13 in Organizadores group
-   - Action: Ask Emilio to re-engage for May 2
+   - Action: Re-engage for July or later in the rotation
 
 Also mentioned but no active lead:
 - **UDB (Universidad Don Bosco)** — Computer Science Hub student group is in the community
@@ -68,12 +68,14 @@ Also mentioned but no active lead:
 
 ### Event Pipeline
 
-- [ ] Secure venue for May meetup — follow up with UEES, UFG, and UCA
-- [ ] Find 2–3 speakers for May (AI/ML, memory management, security topics)
-- [ ] Set up Meetup.com group (blocked — account disabled, support ticket #2018550 open)
+- [x] Secure venue for May meetup — UEES confirmed for May 9
+- [ ] Get schedule, room, and topic preferences from UEES (waiting on Miguel)
+- [ ] Find speakers for May 9 (topics TBD — letting university poll students first)
+- [ ] Confirm UFG for June event (proposal sent 5/1, waiting on Cuchilla)
+- [ ] Set up Meetup.com group (blocked — account reinstated but group deleted, emailed support requesting restoration)
 - [ ] Create event registration flow (Meetup or custom RSVP)
 - [ ] Post-event: publish slides, recordings, and photos
-- [ ] Monthly cadence: alternate in-person (odd months) and virtual (even months)
+- [ ] Monthly cadence: rotate between universities (May: UEES, June: UFG, July+: UCA or others)
 
 ### Event Format
 
@@ -130,7 +132,7 @@ Current state: 3 groups (Announcements, Python SV general, Fotos). General dorma
 
 ### Active
 
-- [x] PSF Meetup Pro Network — application submitted (April 2026)
+- [x] PSF Community Partner (already listed)
 
 ### Targets
 

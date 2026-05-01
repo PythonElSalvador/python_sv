@@ -124,6 +124,40 @@ Quedo atento, muchas gracias!
 Kevin
 ```
 
+- **Response (4/23):** "me parece... bien la actividad de 4 horas o 3" / "Si en la UEES no se puede con gusto lo hacemos aquí"
+
+#### Follow-up: June event proposal
+
+- **Date sent:** 2026-05-01
+- **Context:** UEES confirmed for May 9. Proposing UFG as June venue per monthly rotation plan.
+
+**Message sent:**
+
+```
+Hola Dr. Cuchilla, buenos días!
+
+Espero que esté bien. Le quería comentar que ya se confirmó el evento de mayo en la UEES para el 9 de mayo, así que nos gustaría proponerle la UFG como sede para el evento de junio — queremos seguir haciendo eventos mensuales y rotar entre universidades.
+
+Fecha: Junio 2026 (fecha exacta por definir)
+Horario: Por definir — nos adaptamos a la disponibilidad del espacio
+Formato: Podemos adaptarnos a lo que más les convenga. Algunas opciones:
+- Meetup (2-3 horas): 2-3 charlas cortas + networking
+- Workshop (3-4 horas): sesión práctica donde los asistentes programan en vivo
+- Combinación de ambos: charlas + un taller hands-on
+- PyDay (día completo, 6-8 horas): varias charlas, talleres, y networking
+
+Nos encantaría que la universidad le consulte a sus estudiantes qué formato y temas les gustaría ver, y nosotros buscamos speakers para eso. Queremos que sea colaborativo.
+Asistentes estimados: Mínimo 40 personas, pero queremos atraer la mayor cantidad posible — eso lo coordinamos con ustedes según la capacidad del espacio
+Costo: Gratuito y abierto al público
+
+Si hay estudiantes que quieran dar una charla corta o un demo, con mucho gusto les damos ese espacio. La idea es que se sienta como un evento de la comunidad y de la universidad.
+
+Necesitaríamos un espacio con proyector y capacidad para unas 40-50 personas. También estamos planeando ofrecer comida a los asistentes — ¿sería posible coordinar eso dentro del espacio?
+
+Quedo atento, muchas gracias!
+Kevin
+```
+
 - **Response:** Pending
 
 ### 3. UCA — via Emilio

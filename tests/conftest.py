@@ -4,7 +4,8 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from python_sv.dependencies import page_content
-from python_sv.main import _prerender_pages, create_app
+from python_sv.main import _page_cache, _prerender_pages, create_app
+from python_sv.routers.pages import cache_html_bytes
 
 
 @pytest.fixture
@@ -13,6 +14,7 @@ def app():
     page_content.setdefault("body", "<p>Test</p>")
     application = create_app()
     _prerender_pages(application)
+    cache_html_bytes(_page_cache)
     return application
 
 

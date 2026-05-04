@@ -237,19 +237,27 @@ class CompressMiddleware:
                 )
                 return
 
+        already_encoded = False
         body_parts: list[bytes] = []
         initial_message: dict[str, Any] = {}
         content_type = b""
 
         async def buffer_send(message: Any) -> None:
-            nonlocal initial_message, content_type
+            nonlocal initial_message, content_type, already_encoded
             if message["type"] == "http.response.start":
                 initial_message = message
                 for k, v in message.get("headers", []):
                     if k == b"content-type":
                         content_type = v.split(b";")[0].strip()
-                        break
+                    elif k == b"content-encoding":
+                        already_encoded = True
+                if already_encoded:
+                    await send(message)
+                    return
             elif message["type"] == "http.response.body":
+                if already_encoded:
+                    await send(message)
+                    return
                 body = message.get("body", b"")
                 if body:
                     body_parts.append(body)
@@ -342,6 +350,23 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     _prerender_pages(app)
     logger.info("pre-rendered %d page templates", len(_page_cache))
+
+    from python_sv.routers.pages import cache_html_bytes
+
+    cache_html_bytes(_page_cache)
+
+    link_parts = []
+    for path, rel_type in [
+        ("fonts/bricolage-grotesque-latin.woff2", "font/woff2"),
+        ("fonts/dm-sans-latin.woff2", "font/woff2"),
+    ]:
+        url = static_url(path)
+        link_parts.append(
+            f"<{url}>; rel=preload; as=font; type={rel_type}; crossorigin"
+        )
+    css_url = static_url("css/pysv.css")
+    link_parts.append(f"<{css_url}>; rel=preload; as=style")
+    app.state.link_header = ", ".join(link_parts)
 
     async with (
         create_aio_session() as aio_session,

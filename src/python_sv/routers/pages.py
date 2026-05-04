@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import gzip
+import io
 import logging
 import time
+
+import brotli
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, Response
@@ -52,13 +56,64 @@ _PAGE_CACHE_HEADERS = (
 _NONCE_SENTINEL = "__PYSV_NONCE__"
 _RENDER_MS_SENTINEL = "__RENDER_MS__"
 
+_html_bytes_cache: dict[str, bytes] = {}
+
+
+def cache_html_bytes(page_cache: dict[str, str]) -> None:
+    for slug, html in page_cache.items():
+        _html_bytes_cache[slug] = html.encode()
+
 
 def _serve_cached(request: Request, slug: str) -> Response:
-    html = request.app.state.page_cache[slug]
     nonce = request.state.csp_nonce
     elapsed = f"{(time.perf_counter() - request.state.request_start) * 1000:.1f}"
-    html = html.replace(_NONCE_SENTINEL, nonce).replace(_RENDER_MS_SENTINEL, elapsed)
-    return HTMLResponse(content=html, headers=_PAGE_CACHE_HEADERS)
+
+    raw = _html_bytes_cache.get(slug)
+    if not raw:
+        html = request.app.state.page_cache[slug]
+        html = html.replace(_NONCE_SENTINEL, nonce).replace(
+            _RENDER_MS_SENTINEL, elapsed
+        )
+        return HTMLResponse(content=html, headers=_PAGE_CACHE_HEADERS)
+
+    raw = raw.replace(b"__PYSV_NONCE__", nonce.encode()).replace(
+        b"__RENDER_MS__", elapsed.encode()
+    )
+
+    link_header = getattr(request.app.state, "link_header", "")
+    extra_headers = {**_PAGE_CACHE_HEADERS}
+    if link_header:
+        extra_headers["link"] = link_header
+
+    accept = request.headers.get("accept-encoding", "")
+    if "br" in accept:
+        return Response(
+            content=brotli.compress(raw, quality=1),
+            media_type="text/html; charset=utf-8",
+            headers={
+                **extra_headers,
+                "content-encoding": "br",
+                "vary": "Accept-Encoding",
+            },
+        )
+    if "gzip" in accept:
+        buf = io.BytesIO()
+        with gzip.GzipFile(fileobj=buf, mode="wb", compresslevel=1) as gz_f:
+            gz_f.write(raw)
+        return Response(
+            content=buf.getvalue(),
+            media_type="text/html; charset=utf-8",
+            headers={
+                **extra_headers,
+                "content-encoding": "gzip",
+                "vary": "Accept-Encoding",
+            },
+        )
+    return Response(
+        content=raw,
+        media_type="text/html; charset=utf-8",
+        headers=extra_headers,
+    )
 
 
 @router.get("/", response_class=HTMLResponse)

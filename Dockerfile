@@ -10,6 +10,10 @@ COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-install-project
 
+COPY src/ src/
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
+
 FROM python:3.13-slim
 
 WORKDIR /app
@@ -18,8 +22,6 @@ RUN addgroup --system --gid 1001 appgroup && \
     adduser --system --uid 1001 --ingroup appgroup appuser
 
 COPY --from=builder /app/.venv /app/.venv
-
-COPY src/python_sv/ src/python_sv/
 COPY content/ content/
 COPY gunicorn.conf.py .
 

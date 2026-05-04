@@ -8,7 +8,9 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
+import aiohttp
 import frontmatter
+import httpx
 import markdown
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -20,6 +22,7 @@ from uvicorn.logging import DefaultFormatter
 
 from python_sv.config import BASE_DIR, get_settings
 from python_sv.dependencies import page_content, templates
+from python_sv.http import HttpClients
 from python_sv.routers.pages import router
 
 
@@ -117,9 +120,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     templates.env.globals["static_url"] = static_url  # ty: ignore[invalid-assignment]
 
-    logger.info("pythonsv started")
-    yield
-    logger.info("pythonsv shutting down")
+    async with (
+        aiohttp.ClientSession() as aio_session,
+        httpx.AsyncClient(http2=True) as httpx_client,
+    ):
+        app.state.http = HttpClients(aio=aio_session, httpx=httpx_client)
+        logger.info("pythonsv started")
+        yield
+        logger.info("pythonsv shutting down")
 
 
 def render_error(code: int, message: str, request: Request) -> HTMLResponse:

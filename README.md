@@ -32,13 +32,12 @@ uv run uvicorn python_sv.main:app --reload
 
 The site will be at http://localhost:8000.
 
-## Running with Docker
+## Docker
 
 ```bash
-docker compose up --build
+docker build -t pythonsv .
+docker run -p 8000:8000 --env-file .env pythonsv
 ```
-
-This starts the FastAPI app behind a Caddy reverse proxy on ports 80/443.
 
 ## Project Structure
 

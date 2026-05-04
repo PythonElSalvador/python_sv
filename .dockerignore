@@ -7,10 +7,14 @@ data/
 .env.*
 !.env.example
 Dockerfile
-docker-compose.yml
 .dockerignore
 .gitignore
 .ruff_cache/
+.pytest_cache/
+.mypy_cache/
 .playwright-mcp/
 .claude/
 *.pyc
+presentation/
+scripts/
+docs/

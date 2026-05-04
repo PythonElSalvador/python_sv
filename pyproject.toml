@@ -39,7 +39,3 @@ strict = true
 module = ["frontmatter", "resend", "resend.*"]
 ignore_missing_imports = true
 
-[tool.uv.workspace]
-members = [
-    "presentation",
-]

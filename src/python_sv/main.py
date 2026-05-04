@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import hashlib
 import logging
 import secrets
 import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from pathlib import Path
 from typing import Any
 
 import frontmatter
@@ -39,17 +37,13 @@ def load_page(slug: str) -> frontmatter.Post:
     return frontmatter.load(str(path))
 
 
-def _file_hash(path: Path) -> str:
-    return hashlib.md5(path.read_bytes()).hexdigest()[:10]
-
-
 def _build_static_hashes() -> dict[str, str]:
     static_dir = BASE_DIR / "static"
     hashes = {}
     for f in static_dir.rglob("*"):
         if f.is_file():
             rel = f.relative_to(static_dir)
-            hashes[str(rel)] = _file_hash(f)
+            hashes[str(rel)] = hex(int(f.stat().st_mtime))[2:]
     return hashes
 
 

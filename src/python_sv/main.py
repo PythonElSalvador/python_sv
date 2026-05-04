@@ -122,7 +122,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         create_aio_session() as aio_session,
         create_httpx_client() as httpx_client,
     ):
-        app.state.http = HttpClients(aio=aio_session, httpx=httpx_client)
+        app.state.http = HttpClients(aio=aio_session, httpx_client=httpx_client)
         logger.info("pythonsv started")
         yield
         logger.info("pythonsv shutting down")

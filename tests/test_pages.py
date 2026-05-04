@@ -71,6 +71,19 @@ async def test_static_cache_header(client):
 
 
 @pytest.mark.anyio
+async def test_code_of_conduct_renders(client):
+    resp = await client.get("/codigo-de-conducta")
+    assert resp.status_code == 200
+
+
+@pytest.mark.anyio
+async def test_calendar_renders(client):
+    resp = await client.get("/calendario")
+    assert resp.status_code == 200
+    assert "May" in resp.text
+
+
+@pytest.mark.anyio
 async def test_non_http_scope_passthrough(app):
     received: dict[str, object] = {}
 

@@ -77,4 +77,10 @@ jobs:
               --name pythonsv \
               --resource-group pythonsv \
               --image pythonsvcr.azurecr.io/pythonsv:${{ github.sha }} \
-              --set-env-vars "MONGODB_URI=${{ secrets.MONGODB_URI }}"
+              --set-env-vars \
+                "MONGODB_URI=${{ secrets.MONGODB_URI }}" \
+                "ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }}" \
+                "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" \
+                "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" \
+                "NOTIFICATION_FROM=${{ secrets.NOTIFICATION_FROM }}" \
+                "NOTIFICATION_TO=${{ secrets.NOTIFICATION_TO }}"

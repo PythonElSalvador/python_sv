@@ -88,6 +88,13 @@
     document.documentElement.lang = 'en';
   }
 
+  var signupForm = document.getElementById('signup-form');
+  if (signupForm) {
+    signupForm.addEventListener('htmx:afterRequest', function(evt) {
+      if (evt.detail.successful) signupForm.style.display = 'none';
+    });
+  }
+
   btn.addEventListener('click', function() {
     if (currentLang === 'es') {
       applyEN();

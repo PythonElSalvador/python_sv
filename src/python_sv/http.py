@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 @attrs.define(eq=False, repr=False)
 class HttpClients:
     aio: ClientSession
-    httpx: httpx.AsyncClient
+    httpx_client: httpx.AsyncClient
 
 
 def create_aio_session() -> ClientSession:

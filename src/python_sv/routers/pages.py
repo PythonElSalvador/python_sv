@@ -1,15 +1,32 @@
 from __future__ import annotations
 
+import gzip
+import io
 import logging
-from typing import Annotated
+import time
 
-from fastapi import APIRouter, Depends, Request
+import brotli
+
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 
-from python_sv.config import Settings, get_settings
-from python_sv.dependencies import (
-    page_content,
-    templates,
+from python_sv.config import get_settings
+
+_settings = get_settings()
+_ROBOTS_TXT = f"User-agent: *\nAllow: /\nSitemap: {_settings.base_url}/sitemap.xml\n"
+_SITEMAP_XML = (
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/</loc>\n"
+    "  </url>\n"
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/calendario</loc>\n"
+    "  </url>\n"
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/codigo-de-conducta</loc>\n"
+    "  </url>\n"
+    "</urlset>\n"
 )
 
 logger = logging.getLogger("pythonsv")
@@ -23,46 +40,97 @@ async def health() -> dict[str, str]:
 
 
 @router.get("/robots.txt", response_class=PlainTextResponse)
-async def robots_txt(settings: Annotated[Settings, Depends(get_settings)]) -> str:
-    return f"User-agent: *\nAllow: /\nSitemap: {settings.base_url}/sitemap.xml\n"
+async def robots_txt() -> Response:
+    return PlainTextResponse(
+        _ROBOTS_TXT,
+        headers={"cache-control": "public, max-age=86400"},
+    )
 
 
-@router.get("/sitemap.xml", response_class=PlainTextResponse)
-async def sitemap_xml(settings: Annotated[Settings, Depends(get_settings)]) -> str:
-    return (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        "  <url>\n"
-        f"    <loc>{settings.base_url}/</loc>\n"
-        "  </url>\n"
-        "  <url>\n"
-        f"    <loc>{settings.base_url}/calendario</loc>\n"
-        "  </url>\n"
-        "  <url>\n"
-        f"    <loc>{settings.base_url}/codigo-de-conducta</loc>\n"
-        "  </url>\n"
-        "</urlset>\n"
+@router.get("/sitemap.xml")
+async def sitemap_xml() -> Response:
+    return Response(
+        content=_SITEMAP_XML,
+        media_type="application/xml; charset=utf-8",
+        headers={"cache-control": "public, max-age=86400"},
+    )
+
+
+_PAGE_CACHE_HEADERS = (
+    {} if _settings.debug else {"cache-control": "public, max-age=3600"}
+)
+
+_NONCE_SENTINEL = "__PYSV_NONCE__"
+_RENDER_MS_SENTINEL = "__RENDER_MS__"
+
+_html_bytes_cache: dict[str, bytes] = {}
+
+
+def cache_html_bytes(page_cache: dict[str, str]) -> None:
+    for slug, html in page_cache.items():
+        _html_bytes_cache[slug] = html.encode()
+
+
+def _serve_cached(request: Request, slug: str) -> Response:
+    nonce = request.state.csp_nonce
+    elapsed = f"{(time.perf_counter() - request.state.request_start) * 1000:.1f}"
+
+    raw = _html_bytes_cache.get(slug)
+    if not raw:
+        html = request.app.state.page_cache[slug]
+        html = html.replace(_NONCE_SENTINEL, nonce).replace(
+            _RENDER_MS_SENTINEL, elapsed
+        )
+        return HTMLResponse(content=html, headers=_PAGE_CACHE_HEADERS)
+
+    raw = raw.replace(b"__PYSV_NONCE__", nonce.encode()).replace(
+        b"__RENDER_MS__", elapsed.encode()
+    )
+
+    link_header = getattr(request.app.state, "link_header", "")
+    extra_headers = {**_PAGE_CACHE_HEADERS}
+    if link_header:
+        extra_headers["link"] = link_header
+
+    accept = request.headers.get("accept-encoding", "")
+    if "br" in accept:
+        return Response(
+            content=brotli.compress(raw, quality=1),
+            media_type="text/html; charset=utf-8",
+            headers={
+                **extra_headers,
+                "content-encoding": "br",
+                "vary": "Accept-Encoding",
+            },
+        )
+    if "gzip" in accept:
+        buf = io.BytesIO()
+        with gzip.GzipFile(fileobj=buf, mode="wb", compresslevel=1) as gz_f:
+            gz_f.write(raw)
+        return Response(
+            content=buf.getvalue(),
+            media_type="text/html; charset=utf-8",
+            headers={
+                **extra_headers,
+                "content-encoding": "gzip",
+                "vary": "Accept-Encoding",
+            },
+        )
+    return Response(
+        content=raw,
+        media_type="text/html; charset=utf-8",
+        headers=extra_headers,
     )
 
 
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request) -> Response:
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={
-            "title": page_content["title"],
-            "body": page_content["body"],
-        },
-    )
+    return _serve_cached(request, "index")
 
 
 @router.get("/codigo-de-conducta", response_class=HTMLResponse)
 async def code_of_conduct(request: Request) -> Response:
-    return templates.TemplateResponse(
-        request=request,
-        name="codigo-de-conducta.html",
-    )
+    return _serve_cached(request, "codigo-de-conducta")
 
 
 EVENTS = [
@@ -93,8 +161,4 @@ EVENTS = [
 
 @router.get("/calendario", response_class=HTMLResponse)
 async def calendar(request: Request) -> Response:
-    return templates.TemplateResponse(
-        request=request,
-        name="calendario.html",
-        context={"events": EVENTS},
-    )
+    return _serve_cached(request, "calendario")

@@ -2,7 +2,7 @@
    Self-hosted fonts — no third-party DNS/TLS round-trips
    ========================================================================== */
 
-/* Bricolage Grotesque — variable font (400–800) */
+/* Bricolage Grotesque — latin-ext subset (latin handled by inline critical CSS) */
 @font-face {
   font-family: 'Bricolage Grotesque';
   font-style: normal;
@@ -12,17 +12,8 @@
   src: url('../fonts/bricolage-grotesque-latin-ext.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
-@font-face {
-  font-family: 'Bricolage Grotesque';
-  font-style: normal;
-  font-weight: 400 800;
-  font-stretch: 100%;
-  font-display: swap;
-  src: url('../fonts/bricolage-grotesque-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
 
-/* DM Sans — variable font (400–700) */
+/* DM Sans — latin-ext + italic subsets (latin handled by inline critical CSS) */
 @font-face {
   font-family: 'DM Sans';
   font-style: normal;
@@ -30,14 +21,6 @@
   font-display: swap;
   src: url('../fonts/dm-sans-latin-ext.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-@font-face {
-  font-family: 'DM Sans';
-  font-style: normal;
-  font-weight: 400 700;
-  font-display: swap;
-  src: url('../fonts/dm-sans-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: 'DM Sans';
@@ -299,9 +282,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Language toggle */
 .pysv-lang-toggle {
-  background: var(--pysv-white-8);
+  background: var(--pysv-white-10);
   border: none;
-  color: var(--pysv-white-60);
+  color: var(--pysv-white-70);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.7rem;
@@ -322,7 +305,7 @@ h1, h2, h3, h4, h5, h6 {
    ========================================================================== */
 
 .pysv-hero {
-  background: url('/static/img/hero-izalco.webp') center 40% / cover no-repeat;
+  background: var(--pysv-cobalt);
   color: var(--pysv-white);
   display: flex;
   flex-direction: column;
@@ -332,6 +315,16 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   overflow: hidden;
   text-align: center;
+}
+
+.pysv-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  z-index: 0;
 }
 
 /* Dark overlay for text readability */
@@ -806,7 +799,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 4px rgba(15,31,66,0.5);
 }
 
-.context-content h5 {
+.context-content h3 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.1rem;
@@ -998,23 +991,19 @@ h1, h2, h3, h4, h5, h6 {
 .pysv-spinner { animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.htmx-indicator { display: none; }
-.htmx-request .htmx-indicator { display: inline-block; margin-right: 0.5rem; }
-.htmx-request { opacity: 0.7; pointer-events: none; }
-
 /* ==========================================================================
    Footer — simple, quiet
    ========================================================================== */
 
 .pysv-footer {
   background: var(--pysv-cobalt-dark);
-  color: var(--pysv-white-35);
+  color: var(--pysv-white-60);
   padding: 3rem 0 2rem;
   font-size: 0.85rem;
 }
 
 .pysv-footer a {
-  color: var(--pysv-white-35);
+  color: var(--pysv-white-60);
 }
 .pysv-footer a:hover { color: var(--pysv-gold); }
 
@@ -1057,7 +1046,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-coc-note {
-  color: var(--pysv-white-45);
+  color: var(--pysv-white-55);
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -1074,7 +1063,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-coc-updated {
-  color: var(--pysv-white-30);
+  color: var(--pysv-white-50);
   font-size: 0.8rem;
   margin-top: 0.5rem;
 }
@@ -1099,7 +1088,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--pysv-white-35);
+  color: var(--pysv-white-55);
   display: block;
   margin-bottom: 0.75rem;
 }
@@ -1119,7 +1108,7 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
   padding: 0.4rem 0 0.4rem 1rem;
   font-size: 0.82rem;
-  color: var(--pysv-white-45);
+  color: var(--pysv-white-55);
   text-decoration: none;
   border-left: 2px solid transparent;
   margin-left: -1px;
@@ -1283,7 +1272,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-coc-contact-note {
-  color: var(--pysv-white-35) !important;
+  color: var(--pysv-white-55) !important;
   font-size: 0.85rem !important;
   margin-bottom: 0 !important;
 }
@@ -1295,6 +1284,45 @@ h1, h2, h3, h4, h5, h6 {
 .pysv-footer-links {
   display: flex;
   gap: 1rem;
+}
+
+.pysv-perf-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.pysv-perf-badge:hover {
+  border-color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.8);
+}
+.pysv-perf-time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+}
+.pysv-perf-badge:hover .pysv-perf-time { color: rgba(255,255,255,0.9); }
+.pysv-perf-sep {
+  width: 1px;
+  height: 0.7rem;
+  background: rgba(255,255,255,0.2);
+}
+.pysv-perf-label { letter-spacing: 0.01em; }
+.pysv-perf-logo {
+  height: 0.7rem;
+  width: auto;
+  opacity: 0.65;
+  transition: opacity 0.15s;
+}
+.pysv-perf-badge:hover .pysv-perf-logo { opacity: 0.85; }
+@media (max-width: 767.98px) {
+  .pysv-perf-badge { display: none; }
 }
 
 /* CoC responsive */
@@ -1416,7 +1444,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .pysv-event-year {
   font-size: 0.85rem;
-  color: var(--pysv-white-45);
+  color: var(--pysv-white-55);
 }
 
 .pysv-event-details { flex: 1; }

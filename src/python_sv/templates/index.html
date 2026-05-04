@@ -1,9 +1,16 @@
 {% extends "layout.html" %}
-{% from "partials/_icons.html" import whatsapp %}
 
 {% block body %}
 
 <section class="pysv-hero grain">
+  <img class="pysv-hero-img"
+       src="{{ static_url('img/hero-izalco-1280.webp') }}"
+       srcset="{{ static_url('img/hero-izalco-640.webp') }} 640w, {{ static_url('img/hero-izalco-960.webp') }} 960w, {{ static_url('img/hero-izalco-1280.webp') }} 1280w, {{ static_url('img/hero-izalco-1920.webp') }} 1920w"
+       sizes="100vw"
+       alt=""
+       width="1280" height="853"
+       fetchpriority="high"
+       decoding="sync">
   <div class="container">
     <h1 data-i18n="hero_title">Estamos creando la comunidad de <strong>Python</strong> en El Salvador</h1>
     <p class="pysv-hero-date" data-i18n="hero_date">Sábado 14 de marzo, 2PM–5PM — Millenium Plaza, Alveare, San Salvador</p>
@@ -12,7 +19,7 @@
       <div class="pysv-speaker-card pysv-speaker-card--accent">
         <img class="pysv-speaker-photo" src="{{ static_url('img/nelson-zepeda.webp') }}" alt="Nelson Zepeda" width="48" height="48" loading="eager">
         <div class="pysv-speaker-info">
-          <h3 class="pysv-talk-title" data-i18n="talk_1_title">Procesamiento de Datos con Pandas vs Polars</h3>
+          <p class="pysv-talk-title" data-i18n="talk_1_title">Procesamiento de Datos con Pandas vs Polars</h3>
           <p class="pysv-speaker-name"><strong>Nelson Zepeda</strong> · Chief Data Officer, datasphere.tech</p>
           <div class="pysv-talk-meta">
             <span class="pysv-tag pysv-tag--time">2:30 PM · 40 min</span>
@@ -22,9 +29,9 @@
       </div>
 
       <div class="pysv-speaker-card pysv-speaker-card--tropical">
-        <img class="pysv-speaker-photo" src="{{ static_url('img/daniel-zaldana.webp') }}" alt="Daniel Zaldaña" width="48" height="48" loading="eager">
+        <img class="pysv-speaker-photo" src="{{ static_url('img/daniel-zaldana.webp') }}" alt="Daniel Zaldaña" width="48" height="48" loading="lazy">
         <div class="pysv-speaker-info">
-          <h3 class="pysv-talk-title" data-i18n="talk_2_title">Introducción al forecasting con Python</h3>
+          <p class="pysv-talk-title" data-i18n="talk_2_title">Introducción al forecasting con Python</h3>
           <p class="pysv-speaker-name"><strong>Daniel Zaldaña</strong> · AI &amp; Data Science, PAILL Laboratorios</p>
           <div class="pysv-talk-meta">
             <span class="pysv-tag pysv-tag--time">3:25 PM · 45 min</span>
@@ -34,9 +41,9 @@
       </div>
 
       <div class="pysv-speaker-card pysv-speaker-card--volcanic">
-        <img class="pysv-speaker-photo" src="{{ static_url('img/kevin-turcios.webp') }}" alt="Kevin Turcios" width="48" height="48" loading="eager">
+        <img class="pysv-speaker-photo" src="{{ static_url('img/kevin-turcios.webp') }}" alt="Kevin Turcios" width="48" height="48" loading="lazy">
         <div class="pysv-speaker-info">
-          <h3 class="pysv-talk-title" data-i18n="talk_3_title">Optimización de Código con IA</h3>
+          <p class="pysv-talk-title" data-i18n="talk_3_title">Optimización de Código con IA</h3>
           <p class="pysv-speaker-name"><strong>Kevin Turcios</strong> · Founding SWE @ Codeflash</p>
           <div class="pysv-talk-meta">
             <span class="pysv-tag pysv-tag--time">4:15 PM · 20 min</span>
@@ -125,21 +132,21 @@
       <div class="context-item">
         <div class="context-marker context-marker--problem">1</div>
         <div class="context-content">
-          <h5 data-i18n="ctx_1_title">Las comunidades desaparecieron</h5>
+          <h3data-i18n="ctx_1_title">Las comunidades desaparecieron</h5>
           <p data-i18n="ctx_1_body">La mayoría de comunidades de Python en Latinoamérica murieron durante COVID y nunca se recuperaron. En El Salvador no hay una comunidad activa dedicada a Python — la última actividad fue en 2019.</p>
         </div>
       </div>
       <div class="context-item">
         <div class="context-marker context-marker--proof">2</div>
         <div class="context-content">
-          <h5 data-i18n="ctx_2_title">Pero se puede revivir</h5>
+          <h3data-i18n="ctx_2_title">Pero se puede revivir</h5>
           <p data-i18n="ctx_2_body">En República Dominicana ayudamos a organizar <a href="https://pyday.do" target="_blank" rel="noopener">PyDay DO</a> — estudiantes, profesores, profesionales y empresas en un solo evento. Lo mismo está pasando en Colombia, México y otros países. Las comunidades están volviendo.</p>
         </div>
       </div>
       <div class="context-item">
         <div class="context-marker context-marker--ask">3</div>
         <div class="context-content">
-          <h5 data-i18n="ctx_3_title">El Salvador es el siguiente</h5>
+          <h3data-i18n="ctx_3_title">El Salvador es el siguiente</h5>
           <p data-i18n="ctx_3_body">Estamos armando el primer meetup — San Salvador, San Miguel, o donde haya gente. Si usas Python, estás aprendiendo, o simplemente tienes curiosidad, esto es para ti.</p>
         </div>
       </div>
@@ -152,103 +159,5 @@
 
 {% block scripts_bottom %}
 {{ super() }}
-<script nonce="{{ csp_nonce }}">
-(function() {
-  // Reveal animations
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(function(el) {
-    observer.observe(el);
-  });
-
-  // Lazy-load section background images
-  var bgObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.style.backgroundImage = 'url(' + entry.target.dataset.bg + ')';
-        bgObserver.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: '600px' });
-
-  document.querySelectorAll('[data-bg]').forEach(function(el) {
-    bgObserver.observe(el);
-  });
-
-  // Bilingual toggle (ES/EN)
-  var en = {
-    nav_contexto: 'Context',
-    hero_title: 'We\'re building the <strong>Python</strong> community in El Salvador',
-    hero_schedule: 'See full schedule',
-    hero_date: 'Saturday, March 14th, 2PM\u20135PM \u2014 Millenium Plaza, Alveare, San Salvador',
-    hero_meetup: 'Register on Meetup',
-    talk_1_title: 'Data Processing with Pandas vs Polars',
-    talk_2_title: 'Introduction to Forecasting with Python',
-    talk_3_title: 'Code Optimization with AI',
-    schedule_label: 'Full schedule',
-    schedule_title: 'Agenda',
-    schedule_meetup: 'Register on Meetup',
-    sched_1: 'Doors open \u00b7 arrival and chat',
-    sched_2: 'Welcome and organizer announcements',
-    sched_3: 'Talk 1 \u00b7 Nelson Zepeda',
-    sched_4: 'Break',
-    sched_5: 'Talk 2 \u00b7 Daniel Zaldaña',
-    sched_6: 'Talk 3 \u00b7 Kevin Turcios',
-    sched_7: 'Open networking / closing',
-    ctx_label: 'Context',
-    ctx_title: 'Why now',
-    ctx_1_title: 'The communities disappeared',
-    ctx_1_body: 'Most Python communities in Latin America died during COVID and never recovered. In El Salvador there\'s no active community dedicated to Python — the last activity was in 2019.',
-    ctx_2_title: 'But they can come back',
-    ctx_2_body: 'In the Dominican Republic we helped organize <a href="https://pyday.do" target="_blank" rel="noopener">PyDay DO</a>\u2009—\u2009students, professors, professionals, and companies in a single event. The same is happening in Colombia, Mexico, and other countries. Communities are coming back.',
-    ctx_3_title: 'El Salvador is next',
-    ctx_3_body: 'We\'re putting together the first meetup\u2009—\u2009San Salvador, San Miguel, or wherever there are people. If you use Python, you\'re learning, or you\'re just curious, this is for you.',
-    footer: 'Python SV &copy; {{ current_year }} \u2014 Made with Python and FastAPI in El Salvador.',
-    error_back: 'Back to home',
-    footer_coc: 'Code of Conduct',
-    nav_coc: 'Code of Conduct'
-  };
-
-  var esCache = {};
-  var currentLang = 'es';
-  var btn = document.getElementById('langToggle');
-
-  function applyEN() {
-    document.querySelectorAll('[data-i18n]').forEach(function(el) {
-      var key = el.getAttribute('data-i18n');
-      if (!esCache[key]) esCache[key] = el.innerHTML;
-      if (en[key]) el.innerHTML = en[key];
-    });
-  }
-
-  function applyES() {
-    document.querySelectorAll('[data-i18n]').forEach(function(el) {
-      var key = el.getAttribute('data-i18n');
-      if (esCache[key]) el.innerHTML = esCache[key];
-    });
-  }
-
-  btn.addEventListener('click', function() {
-    if (currentLang === 'es') {
-      applyEN();
-      currentLang = 'en';
-      btn.textContent = 'ES';
-      document.documentElement.lang = 'en';
-    } else {
-      applyES();
-      currentLang = 'es';
-      btn.textContent = 'EN';
-      document.documentElement.lang = 'es';
-    }
-  });
-
-})();
-</script>
+<script nonce="{{ csp_nonce }}" src="{{ static_url('js/index.js') }}" defer></script>
 {% endblock %}

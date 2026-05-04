@@ -59,7 +59,12 @@ class SecurityHeadersMiddleware:
         (b"x-frame-options", b"DENY"),
         (b"referrer-policy", b"strict-origin-when-cross-origin"),
         (b"permissions-policy", b"camera=(), microphone=(), geolocation=()"),
+        (b"cross-origin-opener-policy", b"same-origin"),
     ]
+    _hsts_header: tuple[bytes, bytes] = (
+        b"strict-transport-security",
+        b"max-age=63072000; includeSubDomains; preload",
+    )
     _csp_template: str = (
         "default-src 'self'; "
         "script-src 'self' 'nonce-{}'; "
@@ -69,7 +74,8 @@ class SecurityHeadersMiddleware:
         "connect-src 'self'; "
         "frame-ancestors 'none'; "
         "base-uri 'self'; "
-        "form-action 'self'"
+        "form-action 'self'; "
+        "upgrade-insecure-requests"
     )
     _static_csp: bytes = (
         b"default-src 'none'; "
@@ -79,6 +85,7 @@ class SecurityHeadersMiddleware:
     )
     _static_immutable_headers: list[tuple[bytes, bytes]] = [
         *_static_headers,
+        _hsts_header,
         (b"content-security-policy", _static_csp),
         (b"cache-control", b"public, max-age=31536000, immutable"),
     ]
@@ -121,12 +128,15 @@ class SecurityHeadersMiddleware:
         state["request_start"] = time.perf_counter()
         csp = self._csp_template.format(nonce).encode()
 
+        hsts = self._hsts_header
+
         async def send_wrapper(message: Any) -> None:
             if message["type"] == "http.response.start":
                 headers = list(message.get("headers", []))
                 headers.extend(
                     [
                         *self._static_headers,
+                        hsts,
                         (b"content-security-policy", csp),
                     ]
                 )

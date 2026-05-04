@@ -1046,7 +1046,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-coc-note {
-  color: var(--pysv-white-45);
+  color: var(--pysv-white-55);
   font-size: 0.9rem;
   font-style: italic;
 }
@@ -1063,7 +1063,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-coc-updated {
-  color: var(--pysv-white-30);
+  color: var(--pysv-white-50);
   font-size: 0.8rem;
   margin-top: 0.5rem;
 }
@@ -1088,7 +1088,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--pysv-white-35);
+  color: var(--pysv-white-55);
   display: block;
   margin-bottom: 0.75rem;
 }
@@ -1108,7 +1108,7 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
   padding: 0.4rem 0 0.4rem 1rem;
   font-size: 0.82rem;
-  color: var(--pysv-white-45);
+  color: var(--pysv-white-55);
   text-decoration: none;
   border-left: 2px solid transparent;
   margin-left: -1px;
@@ -1272,7 +1272,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-coc-contact-note {
-  color: var(--pysv-white-35) !important;
+  color: var(--pysv-white-55) !important;
   font-size: 0.85rem !important;
   margin-bottom: 0 !important;
 }
@@ -1444,7 +1444,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .pysv-event-year {
   font-size: 0.85rem;
-  color: var(--pysv-white-45);
+  color: var(--pysv-white-55);
 }
 
 .pysv-event-details { flex: 1; }

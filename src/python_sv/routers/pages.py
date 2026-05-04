@@ -40,13 +40,20 @@ async def health() -> dict[str, str]:
 
 
 @router.get("/robots.txt", response_class=PlainTextResponse)
-async def robots_txt() -> str:
-    return _ROBOTS_TXT
+async def robots_txt() -> Response:
+    return PlainTextResponse(
+        _ROBOTS_TXT,
+        headers={"cache-control": "public, max-age=86400"},
+    )
 
 
-@router.get("/sitemap.xml", response_class=PlainTextResponse)
-async def sitemap_xml() -> str:
-    return _SITEMAP_XML
+@router.get("/sitemap.xml")
+async def sitemap_xml() -> Response:
+    return Response(
+        content=_SITEMAP_XML,
+        media_type="application/xml; charset=utf-8",
+        headers={"cache-control": "public, max-age=86400"},
+    )
 
 
 _PAGE_CACHE_HEADERS = (

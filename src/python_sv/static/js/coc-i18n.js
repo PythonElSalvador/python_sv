@@ -77,17 +77,27 @@
     });
   }
 
+  var saved = localStorage.getItem('pysv-lang');
+  if (saved === 'en') {
+    applyEN();
+    currentLang = 'en';
+    btn.textContent = 'ES';
+    document.documentElement.lang = 'en';
+  }
+
   btn.addEventListener('click', function() {
     if (currentLang === 'es') {
       applyEN();
       currentLang = 'en';
       btn.textContent = 'ES';
       document.documentElement.lang = 'en';
+      localStorage.setItem('pysv-lang', 'en');
     } else {
       applyES();
       currentLang = 'es';
       btn.textContent = 'EN';
       document.documentElement.lang = 'es';
+      localStorage.setItem('pysv-lang', 'es');
     }
   });
 

@@ -3,6 +3,14 @@
 {% block body %}
 
 <section class="pysv-hero grain">
+  <img class="pysv-hero-img"
+       src="{{ static_url('img/hero-izalco-1280.webp') }}"
+       srcset="{{ static_url('img/hero-izalco-640.webp') }} 640w, {{ static_url('img/hero-izalco-960.webp') }} 960w, {{ static_url('img/hero-izalco-1280.webp') }} 1280w, {{ static_url('img/hero-izalco-1920.webp') }} 1920w"
+       sizes="100vw"
+       alt=""
+       width="1280" height="853"
+       fetchpriority="high"
+       decoding="sync">
   <div class="container">
     <h1 data-i18n="hero_title">Estamos creando la comunidad de <strong>Python</strong> en El Salvador</h1>
     <p class="pysv-hero-date" data-i18n="hero_date">Sábado 14 de marzo, 2PM–5PM — Millenium Plaza, Alveare, San Salvador</p>

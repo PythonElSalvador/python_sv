@@ -4,10 +4,10 @@ import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 
-from app.config import Settings, get_settings
-from app.dependencies import (
+from python_sv.config import Settings, get_settings
+from python_sv.dependencies import (
     page_content,
     templates,
 )
@@ -18,17 +18,17 @@ router = APIRouter()
 
 
 @router.get("/health")
-async def health():
+async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
 @router.get("/robots.txt", response_class=PlainTextResponse)
-async def robots_txt(settings: Annotated[Settings, Depends(get_settings)]):
+async def robots_txt(settings: Annotated[Settings, Depends(get_settings)]) -> str:
     return f"User-agent: *\nAllow: /\nSitemap: {settings.base_url}/sitemap.xml\n"
 
 
 @router.get("/sitemap.xml", response_class=PlainTextResponse)
-async def sitemap_xml(settings: Annotated[Settings, Depends(get_settings)]):
+async def sitemap_xml(settings: Annotated[Settings, Depends(get_settings)]) -> str:
     return (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -46,7 +46,7 @@ async def sitemap_xml(settings: Annotated[Settings, Depends(get_settings)]):
 
 
 @router.get("/", response_class=HTMLResponse)
-async def home(request: Request):
+async def home(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="index.html",
@@ -58,7 +58,7 @@ async def home(request: Request):
 
 
 @router.get("/codigo-de-conducta", response_class=HTMLResponse)
-async def code_of_conduct(request: Request):
+async def code_of_conduct(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="codigo-de-conducta.html",
@@ -92,7 +92,7 @@ EVENTS = [
 
 
 @router.get("/calendario", response_class=HTMLResponse)
-async def calendar(request: Request):
+async def calendar(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="calendario.html",

@@ -3,7 +3,10 @@ from __future__ import annotations
 import hashlib
 import logging
 import secrets
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
+from typing import Any
 
 import frontmatter
 import markdown
@@ -15,9 +18,9 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.types import ASGIApp, Receive, Scope, Send
 from uvicorn.logging import DefaultFormatter
 
-from app.config import BASE_DIR, get_settings
-from app.dependencies import page_content, templates
-from app.routers.pages import router
+from python_sv.config import BASE_DIR, get_settings
+from python_sv.dependencies import page_content, templates
+from python_sv.routers.pages import router
 
 
 settings = get_settings()
@@ -29,11 +32,11 @@ logger.propagate = False
 
 
 def load_page(slug: str) -> frontmatter.Post:
-    path = BASE_DIR.parent / "content" / f"{slug}.md"
-    return frontmatter.load(path)
+    path = BASE_DIR.parent.parent / "content" / f"{slug}.md"
+    return frontmatter.load(str(path))
 
 
-def _file_hash(path) -> str:
+def _file_hash(path: Path) -> str:
     return hashlib.md5(path.read_bytes()).hexdigest()[:10]
 
 
@@ -62,7 +65,7 @@ class SecurityHeadersMiddleware:
         scope.setdefault("state", {})["csp_nonce"] = nonce
         path = scope.get("path", "")
 
-        async def send_wrapper(message):
+        async def send_wrapper(message: Any) -> None:
             if message["type"] == "http.response.start":
                 headers = list(message.get("headers", []))
                 headers.extend(
@@ -101,9 +104,9 @@ class SecurityHeadersMiddleware:
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     index_page = load_page("index")
-    page_content["title"] = index_page.metadata.get("title", "Python SV")
+    page_content["title"] = str(index_page.metadata.get("title", "Python SV"))
     page_content["body"] = markdown.markdown(index_page.content)
 
     static_hashes = _build_static_hashes()
@@ -112,7 +115,7 @@ async def lifespan(app: FastAPI):
         h = static_hashes.get(path, "")
         return f"/static/{path}?v={h}" if h else f"/static/{path}"
 
-    templates.env.globals["static_url"] = static_url
+    templates.env.globals["static_url"] = static_url  # ty: ignore[invalid-assignment]
 
     logger.info("pythonsv started")
     yield
@@ -127,14 +130,16 @@ app.include_router(router)
 
 
 @app.exception_handler(StarletteHTTPException)
-async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+async def http_exception_handler(
+    request: Request, exc: StarletteHTTPException
+) -> HTMLResponse:
     if exc.status_code == 404:
         return render_error(404, "Page not found.", request)
     return render_error(exc.status_code, str(exc.detail), request)
 
 
 @app.exception_handler(Exception)
-async def unhandled_exception_handler(request: Request, exc: Exception):
+async def unhandled_exception_handler(request: Request, exc: Exception) -> HTMLResponse:
     try:
         logger.exception("Unhandled error")
         return render_error(500, "Something went wrong. Please try again.", request)

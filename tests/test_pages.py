@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from app.config import Settings, get_settings
-from app.main import app
+from python_sv.config import Settings, get_settings
+from python_sv.main import app
 
 
 @pytest.mark.anyio

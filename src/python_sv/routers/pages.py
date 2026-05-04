@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 import logging
+import time
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 
 from python_sv.config import get_settings
-from python_sv.dependencies import (
-    page_content,
-    templates,
-)
 
 _settings = get_settings()
 _ROBOTS_TXT = f"User-agent: *\nAllow: /\nSitemap: {_settings.base_url}/sitemap.xml\n"
@@ -52,27 +49,26 @@ _PAGE_CACHE_HEADERS = (
     {} if _settings.debug else {"cache-control": "public, max-age=3600"}
 )
 
+_NONCE_SENTINEL = "__PYSV_NONCE__"
+_RENDER_MS_SENTINEL = "__RENDER_MS__"
+
+
+def _serve_cached(request: Request, slug: str) -> Response:
+    html = request.app.state.page_cache[slug]
+    nonce = request.state.csp_nonce
+    elapsed = f"{(time.perf_counter() - request.state.request_start) * 1000:.1f}"
+    html = html.replace(_NONCE_SENTINEL, nonce).replace(_RENDER_MS_SENTINEL, elapsed)
+    return HTMLResponse(content=html, headers=_PAGE_CACHE_HEADERS)
+
 
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request) -> Response:
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={
-            "title": page_content["title"],
-            "body": page_content["body"],
-        },
-        headers=_PAGE_CACHE_HEADERS,
-    )
+    return _serve_cached(request, "index")
 
 
 @router.get("/codigo-de-conducta", response_class=HTMLResponse)
 async def code_of_conduct(request: Request) -> Response:
-    return templates.TemplateResponse(
-        request=request,
-        name="codigo-de-conducta.html",
-        headers=_PAGE_CACHE_HEADERS,
-    )
+    return _serve_cached(request, "codigo-de-conducta")
 
 
 EVENTS = [
@@ -103,9 +99,4 @@ EVENTS = [
 
 @router.get("/calendario", response_class=HTMLResponse)
 async def calendar(request: Request) -> Response:
-    return templates.TemplateResponse(
-        request=request,
-        name="calendario.html",
-        context={"events": EVENTS},
-        headers=_PAGE_CACHE_HEADERS,
-    )
+    return _serve_cached(request, "calendario")

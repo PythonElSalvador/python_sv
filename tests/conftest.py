@@ -4,14 +4,16 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from python_sv.dependencies import page_content
-from python_sv.main import create_app
+from python_sv.main import _prerender_pages, create_app
 
 
 @pytest.fixture
 def app():
     page_content.setdefault("title", "Python SV")
     page_content.setdefault("body", "<p>Test</p>")
-    return create_app()
+    application = create_app()
+    _prerender_pages(application)
+    return application
 
 
 @pytest.fixture

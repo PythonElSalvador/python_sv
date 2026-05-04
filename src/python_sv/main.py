@@ -172,6 +172,37 @@ def _precompress_static(static_dir: pathlib.Path) -> dict[str, tuple[bytes, byte
 
 _static_compress_cache: dict[str, tuple[bytes, bytes]] = {}
 
+_page_cache: dict[str, str] = {}
+
+
+def _prerender_pages(app: FastAPI) -> None:
+    from python_sv.dependencies import _current_year
+    from python_sv.routers.pages import _NONCE_SENTINEL, _RENDER_MS_SENTINEL
+
+    env = templates.env
+    ctx = {
+        "csp_nonce": _NONCE_SENTINEL,
+        "current_year": _current_year(),
+        "render_time_ms": _RENDER_MS_SENTINEL,
+        "whatsapp_url": settings.whatsapp_url,
+        "title": page_content.get("title", "Python SV"),
+        "body": page_content.get("body", ""),
+    }
+
+    from python_sv.routers.pages import EVENTS
+
+    page_defs: list[tuple[str, str, dict[str, Any]]] = [
+        ("index", "index.html", {}),
+        ("calendario", "calendario.html", {"events": EVENTS}),
+        ("codigo-de-conducta", "codigo-de-conducta.html", {}),
+    ]
+    for slug, template_name, extra_ctx in page_defs:
+        tmpl = env.get_template(template_name)
+        html = tmpl.render({**ctx, **extra_ctx})
+        _page_cache[slug] = html
+
+    app.state.page_cache = _page_cache
+
 
 class CompressMiddleware:
     def __init__(self, app: ASGIApp, minimum_size: int = 500) -> None:
@@ -308,6 +339,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     _static_compress_cache.update(_precompress_static(BASE_DIR / "static"))
     logger.info("pre-compressed %d static files", len(_static_compress_cache))
+
+    _prerender_pages(app)
+    logger.info("pre-rendered %d page templates", len(_page_cache))
 
     async with (
         create_aio_session() as aio_session,

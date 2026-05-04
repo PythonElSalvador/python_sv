@@ -299,9 +299,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Language toggle */
 .pysv-lang-toggle {
-  background: var(--pysv-white-8);
+  background: var(--pysv-white-10);
   border: none;
-  color: var(--pysv-white-60);
+  color: var(--pysv-white-70);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.7rem;
@@ -806,7 +806,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 4px rgba(15,31,66,0.5);
 }
 
-.context-content h5 {
+.context-content h3 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.1rem;
@@ -1008,13 +1008,13 @@ h1, h2, h3, h4, h5, h6 {
 
 .pysv-footer {
   background: var(--pysv-cobalt-dark);
-  color: var(--pysv-white-35);
+  color: var(--pysv-white-60);
   padding: 3rem 0 2rem;
   font-size: 0.85rem;
 }
 
 .pysv-footer a {
-  color: var(--pysv-white-35);
+  color: var(--pysv-white-60);
 }
 .pysv-footer a:hover { color: var(--pysv-gold); }
 

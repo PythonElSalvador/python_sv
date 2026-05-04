@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 
-from app.config import BASE_DIR, get_settings
+from python_sv.config import BASE_DIR, get_settings
 
 settings = get_settings()
 
@@ -24,5 +24,5 @@ templates = Jinja2Templates(
     directory=BASE_DIR / "templates",
     context_processors=[context_processor],
 )
-templates.env.globals["whatsapp_url"] = settings.whatsapp_url
-templates.env.globals["static_url"] = lambda path: f"/static/{path}"
+templates.env.globals["whatsapp_url"] = settings.whatsapp_url  # ty: ignore[invalid-assignment]
+templates.env.globals["static_url"] = lambda path: f"/static/{path}"  # ty: ignore[invalid-assignment]

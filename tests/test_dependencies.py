@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.dependencies import context_processor
+from python_sv.dependencies import context_processor
 
 
 class FakeState:

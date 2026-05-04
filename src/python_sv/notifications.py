@@ -4,7 +4,7 @@ import logging
 
 import resend
 
-from app.config import get_settings
+from python_sv.config import get_settings
 
 logger = logging.getLogger("pythonsv")
 

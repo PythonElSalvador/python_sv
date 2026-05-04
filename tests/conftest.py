@@ -3,8 +3,8 @@ from __future__ import annotations
 import pytest
 from httpx import ASGITransport, AsyncClient
 
-from app.dependencies import page_content
-from app.main import app
+from python_sv.dependencies import page_content
+from python_sv.main import app
 
 
 @pytest.fixture

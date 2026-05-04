@@ -11,3 +11,4 @@ scripts/
 *.db
 .playwright-mcp/
 LATEST_HANDOFF.md
+.mcp.json

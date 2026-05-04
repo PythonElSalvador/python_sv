@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 import logging
-from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 
-from python_sv.config import Settings, get_settings
+from python_sv.config import get_settings
 from python_sv.dependencies import (
     page_content,
     templates,
 )
+
+_settings = get_settings()
 
 logger = logging.getLogger("pythonsv")
 
@@ -23,26 +24,29 @@ async def health() -> dict[str, str]:
 
 
 @router.get("/robots.txt", response_class=PlainTextResponse)
-async def robots_txt(settings: Annotated[Settings, Depends(get_settings)]) -> str:
-    return f"User-agent: *\nAllow: /\nSitemap: {settings.base_url}/sitemap.xml\n"
+async def robots_txt() -> str:
+    return f"User-agent: *\nAllow: /\nSitemap: {_settings.base_url}/sitemap.xml\n"
 
 
 @router.get("/sitemap.xml", response_class=PlainTextResponse)
-async def sitemap_xml(settings: Annotated[Settings, Depends(get_settings)]) -> str:
+async def sitemap_xml() -> str:
     return (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         "  <url>\n"
-        f"    <loc>{settings.base_url}/</loc>\n"
+        f"    <loc>{_settings.base_url}/</loc>\n"
         "  </url>\n"
         "  <url>\n"
-        f"    <loc>{settings.base_url}/calendario</loc>\n"
+        f"    <loc>{_settings.base_url}/calendario</loc>\n"
         "  </url>\n"
         "  <url>\n"
-        f"    <loc>{settings.base_url}/codigo-de-conducta</loc>\n"
+        f"    <loc>{_settings.base_url}/codigo-de-conducta</loc>\n"
         "  </url>\n"
         "</urlset>\n"
     )
+
+
+_PAGE_CACHE_HEADERS = {"cache-control": "public, max-age=3600"}
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -54,6 +58,7 @@ async def home(request: Request) -> Response:
             "title": page_content["title"],
             "body": page_content["body"],
         },
+        headers=_PAGE_CACHE_HEADERS,
     )
 
 
@@ -62,6 +67,7 @@ async def code_of_conduct(request: Request) -> Response:
     return templates.TemplateResponse(
         request=request,
         name="codigo-de-conducta.html",
+        headers=_PAGE_CACHE_HEADERS,
     )
 
 
@@ -97,4 +103,5 @@ async def calendar(request: Request) -> Response:
         request=request,
         name="calendario.html",
         context={"events": EVENTS},
+        headers=_PAGE_CACHE_HEADERS,
     )

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import secrets
 from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
@@ -27,7 +26,7 @@ def _current_year() -> int:
 
 def context_processor(request: Request) -> dict[str, str | int]:
     return {
-        "csp_nonce": getattr(request.state, "csp_nonce", secrets.token_urlsafe(16)),
+        "csp_nonce": request.state.csp_nonce,
         "current_year": _current_year(),
     }
 
@@ -41,4 +40,3 @@ templates.env.auto_reload = settings.debug
 templates.env.trim_blocks = True
 templates.env.lstrip_blocks = True
 templates.env.globals["whatsapp_url"] = settings.whatsapp_url  # ty: ignore[invalid-assignment]
-templates.env.globals["static_url"] = lambda path: f"/static/{path}"  # ty: ignore[invalid-assignment]

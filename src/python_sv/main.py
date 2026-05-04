@@ -14,6 +14,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.types import ASGIApp, Receive, Scope, Send
 from uvicorn.logging import DefaultFormatter
@@ -54,6 +55,24 @@ def _build_static_hashes() -> dict[str, str]:
 # Raw ASGI middleware — intentionally avoids BaseHTTPMiddleware to prevent
 # issues with streaming responses and for better performance.
 class SecurityHeadersMiddleware:
+    _static_headers: list[tuple[bytes, bytes]] = [
+        (b"x-content-type-options", b"nosniff"),
+        (b"x-frame-options", b"DENY"),
+        (b"referrer-policy", b"strict-origin-when-cross-origin"),
+        (b"permissions-policy", b"camera=(), microphone=(), geolocation=()"),
+    ]
+    _csp_template: str = (
+        "default-src 'self'; "
+        "script-src 'self' 'nonce-{}'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "font-src 'self'; "
+        "img-src 'self' data:; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none'; "
+        "base-uri 'self'; "
+        "form-action 'self'"
+    )
+
     def __init__(self, app: ASGIApp) -> None:
         self.app = app
 
@@ -65,33 +84,15 @@ class SecurityHeadersMiddleware:
         nonce = secrets.token_urlsafe(16)
         scope.setdefault("state", {})["csp_nonce"] = nonce
         path = scope.get("path", "")
+        csp = self._csp_template.format(nonce).encode()
 
         async def send_wrapper(message: Any) -> None:
             if message["type"] == "http.response.start":
                 headers = list(message.get("headers", []))
                 headers.extend(
                     [
-                        (b"x-content-type-options", b"nosniff"),
-                        (b"x-frame-options", b"DENY"),
-                        (b"referrer-policy", b"strict-origin-when-cross-origin"),
-                        (
-                            b"permissions-policy",
-                            b"camera=(), microphone=(), geolocation=()",
-                        ),
-                        (
-                            b"content-security-policy",
-                            (
-                                f"default-src 'self'; "
-                                f"script-src 'self' 'nonce-{nonce}'; "
-                                f"style-src 'self' 'unsafe-inline'; "
-                                f"font-src 'self'; "
-                                f"img-src 'self' data:; "
-                                f"connect-src 'self'; "
-                                f"frame-ancestors 'none'; "
-                                f"base-uri 'self'; "
-                                f"form-action 'self'"
-                            ).encode(),
-                        ),
+                        *self._static_headers,
+                        (b"content-security-policy", csp),
                     ]
                 )
                 if path.startswith("/static/") and not settings.debug:
@@ -145,6 +146,7 @@ def create_app() -> FastAPI:
         lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None
     )
     application.add_middleware(SecurityHeadersMiddleware)
+    application.add_middleware(GZipMiddleware, minimum_size=1000)
     application.add_middleware(
         TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts
     )

@@ -6,7 +6,7 @@ import pytest
 from fastapi import HTTPException
 from httpx import ASGITransport, AsyncClient
 
-from python_sv.config import Settings, get_settings
+from python_sv.config import Settings
 
 
 @pytest.mark.anyio
@@ -54,14 +54,16 @@ async def test_security_headers(client):
 
 
 @pytest.mark.anyio
-async def test_settings_override(app, client):
-    custom = Settings(base_url="https://custom.example.com")
-    app.dependency_overrides[get_settings] = lambda: custom
+async def test_settings_override(client):
+    import python_sv.routers.pages as pages_mod
+
+    original = pages_mod._settings
+    pages_mod._settings = Settings(base_url="https://custom.example.com")
     try:
         resp = await client.get("/robots.txt")
         assert "https://custom.example.com" in resp.text
     finally:
-        app.dependency_overrides.clear()
+        pages_mod._settings = original
 
 
 @pytest.mark.anyio

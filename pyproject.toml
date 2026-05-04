@@ -4,16 +4,19 @@ version = "0.1.0"
 description = "Sitio web de la comunidad Python El Salvador"
 requires-python = ">=3.12"
 dependencies = [
+    "aiohttp[speedups]>=3.11",
+    "attrs>=25.3",
     "fastapi>=0.115",
-    "uvicorn[standard]>=0.34",
     "gunicorn>=23.0",
+    "httpx[http2]>=0.28.1",
     "jinja2>=3.1",
-    "python-frontmatter>=1.1",
+    "markdown>=3.7",
     "pydantic[email]>=2.0",
     "pydantic-settings>=2.0",
+    "python-frontmatter>=1.1",
     "python-multipart>=0.0.18",
-    "markdown>=3.7",
     "resend>=2.23.0",
+    "uvicorn[standard]>=0.34",
 ]
 
 [dependency-groups]
@@ -23,6 +26,7 @@ dev = [
     "mypy>=1.20.2",
     "pytest>=9.0.2",
     "pytest-anyio>=0.0.0",
+    "pytest-cov>=6.2",
     "ruff>=0.11",
     "ty>=0.0.34",
     "types-markdown>=3.10.2.20260408",
@@ -36,6 +40,6 @@ build-backend = "uv_build"
 strict = true
 
 [[tool.mypy.overrides]]
-module = ["frontmatter", "resend", "resend.*"]
+module = ["aiohttp", "aiohttp.*", "frontmatter", "resend", "resend.*"]
 ignore_missing_imports = true
 

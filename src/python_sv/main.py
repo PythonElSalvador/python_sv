@@ -20,6 +20,7 @@ from uvicorn.logging import DefaultFormatter
 
 from python_sv.config import BASE_DIR, get_settings
 from python_sv.dependencies import page_content, templates
+from python_sv.http import HttpClients, create_aio_session, create_httpx_client
 from python_sv.routers.pages import router
 
 
@@ -117,9 +118,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     templates.env.globals["static_url"] = static_url  # ty: ignore[invalid-assignment]
 
-    logger.info("pythonsv started")
-    yield
-    logger.info("pythonsv shutting down")
+    async with (
+        create_aio_session() as aio_session,
+        create_httpx_client() as httpx_client,
+    ):
+        app.state.http = HttpClients(aio=aio_session, httpx=httpx_client)
+        logger.info("pythonsv started")
+        yield
+        logger.info("pythonsv shutting down")
 
 
 def render_error(code: int, message: str, request: Request) -> HTMLResponse:

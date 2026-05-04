@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import pytest
+from fastapi import HTTPException
+from httpx import ASGITransport, AsyncClient
 
 from python_sv.config import Settings, get_settings
 
@@ -58,3 +62,63 @@ async def test_settings_override(app, client):
         assert "https://custom.example.com" in resp.text
     finally:
         app.dependency_overrides.clear()
+
+
+@pytest.mark.anyio
+async def test_static_cache_header(client):
+    resp = await client.get("/static/css/style.css")
+    assert resp.headers["cache-control"] == "public, max-age=31536000, immutable"
+
+
+@pytest.mark.anyio
+async def test_non_http_scope_passthrough(app):
+    received: dict[str, object] = {}
+
+    async def mock_app(scope, receive, send):
+        received["scope"] = scope
+
+    from python_sv.main import SecurityHeadersMiddleware
+
+    mw = SecurityHeadersMiddleware(mock_app)
+    await mw({"type": "websocket"}, None, None)
+    assert received["scope"]["type"] == "websocket"
+
+
+@pytest.mark.anyio
+async def test_non_404_http_exception(app, client):
+    async def raise_405():
+        raise HTTPException(status_code=405, detail="Method Not Allowed")
+
+    app.add_api_route("/test-405", raise_405)
+    resp = await client.get("/test-405")
+    assert resp.status_code == 405
+
+
+@pytest.fixture
+async def lenient_client(app):
+    transport = ASGITransport(app=app, raise_app_exceptions=False)
+    async with AsyncClient(transport=transport, base_url="http://localhost") as ac:
+        yield ac
+
+
+@pytest.mark.anyio
+async def test_unhandled_exception_returns_500(app, lenient_client):
+    async def raise_unhandled():
+        raise RuntimeError("boom")
+
+    app.add_api_route("/test-500", raise_unhandled)
+    resp = await lenient_client.get("/test-500")
+    assert resp.status_code == 500
+    assert "pythonsv.com" in resp.text
+
+
+@pytest.mark.anyio
+async def test_unhandled_exception_fallback(app, lenient_client):
+    async def raise_unhandled():
+        raise RuntimeError("boom")
+
+    app.add_api_route("/test-fallback", raise_unhandled)
+    with patch("python_sv.main.render_error", side_effect=Exception("render failed")):
+        resp = await lenient_client.get("/test-fallback")
+    assert resp.status_code == 500
+    assert resp.text == "Internal Server Error"

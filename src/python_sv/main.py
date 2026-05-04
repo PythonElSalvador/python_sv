@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import secrets
+import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -72,6 +73,21 @@ class SecurityHeadersMiddleware:
         "base-uri 'self'; "
         "form-action 'self'"
     )
+    _static_csp: bytes = (
+        b"default-src 'none'; "
+        b"style-src 'self' 'unsafe-inline'; "
+        b"font-src 'self'; "
+        b"img-src 'self' data:"
+    )
+    _static_immutable_headers: list[tuple[bytes, bytes]] = [
+        *_static_headers,
+        (b"content-security-policy", _static_csp),
+        (b"cache-control", b"public, max-age=31536000, immutable"),
+    ]
+    _static_debug_headers: list[tuple[bytes, bytes]] = [
+        *_static_headers,
+        (b"content-security-policy", _static_csp),
+    ]
 
     def __init__(self, app: ASGIApp) -> None:
         self.app = app
@@ -81,9 +97,30 @@ class SecurityHeadersMiddleware:
             await self.app(scope, receive, send)
             return
 
-        nonce = secrets.token_urlsafe(16)
-        scope.setdefault("state", {})["csp_nonce"] = nonce
         path = scope.get("path", "")
+
+        if path.startswith("/static/"):
+            scope.setdefault("state", {})["csp_nonce"] = ""
+            extra = (
+                self._static_immutable_headers
+                if not settings.debug
+                else self._static_debug_headers
+            )
+
+            async def static_send(message: Any) -> None:
+                if message["type"] == "http.response.start":
+                    headers = list(message.get("headers", []))
+                    headers.extend(extra)
+                    message = {**message, "headers": headers}
+                await send(message)
+
+            await self.app(scope, receive, static_send)
+            return
+
+        nonce = secrets.token_urlsafe(16)
+        state = scope.setdefault("state", {})
+        state["csp_nonce"] = nonce
+        state["request_start"] = time.perf_counter()
         csp = self._csp_template.format(nonce).encode()
 
         async def send_wrapper(message: Any) -> None:
@@ -95,10 +132,6 @@ class SecurityHeadersMiddleware:
                         (b"content-security-policy", csp),
                     ]
                 )
-                if path.startswith("/static/") and not settings.debug:
-                    headers.append(
-                        (b"cache-control", b"public, max-age=31536000, immutable")
-                    )
                 message = {**message, "headers": headers}
             await send(message)
 

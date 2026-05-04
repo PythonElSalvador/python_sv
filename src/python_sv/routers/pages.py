@@ -12,6 +12,21 @@ from python_sv.dependencies import (
 )
 
 _settings = get_settings()
+_ROBOTS_TXT = f"User-agent: *\nAllow: /\nSitemap: {_settings.base_url}/sitemap.xml\n"
+_SITEMAP_XML = (
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/</loc>\n"
+    "  </url>\n"
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/calendario</loc>\n"
+    "  </url>\n"
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/codigo-de-conducta</loc>\n"
+    "  </url>\n"
+    "</urlset>\n"
+)
 
 logger = logging.getLogger("pythonsv")
 
@@ -25,28 +40,17 @@ async def health() -> dict[str, str]:
 
 @router.get("/robots.txt", response_class=PlainTextResponse)
 async def robots_txt() -> str:
-    return f"User-agent: *\nAllow: /\nSitemap: {_settings.base_url}/sitemap.xml\n"
+    return _ROBOTS_TXT
 
 
 @router.get("/sitemap.xml", response_class=PlainTextResponse)
 async def sitemap_xml() -> str:
-    return (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        "  <url>\n"
-        f"    <loc>{_settings.base_url}/</loc>\n"
-        "  </url>\n"
-        "  <url>\n"
-        f"    <loc>{_settings.base_url}/calendario</loc>\n"
-        "  </url>\n"
-        "  <url>\n"
-        f"    <loc>{_settings.base_url}/codigo-de-conducta</loc>\n"
-        "  </url>\n"
-        "</urlset>\n"
-    )
+    return _SITEMAP_XML
 
 
-_PAGE_CACHE_HEADERS = {"cache-control": "public, max-age=3600"}
+_PAGE_CACHE_HEADERS = (
+    {} if _settings.debug else {"cache-control": "public, max-age=3600"}
+)
 
 
 @router.get("/", response_class=HTMLResponse)

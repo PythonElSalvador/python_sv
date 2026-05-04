@@ -57,18 +57,20 @@ async def test_security_headers(client):
 async def test_settings_override(client):
     import python_sv.routers.pages as pages_mod
 
-    original = pages_mod._settings
-    pages_mod._settings = Settings(base_url="https://custom.example.com")
+    custom = Settings(base_url="https://custom.example.com")
+    custom_robots = f"User-agent: *\nAllow: /\nSitemap: {custom.base_url}/sitemap.xml\n"
+    original = pages_mod._ROBOTS_TXT
+    pages_mod._ROBOTS_TXT = custom_robots
     try:
         resp = await client.get("/robots.txt")
         assert "https://custom.example.com" in resp.text
     finally:
-        pages_mod._settings = original
+        pages_mod._ROBOTS_TXT = original
 
 
 @pytest.mark.anyio
 async def test_static_cache_header(client):
-    resp = await client.get("/static/css/style.css")
+    resp = await client.get("/static/css/pysv.css")
     assert resp.headers["cache-control"] == "public, max-age=31536000, immutable"
 
 

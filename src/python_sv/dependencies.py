@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
@@ -24,10 +25,12 @@ def _current_year() -> int:
     return datetime.now(timezone.utc).year
 
 
-def context_processor(request: Request) -> dict[str, str | int]:
+def context_processor(request: Request) -> dict[str, str | int | float]:
+    elapsed_ms = (time.perf_counter() - request.state.request_start) * 1000
     return {
         "csp_nonce": request.state.csp_nonce,
         "current_year": _current_year(),
+        "render_time_ms": round(elapsed_ms, 1),
     }
 
 

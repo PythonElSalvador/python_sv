@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import time
+
 from python_sv.dependencies import context_processor
 
 
 class FakeState:
     csp_nonce = "test-nonce"
+    request_start = time.perf_counter()
 
 
 class FakeRequest:

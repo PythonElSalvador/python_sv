@@ -14,3 +14,6 @@ data/
 LATEST_HANDOFF.md
 .mcp.json
 scripts/organizers.csv
+.claude/
+.coverage
+/*.png

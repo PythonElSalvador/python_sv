@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from fastapi import Request
 
 
-@attrs.define
+@attrs.define(eq=False, repr=False)
 class HttpClients:
     aio: ClientSession
     httpx: httpx.AsyncClient
@@ -19,7 +19,7 @@ class HttpClients:
 
 def create_aio_session() -> ClientSession:
     connector = TCPConnector(
-        limit=0,
+        limit=200,
         limit_per_host=30,
         ttl_dns_cache=300,
         use_dns_cache=True,
@@ -40,17 +40,17 @@ def create_aio_session() -> ClientSession:
 
 
 def create_httpx_client() -> httpx.AsyncClient:
-    transport = httpx.AsyncHTTPTransport(
-        http1=False,
-        http2=True,
-        socket_options=[
-            (socket.IPPROTO_TCP, socket.TCP_NODELAY, 1),
-        ],
-    )
     limits = httpx.Limits(
         max_connections=100,
         max_keepalive_connections=50,
         keepalive_expiry=30,
+    )
+    transport = httpx.AsyncHTTPTransport(
+        http2=True,
+        limits=limits,
+        socket_options=[
+            (socket.IPPROTO_TCP, socket.TCP_NODELAY, 1),
+        ],
     )
     timeout = httpx.Timeout(
         connect=5.0,
@@ -60,7 +60,6 @@ def create_httpx_client() -> httpx.AsyncClient:
     )
     return httpx.AsyncClient(
         transport=transport,
-        limits=limits,
         timeout=timeout,
     )
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import logging
 import secrets
@@ -7,8 +8,6 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
-
-import asyncio
 
 import frontmatter
 import markdown
@@ -122,14 +121,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     aio_session = create_aio_session()
     httpx_client = create_httpx_client()
-    async with httpx_client:
-        app.state.http = HttpClients(aio=aio_session, httpx=httpx_client)
-        logger.info("pythonsv started")
-        yield
-        logger.info("pythonsv shutting down")
-    await aio_session.close()
-    # Allow SSL transports to drain before event loop closes.
-    await asyncio.sleep(0.25)
+    try:
+        async with httpx_client:
+            app.state.http = HttpClients(aio=aio_session, httpx=httpx_client)
+            logger.info("pythonsv started")
+            yield
+            logger.info("pythonsv shutting down")
+    finally:
+        await aio_session.close()
+        await asyncio.sleep(0.25)
 
 
 def render_error(code: int, message: str, request: Request) -> HTMLResponse:

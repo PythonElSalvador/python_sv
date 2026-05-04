@@ -22,6 +22,7 @@ RUN addgroup --system --gid 1001 appgroup && \
     adduser --system --uid 1001 --ingroup appgroup appuser
 
 COPY --from=builder /app/.venv /app/.venv
+COPY src/ src/
 COPY content/ content/
 COPY gunicorn.conf.py .
 

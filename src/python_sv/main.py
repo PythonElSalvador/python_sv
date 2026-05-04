@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import hashlib
 import logging
 import secrets
@@ -119,17 +118,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     templates.env.globals["static_url"] = static_url  # ty: ignore[invalid-assignment]
 
-    aio_session = create_aio_session()
-    httpx_client = create_httpx_client()
-    try:
-        async with httpx_client:
-            app.state.http = HttpClients(aio=aio_session, httpx=httpx_client)
-            logger.info("pythonsv started")
-            yield
-            logger.info("pythonsv shutting down")
-    finally:
-        await aio_session.close()
-        await asyncio.sleep(0.25)
+    async with (
+        create_aio_session() as aio_session,
+        create_httpx_client() as httpx_client,
+    ):
+        app.state.http = HttpClients(aio=aio_session, httpx=httpx_client)
+        logger.info("pythonsv started")
+        yield
+        logger.info("pythonsv shutting down")
 
 
 def render_error(code: int, message: str, request: Request) -> HTMLResponse:

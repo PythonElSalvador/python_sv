@@ -76,4 +76,5 @@ jobs:
             az containerapp update \
               --name pythonsv \
               --resource-group pythonsv \
-              --image pythonsvcr.azurecr.io/pythonsv:${{ github.sha }}
+              --image pythonsvcr.azurecr.io/pythonsv:${{ github.sha }} \
+              --set-env-vars "MONGODB_URI=${{ secrets.MONGODB_URI }}"

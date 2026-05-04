@@ -1,0 +1,204 @@
+{% extends "layout.html" %}
+{% block preload_hero %}{% endblock %}
+
+{% block title %}Admin — Signups — Python SV{% endblock %}
+
+{% block extra_head %}
+<style nonce="{{ csp_nonce }}">
+  .admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .admin-stat-card {
+    background: var(--pysv-white-6);
+    border: 1px solid var(--pysv-white-8);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+  }
+  .admin-stat-value {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--pysv-gold);
+    line-height: 1.2;
+  }
+  .admin-stat-label {
+    font-size: 0.8rem;
+    color: var(--pysv-white-60);
+    margin-top: 0.25rem;
+  }
+  .admin-group {
+    margin-bottom: 2rem;
+  }
+  .admin-group h3 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--pysv-white);
+    margin-bottom: 0.75rem;
+  }
+  .admin-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+  }
+  .admin-bar-label {
+    min-width: 120px;
+    font-size: 0.82rem;
+    color: var(--pysv-white-70);
+  }
+  .admin-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--pysv-white-8);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .admin-bar-fill {
+    height: 100%;
+    background: var(--pysv-gold);
+    border-radius: 3px;
+  }
+  .admin-bar-count {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--pysv-white-55);
+    min-width: 30px;
+    text-align: right;
+  }
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .admin-table th {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    color: var(--pysv-white-60);
+    font-weight: 600;
+    border-bottom: 1px solid var(--pysv-white-10);
+  }
+  .admin-table td {
+    padding: 0.5rem 0.75rem;
+    color: var(--pysv-white-70);
+    border-bottom: 1px solid var(--pysv-white-6);
+  }
+  .admin-notice {
+    background: var(--pysv-white-6);
+    border: 1px solid var(--pysv-white-8);
+    border-radius: var(--radius-sm);
+    padding: 2rem;
+    text-align: center;
+    color: var(--pysv-white-60);
+    font-size: 0.9rem;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="pysv-section pysv-section-dark">
+  <div class="container">
+    <span class="pysv-section-label">Admin</span>
+    <h1 class="pysv-section-title">Signup Stats</h1>
+
+    {% if db_unavailable %}
+    <div class="admin-notice">
+      Database is not configured. Set the <code>MONGODB_URI</code> environment variable to enable this page.
+    </div>
+    {% else %}
+
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <div class="admin-stat-value">{{ total }}</div>
+        <div class="admin-stat-label">Total signups</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-value">{{ by_city | length }}</div>
+        <div class="admin-stat-label">Cities represented</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-value">{{ by_member_type | length }}</div>
+        <div class="admin-stat-label">Member types</div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-value">{{ by_role | length }}</div>
+        <div class="admin-stat-label">Roles</div>
+      </div>
+    </div>
+
+    <div class="admin-group">
+      <h3>Signups by City (top 10)</h3>
+      {% for item in by_city %}
+      <div class="admin-bar">
+        <span class="admin-bar-label">{{ item._id or "Unknown" }}</span>
+        <div class="admin-bar-track">
+          <div class="admin-bar-fill" style="width: {{ (item.count / total * 100) | round(1) }}%"></div>
+        </div>
+        <span class="admin-bar-count">{{ item.count }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="admin-group">
+      <h3>Signups by Member Type</h3>
+      {% for item in by_member_type %}
+      <div class="admin-bar">
+        <span class="admin-bar-label">{{ item._id or "Unknown" }}</span>
+        <div class="admin-bar-track">
+          <div class="admin-bar-fill" style="width: {{ (item.count / total * 100) | round(1) }}%"></div>
+        </div>
+        <span class="admin-bar-count">{{ item.count }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="admin-group">
+      <h3>Signups by Role</h3>
+      {% for item in by_role %}
+      <div class="admin-bar">
+        <span class="admin-bar-label">{{ item._id or "Unknown" }}</span>
+        <div class="admin-bar-track">
+          <div class="admin-bar-fill" style="width: {{ (item.count / total * 100) | round(1) }}%"></div>
+        </div>
+        <span class="admin-bar-count">{{ item.count }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="admin-group">
+      <h3>Recent Signups (last 20)</h3>
+      {% if recent %}
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>City</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for signup in recent %}
+            <tr>
+              <td>{{ signup.name }}</td>
+              <td>{{ signup.email }}</td>
+              <td>{{ signup.city }}</td>
+              <td>{{ signup.created_at.strftime('%Y-%m-%d %H:%M') if signup.created_at else "—" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p style="color: var(--pysv-white-55); font-size: 0.85rem;">No signups yet.</p>
+      {% endif %}
+    </div>
+
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

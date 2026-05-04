@@ -15,6 +15,7 @@ import brotli
 import frontmatter
 import markdown
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -22,10 +23,14 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.types import ASGIApp, Receive, Scope, Send
 from uvicorn.logging import DefaultFormatter
 
+from motor.motor_asyncio import AsyncIOMotorClient
+
 from python_sv.config import BASE_DIR, get_settings
 from python_sv.dependencies import page_content, templates
 from python_sv.http import HttpClients, create_aio_session, create_httpx_client
+from python_sv.routers.admin import router as admin_router
 from python_sv.routers.pages import router
+from python_sv.routers.signup import router as signup_router
 
 
 settings = get_settings()
@@ -378,6 +383,17 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     link_parts.append(f"<{css_url}>; rel=preload; as=style")
     app.state.link_header = ", ".join(link_parts)
 
+    mongo_client: AsyncIOMotorClient[Any] | None = None
+    if settings.mongodb_uri:
+        mongo_client = AsyncIOMotorClient(settings.mongodb_uri)
+        db = mongo_client.pythonsv
+        await db.signups.create_index("email", unique=True)
+        await db.signups.create_index([("created_at", -1)])
+        app.state.db = db
+        logger.info("connected to mongodb")
+    else:
+        app.state.db = None
+
     async with (
         create_aio_session() as aio_session,
         create_httpx_client() as httpx_client,
@@ -386,6 +402,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         logger.info("pythonsv started")
         yield
         logger.info("pythonsv shutting down")
+
+    if mongo_client:
+        mongo_client.close()
 
 
 def render_error(code: int, message: str, request: Request) -> HTMLResponse:
@@ -413,11 +432,34 @@ def create_app() -> FastAPI:
         "/static", StaticFiles(directory=BASE_DIR / "static"), name="static"
     )
     application.include_router(router)
+    application.include_router(signup_router)
+    application.include_router(admin_router)
+
+    @application.exception_handler(RequestValidationError)
+    async def validation_exception_handler(
+        request: Request, exc: RequestValidationError
+    ) -> HTMLResponse:
+        if request.url.path.startswith("/api/"):
+            return templates.TemplateResponse(
+                request=request,
+                name="partials/signup_error.html",
+                context={
+                    "message": "Por favor revisa que todos los campos estén correctos."
+                },
+                status_code=422,
+            )
+        return render_error(422, "Invalid request.", request)
 
     @application.exception_handler(StarletteHTTPException)
     async def http_exception_handler(
         request: Request, exc: StarletteHTTPException
     ) -> HTMLResponse:
+        if exc.status_code == 401:
+            return HTMLResponse(
+                content="Unauthorized",
+                status_code=401,
+                headers={"WWW-Authenticate": "Basic"},
+            )
         if exc.status_code == 404:
             return render_error(404, "Page not found.", request)
         return render_error(exc.status_code, str(exc.detail), request)

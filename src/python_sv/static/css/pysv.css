@@ -1524,5 +1524,72 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ==========================================================================
+   Signup form (HTMX)
+   ========================================================================== */
+
+.pysv-signup-form {
+  max-width: 560px;
+  margin: 2rem auto 0;
+}
+
+.pysv-form-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pysv-input {
+  flex: 1;
+  background: var(--pysv-white-5);
+  border: 1px solid var(--pysv-white-8);
+  border-radius: 0.4rem;
+  color: var(--pysv-white);
+  padding: 0.8rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.93rem;
+  outline: none;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.pysv-input::placeholder { color: var(--pysv-warm-300); }
+
+select.pysv-input { color: var(--pysv-warm-300); }
+select.pysv-input:valid { color: var(--pysv-white); }
+select.pysv-input option { background: var(--pysv-cobalt-dark); color: var(--pysv-white); }
+
+.pysv-input:focus {
+  border-color: rgba(232,168,23,0.4);
+  background: var(--pysv-white-8);
+}
+
+.pysv-signup-btn {
+  flex: 0 0 auto;
+  padding: 0.8rem 2rem;
+  font-size: 0.9rem;
+}
+
+.htmx-indicator {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--pysv-cobalt);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.htmx-request .htmx-indicator { display: inline-block; }
+
+#signup-result {
+  max-width: 560px;
+  margin: 1.5rem auto 0;
+}
+
+@media (max-width: 575.98px) {
+  .pysv-form-row { flex-direction: column; }
+  .pysv-signup-btn { width: 100%; }
+}
+
 /* Noscript — hide language toggle when JS is unavailable */
 noscript .pysv-lang-toggle { display: none; }

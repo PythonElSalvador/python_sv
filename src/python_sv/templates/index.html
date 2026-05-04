@@ -155,6 +155,50 @@
   </div>
 </section>
 
+<section class="pysv-section pysv-section-dark grain" id="unete">
+  <div class="container">
+    <div class="reveal">
+      <span class="pysv-section-label" data-i18n="signup_label">Comunidad</span>
+      <h2 class="pysv-section-title" data-i18n="signup_title">Únete a Python SV</h2>
+      <p class="pysv-section-subtitle" data-i18n="signup_subtitle">Recibe novedades y accede al grupo de WhatsApp de la comunidad.</p>
+    </div>
+
+    <form id="signup-form" class="pysv-signup-form reveal"
+          hx-post="/api/signup"
+          hx-target="#signup-result"
+          hx-swap="innerHTML"
+          hx-indicator="#signup-spinner">
+      <div class="pysv-form-row">
+        <input type="text" name="name" placeholder="Tu nombre" required class="pysv-input" autocomplete="name">
+        <input type="email" name="email" placeholder="correo@ejemplo.com" required class="pysv-input" autocomplete="email">
+      </div>
+      <div class="pysv-form-row">
+        <input type="text" name="city" placeholder="Ciudad" required class="pysv-input" autocomplete="address-level2">
+        <select name="member_type" required class="pysv-input">
+          <option value="" disabled selected data-i18n="form_type_placeholder">Tipo de miembro</option>
+          <option value="student" data-i18n="form_type_student">Estudiante</option>
+          <option value="professional" data-i18n="form_type_pro">Profesional</option>
+          <option value="other" data-i18n="form_type_other">Otro</option>
+        </select>
+      </div>
+      <div class="pysv-form-row">
+        <select name="role" required class="pysv-input">
+          <option value="" disabled selected data-i18n="form_role_placeholder">¿Cómo quieres participar?</option>
+          <option value="attend" data-i18n="form_role_attend">Asistir a eventos</option>
+          <option value="speak" data-i18n="form_role_speak">Dar charlas</option>
+          <option value="organize" data-i18n="form_role_organize">Ayudar a organizar</option>
+        </select>
+        <button type="submit" class="btn-pysv-gold pysv-signup-btn">
+          <span class="htmx-indicator" id="signup-spinner" aria-hidden="true"></span>
+          <span data-i18n="form_submit">Unirme</span>
+        </button>
+      </div>
+    </form>
+
+    <div id="signup-result"></div>
+  </div>
+</section>
+
 {% endblock %}
 
 {% block scripts_bottom %}

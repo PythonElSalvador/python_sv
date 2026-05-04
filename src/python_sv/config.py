@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     allowed_hosts: list[str] = ["localhost", "127.0.0.1"]
     log_level: str = "INFO"
     csrf_secret: str = secrets.token_hex(32)
+    mongodb_uri: str = ""
+    admin_username: str = ""
+    admin_password: str = ""
     resend_api_key: str = ""
     notification_from: str = "Python SV <onboarding@resend.dev>"
     notification_to: str = ""

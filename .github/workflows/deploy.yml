@@ -50,15 +50,26 @@ jobs:
 
   deploy:
     needs: [build]
-    if: ${{ secrets.AZURE_CREDENTIALS != '' }}
     runs-on: ubuntu-latest
+    env:
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
     steps:
+      - name: Check credentials
+        id: check
+        run: |
+          if [ -z "$AZURE_CREDENTIALS" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "AZURE_CREDENTIALS not set, skipping deploy"
+          fi
+
       - name: Log in to Azure
+        if: steps.check.outputs.skip != 'true'
         uses: azure/login@v3
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Container Apps
+        if: steps.check.outputs.skip != 'true'
         uses: azure/cli@v3
         with:
           inlineScript: |

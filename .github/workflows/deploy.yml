@@ -50,6 +50,7 @@ jobs:
 
   deploy:
     needs: [build]
+    if: ${{ secrets.AZURE_CREDENTIALS != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Log in to Azure

@@ -122,31 +122,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     logger.info("pythonsv shutting down")
 
 
-app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
-app.add_middleware(SecurityHeadersMiddleware)
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
-app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
-app.include_router(router)
-
-
-@app.exception_handler(StarletteHTTPException)
-async def http_exception_handler(
-    request: Request, exc: StarletteHTTPException
-) -> HTMLResponse:
-    if exc.status_code == 404:
-        return render_error(404, "Page not found.", request)
-    return render_error(exc.status_code, str(exc.detail), request)
-
-
-@app.exception_handler(Exception)
-async def unhandled_exception_handler(request: Request, exc: Exception) -> HTMLResponse:
-    try:
-        logger.exception("Unhandled error")
-        return render_error(500, "Something went wrong. Please try again.", request)
-    except Exception:
-        return HTMLResponse("Internal Server Error", status_code=500)
-
-
 def render_error(code: int, message: str, request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
         request=request,
@@ -157,3 +132,40 @@ def render_error(code: int, message: str, request: Request) -> HTMLResponse:
         },
         status_code=code,
     )
+
+
+def create_app() -> FastAPI:
+    application = FastAPI(
+        lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None
+    )
+    application.add_middleware(SecurityHeadersMiddleware)
+    application.add_middleware(
+        TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts
+    )
+    application.mount(
+        "/static", StaticFiles(directory=BASE_DIR / "static"), name="static"
+    )
+    application.include_router(router)
+
+    @application.exception_handler(StarletteHTTPException)
+    async def http_exception_handler(
+        request: Request, exc: StarletteHTTPException
+    ) -> HTMLResponse:
+        if exc.status_code == 404:
+            return render_error(404, "Page not found.", request)
+        return render_error(exc.status_code, str(exc.detail), request)
+
+    @application.exception_handler(Exception)
+    async def unhandled_exception_handler(
+        request: Request, exc: Exception
+    ) -> HTMLResponse:
+        try:
+            logger.exception("Unhandled error")
+            return render_error(500, "Something went wrong. Please try again.", request)
+        except Exception:
+            return HTMLResponse("Internal Server Error", status_code=500)
+
+    return application
+
+
+app = create_app()

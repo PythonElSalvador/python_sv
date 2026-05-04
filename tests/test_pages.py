@@ -3,7 +3,6 @@ from __future__ import annotations
 import pytest
 
 from python_sv.config import Settings, get_settings
-from python_sv.main import app
 
 
 @pytest.mark.anyio
@@ -51,7 +50,7 @@ async def test_security_headers(client):
 
 
 @pytest.mark.anyio
-async def test_settings_override(client):
+async def test_settings_override(app, client):
     custom = Settings(base_url="https://custom.example.com")
     app.dependency_overrides[get_settings] = lambda: custom
     try:

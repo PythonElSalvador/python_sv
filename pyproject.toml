@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 dependencies = [
     "aiohttp[speedups]>=3.11",
     "attrs>=25.3",
+    "brotli>=1.1",
     "fastapi>=0.115",
     "gunicorn>=23.0",
     "httpx[http2]>=0.28.1",
@@ -41,6 +42,6 @@ build-backend = "uv_build"
 strict = true
 
 [[tool.mypy.overrides]]
-module = ["frontmatter", "resend", "resend.*"]
+module = ["brotli", "frontmatter", "resend", "resend.*"]
 ignore_missing_imports = true
 

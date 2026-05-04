@@ -1488,6 +1488,7 @@ source = { editable = "." }
 dependencies = [
     { name = "aiohttp", extra = ["speedups"] },
     { name = "attrs" },
+    { name = "brotli" },
     { name = "fastapi" },
     { name = "gunicorn" },
     { name = "httpx", extra = ["http2"] },
@@ -1519,6 +1520,7 @@ dev = [
 requires-dist = [
     { name = "aiohttp", extras = ["speedups"], specifier = ">=3.11" },
     { name = "attrs", specifier = ">=25.3" },
+    { name = "brotli", specifier = ">=1.1" },
     { name = "fastapi", specifier = ">=0.115" },
     { name = "gunicorn", specifier = ">=23.0" },
     { name = "httpx", extras = ["http2"], specifier = ">=0.28.1" },

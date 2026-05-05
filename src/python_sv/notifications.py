@@ -32,3 +32,29 @@ def notify_signup(
         )
     except Exception:
         logger.exception("Failed to send signup notification")
+
+
+def notify_proposal(
+    name: str, email: str, topic: str, description: str, level: str
+) -> None:
+    settings = get_settings()
+    if not settings.resend_api_key or not settings.notification_to:
+        return
+
+    resend.api_key = settings.resend_api_key
+
+    try:
+        resend.Emails.send(
+            {
+                "from": settings.notification_from,
+                "to": [settings.notification_to],
+                "subject": f"Speaker proposal: {topic}",
+                "html": (
+                    f"<p><strong>{name}</strong> ({email})</p>"
+                    f"<p>Topic: {topic}<br>Level: {level}</p>"
+                    f"<p>Description: {description}</p>"
+                ),
+            }
+        )
+    except Exception:
+        logger.exception("Failed to send proposal notification")

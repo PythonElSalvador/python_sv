@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     admin_username: str = ""
     admin_password: str = ""
     resend_api_key: str = ""
-    notification_from: str = "Python SV <onboarding@resend.dev>"
+    notification_from: str = "Python SV <hola@pythonsv.com>"
     notification_to: str = ""
     debug: bool = False
 

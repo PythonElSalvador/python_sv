@@ -30,6 +30,7 @@ from python_sv.dependencies import page_content, templates
 from python_sv.http import HttpClients, create_aio_session, create_httpx_client
 from python_sv.routers.admin import router as admin_router
 from python_sv.routers.pages import router
+from python_sv.routers.proposals import router as proposals_router
 from python_sv.routers.signup import router as signup_router
 
 
@@ -208,6 +209,7 @@ def _prerender_pages(app: FastAPI) -> None:
 
     page_defs: list[tuple[str, str, dict[str, Any]]] = [
         ("index", "index.html", {}),
+        ("propuestas", "propuestas.html", {}),
         ("calendario", "calendario.html", {"events": EVENTS}),
         ("codigo-de-conducta", "codigo-de-conducta.html", {}),
     ]
@@ -389,6 +391,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         db = mongo_client.pythonsv
         await db.signups.create_index("email", unique=True)
         await db.signups.create_index([("created_at", -1)])
+        await db.proposals.create_index([("created_at", -1)])
         app.state.db = db
         logger.info("connected to mongodb")
     else:
@@ -433,6 +436,7 @@ def create_app() -> FastAPI:
     )
     application.include_router(router)
     application.include_router(signup_router)
+    application.include_router(proposals_router)
     application.include_router(admin_router)
 
     @application.exception_handler(RequestValidationError)

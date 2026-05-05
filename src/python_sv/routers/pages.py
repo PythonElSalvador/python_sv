@@ -14,11 +14,35 @@ from python_sv.config import get_settings
 
 _settings = get_settings()
 _ROBOTS_TXT = f"User-agent: *\nAllow: /\nSitemap: {_settings.base_url}/sitemap.xml\n"
+_LLMS_TXT = """\
+# Python SV
+
+> La comunidad de Python en El Salvador. Organizamos meetups presenciales, charlas técnicas y demos.
+
+## Páginas
+
+- [Inicio](https://pythonsv.com/): Página principal con información del próximo evento y formulario para unirse.
+- [Calendario](https://pythonsv.com/calendario): Próximos meetups y eventos.
+- [Código de Conducta](https://pythonsv.com/codigo-de-conducta): Reglas de convivencia de la comunidad.
+
+## Contacto
+
+- Email: conduct@pythonsv.com
+- Meetup: https://www.meetup.com/python-sv_/
+- WhatsApp: Enlace disponible en la página principal.
+
+## Contexto
+
+Python SV es una comunidad sin fines de lucro fundada en 2026 con el objetivo de revivir el ecosistema de Python en El Salvador. Organizamos meetups mensuales en San Salvador con charlas técnicas, demos en vivo y networking. La comunidad está abierta a estudiantes, profesionales y cualquier persona interesada en Python.
+"""
 _SITEMAP_XML = (
     '<?xml version="1.0" encoding="UTF-8"?>\n'
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     "  <url>\n"
     f"    <loc>{_settings.base_url}/</loc>\n"
+    "  </url>\n"
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/propuestas</loc>\n"
     "  </url>\n"
     "  <url>\n"
     f"    <loc>{_settings.base_url}/calendario</loc>\n"
@@ -37,6 +61,14 @@ router = APIRouter()
 @router.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@router.get("/llms.txt", response_class=PlainTextResponse)
+async def llms_txt() -> Response:
+    return PlainTextResponse(
+        _LLMS_TXT,
+        headers={"cache-control": "public, max-age=86400"},
+    )
 
 
 @router.get("/robots.txt", response_class=PlainTextResponse)
@@ -135,28 +167,22 @@ async def code_of_conduct(request: Request) -> Response:
 
 EVENTS = [
     {
-        "title": "Python SV Meetup — AI, Memory & Security",
+        "title": "Python SV Meetup — Charla + Demo",
         "month": "May",
         "year": "2026",
-        "date_display": "Sábado 2 de mayo, 2026",
-        "location": "Presencial — lugar por confirmar",
-        "topics": ["AI", "Memory", "Security"],
-        "description": "Nuestro primer meetup presencial. Charlas y demos sobre inteligencia artificial, manejo de memoria y seguridad en Python.",
-        "link": None,
-        "link_text": "",
-    },
-    {
-        "title": "Python SV Meetup — Virtual",
-        "month": "Jun",
-        "year": "2026",
-        "date_display": "Fecha por confirmar",
-        "location": "Virtual",
-        "topics": [],
-        "description": "Meetup virtual de la comunidad. Tema por confirmar.",
-        "link": None,
-        "link_text": "",
+        "date_display": "Sábado 9 de mayo, 2026",
+        "location": "UEES, San Salvador",
+        "topics": ["OpenCV", "Image Processing", "Python"],
+        "description": "Nuestro segundo meetup presencial en la UEES. Una charla y demo sobre procesamiento de imágenes con Python.",
+        "link": "/propuestas",
+        "link_text": "Proponer charla",
     },
 ]
+
+
+@router.get("/propuestas", response_class=HTMLResponse)
+async def proposals(request: Request) -> Response:
+    return _serve_cached(request, "propuestas")
 
 
 @router.get("/calendario", response_class=HTMLResponse)

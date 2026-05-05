@@ -379,6 +379,13 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.02em;
 }
 
+.pysv-hero-topic {
+  font-size: 1.05rem;
+  color: var(--pysv-warm-200, #e0dcd4);
+  margin: 0.75rem auto 0;
+  opacity: 0.9;
+}
+
 /* Scroll hint — bouncing chevron below hero content */
 .pysv-scroll-hint {
   margin-top: auto;
@@ -1562,6 +1569,9 @@ select.pysv-input option { background: var(--pysv-cobalt-dark); color: var(--pys
   border-color: rgba(232,168,23,0.4);
   background: var(--pysv-white-8);
 }
+
+.pysv-form-row--full { flex-direction: column; }
+.pysv-textarea { resize: vertical; min-height: 5rem; }
 
 .pysv-signup-btn {
   flex: 0 0 auto;

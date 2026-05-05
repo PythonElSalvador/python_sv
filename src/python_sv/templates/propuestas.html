@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block preload_hero %}{% endblock %}
+
+{% block title %}Proponer charla — Python SV{% endblock %}
+{% block og_title %}Proponer charla — Python SV{% endblock %}
+{% block og_desc %}Propón una charla o demo para un meetup de Python SV.{% endblock %}
+{% block og_url %}https://pythonsv.com/propuestas{% endblock %}
+{% block og_image %}https://pythonsv.com/static/img/og-calendario.png{% endblock %}
+{% block meta %}
+<meta name="description" content="Propón una charla o demo para un próximo meetup de Python SV en El Salvador.">
+{% endblock %}
+
+{% block body %}
+<section class="pysv-section pysv-section-dark grain" id="propuestas">
+  <div class="container">
+    <div class="reveal">
+      <span class="pysv-section-label">Charlas</span>
+      <h1 class="pysv-section-title">Proponer una charla</h1>
+      <p class="pysv-section-subtitle">¿Quieres compartir algo con la comunidad? No importa tu nivel — si te apasiona, queremos escucharte.</p>
+    </div>
+
+    <form id="proposal-form" class="pysv-signup-form reveal"
+          hx-post="/api/proposal"
+          hx-target="#proposal-result"
+          hx-swap="innerHTML"
+          hx-indicator="#proposal-spinner">
+      <div class="pysv-form-row">
+        <input type="text" name="name" placeholder="Tu nombre" required class="pysv-input" autocomplete="name">
+        <input type="email" name="email" placeholder="correo@ejemplo.com" required class="pysv-input" autocomplete="email">
+      </div>
+      <div class="pysv-form-row">
+        <input type="text" name="topic" placeholder="Tema de la charla" required class="pysv-input">
+        <select name="level" required class="pysv-input">
+          <option value="" disabled selected>Tu nivel de experiencia</option>
+          <option value="beginner">Principiante</option>
+          <option value="intermediate">Intermedio</option>
+          <option value="advanced">Avanzado</option>
+        </select>
+      </div>
+      <div class="pysv-form-row pysv-form-row--full">
+        <textarea name="description" placeholder="Describe brevemente de qué tratará tu charla (2-3 oraciones)" required class="pysv-input pysv-textarea" rows="3"></textarea>
+      </div>
+      <div class="pysv-form-row">
+        <button type="submit" class="btn-pysv-gold pysv-signup-btn">
+          <span class="htmx-indicator" id="proposal-spinner" aria-hidden="true"></span>
+          <span>Enviar propuesta</span>
+        </button>
+      </div>
+    </form>
+
+    <div id="proposal-result"></div>
+
+    <div class="pysv-calendar-back">
+      <a href="/" class="btn-pysv-gold">Volver al inicio</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts_bottom %}
+{{ super() }}
+<script nonce="{{ csp_nonce }}">
+(function() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+
+  var form = document.getElementById('proposal-form');
+  if (form) {
+    form.addEventListener('htmx:afterRequest', function(evt) {
+      if (evt.detail.successful) form.style.display = 'none';
+    });
+  }
+})();
+</script>
+{% endblock %}

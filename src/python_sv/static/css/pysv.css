@@ -380,10 +380,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-hero-topic {
-  font-size: 1.05rem;
-  color: var(--pysv-warm-200, #e0dcd4);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--pysv-white);
   margin: 0.75rem auto 0;
-  opacity: 0.9;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
 /* Scroll hint — bouncing chevron below hero content */

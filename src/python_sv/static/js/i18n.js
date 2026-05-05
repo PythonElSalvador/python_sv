@@ -11,7 +11,7 @@
 
     // Homepage hero
     hero_title: 'We\'re building the <strong>Python</strong> community in El Salvador',
-    hero_date: 'Saturday May 9, 2PM–4PM — UEES, San Salvador',
+    hero_date: 'Saturday May 9, 2PM–5PM — UEES, San Salvador',
     talk_1_title: 'Image Processing with OpenCV',
     talk_1_desc: 'Learn to detect edges, filter colors, and track objects in real time using Python and OpenCV — with a live demo.',
     hero_meetup: 'Join the community',

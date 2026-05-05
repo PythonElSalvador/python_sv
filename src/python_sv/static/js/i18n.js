@@ -14,7 +14,7 @@
     hero_date: 'Saturday May 9, 2PM–5PM — UEES, San Salvador',
     talk_1_title: 'Image Processing with OpenCV',
     talk_1_desc: 'Learn to detect edges, filter colors, and track objects in real time using Python and OpenCV — with a live demo.',
-    hero_meetup: 'Join the community',
+    hero_meetup: 'RSVP on Meetup',
 
     // Homepage context
     ctx_label: 'Context',

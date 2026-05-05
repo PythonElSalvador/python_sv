@@ -177,7 +177,7 @@ EVENTS = [
         "speaker_name": "Kevin Turcios",
         "speaker_role": "Founding SWE @ Codeflash",
         "speaker_photo": "img/kevin-turcios.webp",
-        "image": "img/hero-izalco-640.webp",
+        "image": "img/uees-building-640.webp",
         "link": "https://www.meetup.com/python-sv_/events/314638127/",
         "link_text": "RSVP en Meetup",
     },

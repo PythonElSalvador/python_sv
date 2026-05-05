@@ -20,11 +20,11 @@
     ctx_label: 'Context',
     ctx_title: 'Why now',
     ctx_1_title: 'The communities disappeared',
-    ctx_1_body: 'Most Python communities in Latin America died during COVID and never recovered. In El Salvador there\'s no active community dedicated to Python — the last activity was in 2019.',
-    ctx_2_title: 'But they can come back',
-    ctx_2_body: 'In the Dominican Republic we helped organize <a href="https://pyday.do" target="_blank" rel="noopener">PyDay DO</a> — students, professors, professionals, and companies in a single event. The same is happening in Colombia, Mexico, and other countries. Communities are coming back.',
-    ctx_3_title: 'El Salvador is next',
-    ctx_3_body: 'We\'re putting together meetups — San Salvador, San Miguel, or wherever there are people. If you use Python, you\'re learning, or you\'re just curious, this is for you.',
+    ctx_1_body: 'Most Python communities in Latin America died during COVID and never recovered. In El Salvador there was no active Python community since 2019.',
+    ctx_2_title: 'We brought it back',
+    ctx_2_body: 'In March 2026 we launched the first Python SV meetup with 30+ attendees in San Salvador. Now we\'re part of the network of Python communities in Latin America alongside Colombia, Mexico, and the Dominican Republic.',
+    ctx_3_title: 'And we\'re just getting started',
+    ctx_3_body: 'Talks, workshops, live demos — every month. If you use Python, you\'re learning, or you\'re just curious, this is for you.',
 
     // Homepage signup
     signup_label: 'Community',

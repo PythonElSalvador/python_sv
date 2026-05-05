@@ -167,13 +167,17 @@ async def code_of_conduct(request: Request) -> Response:
 
 EVENTS = [
     {
-        "title": "Python SV Meetup — Charla + Demo",
+        "title": "Procesamiento de imágenes con OpenCV",
         "month": "MAY",
         "year": "2026",
         "date_display": "Sábado 9 de mayo, 2PM–5PM",
         "location": "UEES, San Salvador",
         "topics": ["OpenCV", "Image Processing", "Python"],
-        "description": "Segundo meetup presencial. Aprende a detectar bordes, filtrar colores y rastrear objetos en tiempo real usando Python y OpenCV — con demo en vivo.",
+        "description": "Aprende a detectar bordes, filtrar colores y rastrear objetos en tiempo real usando Python y OpenCV — con demo en vivo.",
+        "speaker_name": "Kevin Turcios",
+        "speaker_role": "Founding SWE @ Codeflash",
+        "speaker_photo": "img/kevin-turcios.webp",
+        "image": "img/hero-izalco-640.webp",
         "link": "https://www.meetup.com/python-sv_/events/314638127/",
         "link_text": "RSVP en Meetup",
     },

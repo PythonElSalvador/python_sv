@@ -22,21 +22,26 @@
     <div class="pysv-calendar-grid">
       {% for event in events %}
       <div class="pysv-event-card">
-        <div class="pysv-event-date">
-          <span class="pysv-event-month">{{ event.month }}</span>
-          <span class="pysv-event-year">{{ event.year }}</span>
+        {% if event.image %}
+        <div class="pysv-event-cover">
+          <img src="{{ static_url(event.image) }}" alt="" loading="lazy">
+          <div class="pysv-event-date-badge">
+            <span class="pysv-event-month">{{ event.month }}</span>
+            <span class="pysv-event-day">9</span>
+          </div>
         </div>
-        <div class="pysv-event-details">
+        {% endif %}
+        <div class="pysv-event-body">
           <h2 class="pysv-event-title">{{ event.title }}</h2>
           <div class="pysv-event-meta">
             {% if event.date_display %}
             <span class="pysv-event-meta-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
               {{ event.date_display }}
             </span>
             {% endif %}
             <span class="pysv-event-meta-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               {{ event.location }}
             </span>
           </div>
@@ -49,6 +54,15 @@
           {% endif %}
           {% if event.description %}
           <p class="pysv-event-desc">{{ event.description }}</p>
+          {% endif %}
+          {% if event.speaker_name %}
+          <div class="pysv-event-speaker">
+            <img class="pysv-event-speaker-photo" src="{{ static_url(event.speaker_photo) }}" alt="{{ event.speaker_name }}" width="36" height="36">
+            <div>
+              <span class="pysv-event-speaker-name">{{ event.speaker_name }}</span>
+              <span class="pysv-event-speaker-role">{{ event.speaker_role }}</span>
+            </div>
+          </div>
           {% endif %}
           {% if event.link %}
           <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn-pysv-gold pysv-event-btn">{{ event.link_text }}</a>

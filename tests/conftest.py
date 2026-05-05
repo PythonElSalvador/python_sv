@@ -4,7 +4,7 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from python_sv.dependencies import page_content
-from python_sv.main import _page_cache, _prerender_pages, create_app
+from python_sv.main import _page_cache, _prerender_pages, create_app, templates
 from python_sv.routers.pages import cache_html_bytes
 
 
@@ -12,6 +12,7 @@ from python_sv.routers.pages import cache_html_bytes
 def app():
     page_content.setdefault("title", "Python SV")
     page_content.setdefault("body", "<p>Test</p>")
+    templates.env.globals.setdefault("static_url", lambda path: f"/static/{path}")
     application = create_app()
     _prerender_pages(application)
     cache_html_bytes(_page_cache)

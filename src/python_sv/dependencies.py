@@ -43,3 +43,4 @@ templates.env.auto_reload = settings.debug
 templates.env.trim_blocks = True
 templates.env.lstrip_blocks = True
 templates.env.globals["whatsapp_url"] = settings.whatsapp_url  # ty: ignore[invalid-assignment]
+templates.env.globals["plausible_domain"] = settings.plausible_domain  # ty: ignore[invalid-assignment]

@@ -77,7 +77,7 @@ class SecurityHeadersMiddleware:
         "style-src 'self' 'unsafe-inline'; "
         "font-src 'self'; "
         "img-src 'self' data:; "
-        "connect-src 'self'; "
+        "connect-src 'self' https://plausible.io; "
         "frame-ancestors 'none'; "
         "base-uri 'self'; "
         "form-action 'self'; "

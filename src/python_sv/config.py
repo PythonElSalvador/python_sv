@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     resend_api_key: str = ""
     notification_from: str = "Python SV <hola@pythonsv.com>"
     notification_to: str = ""
+    plausible_domain: str = ""
     debug: bool = False
 
 

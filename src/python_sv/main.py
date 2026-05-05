@@ -71,7 +71,7 @@ class SecurityHeadersMiddleware:
         b"strict-transport-security",
         b"max-age=63072000; includeSubDomains; preload",
     )
-    _csp_template: str = (
+    _csp_base: str = (
         "default-src 'self'; "
         "script-src 'self' 'nonce-{}'; "
         "style-src 'self' 'unsafe-inline'; "
@@ -80,8 +80,10 @@ class SecurityHeadersMiddleware:
         "connect-src 'self' https://plausible.io; "
         "frame-ancestors 'none'; "
         "base-uri 'self'; "
-        "form-action 'self'; "
-        "upgrade-insecure-requests"
+        "form-action 'self'"
+    )
+    _csp_template: str = _csp_base + (
+        "; upgrade-insecure-requests" if not settings.debug else ""
     )
     _static_csp: bytes = (
         b"default-src 'none'; "

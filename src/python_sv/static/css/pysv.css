@@ -377,6 +377,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--pysv-gold);
   margin: 1.5rem auto 0;
   letter-spacing: 0.02em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7), 0 0 2px rgba(0,0,0,0.5);
 }
 
 .pysv-hero-topic {
@@ -385,7 +386,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   color: var(--pysv-white);
   margin: 0.75rem auto 0;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 0 3px rgba(0,0,0,0.6);
 }
 
 /* Scroll hint — bouncing chevron below hero content */
@@ -621,10 +622,10 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   gap: 1rem;
   align-items: center;
-  background: var(--pysv-white-5);
-  border: 1px solid var(--pysv-white-8);
+  background: var(--pysv-cobalt);
+  border: 1px solid var(--pysv-white-15);
   border-radius: var(--radius);
-  padding: 0.75rem 1.25rem;
+  padding: 1rem 1.5rem;
   margin-bottom: 0.6rem;
   position: relative;
   overflow: hidden;
@@ -632,8 +633,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-speaker-photo {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -658,7 +659,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .pysv-talk-title {
   font-family: var(--font-display);
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--pysv-white);
   margin-bottom: 0.15rem;
@@ -666,13 +667,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pysv-speaker-name {
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   color: var(--pysv-white-45);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
 }
 .pysv-speaker-name strong {
   color: var(--pysv-white-70);
   font-weight: 500;
+}
+
+.pysv-talk-desc {
+  font-size: 0.82rem;
+  color: var(--pysv-white-60);
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
 }
 
 .pysv-talk-meta {

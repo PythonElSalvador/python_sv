@@ -1,5 +1,11 @@
 (function() {
-  // Reveal animations
+  var reveals = document.querySelectorAll('.reveal');
+
+  if (!('IntersectionObserver' in window)) {
+    reveals.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
@@ -7,11 +13,22 @@
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0 });
 
-  document.querySelectorAll('.reveal').forEach(function(el) {
-    observer.observe(el);
-  });
+  reveals.forEach(function(el) { observer.observe(el); });
+
+  // Fallback: reveal anything near viewport after 500ms
+  setTimeout(function() {
+    reveals.forEach(function(el) {
+      if (!el.classList.contains('visible')) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 100) {
+          el.classList.add('visible');
+          observer.unobserve(el);
+        }
+      }
+    });
+  }, 500);
 
   // Lazy-load section background images
   var bgObserver = new IntersectionObserver(function(entries) {

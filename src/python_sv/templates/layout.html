@@ -35,8 +35,8 @@
         imagesrcset="{{ static_url('img/hero-izalco-640.webp') }} 640w, {{ static_url('img/hero-izalco-960.webp') }} 960w, {{ static_url('img/hero-izalco-1280.webp') }} 1280w, {{ static_url('img/hero-izalco-1920.webp') }} 1920w"
         imagesizes="100vw" fetchpriority="high">
   {% endblock %}
-  {% if plausible_domain %}
-  <script nonce="{{ csp_nonce }}" defer data-domain="{{ plausible_domain }}" src="https://plausible.io/js/script.js"></script>
+  {% if plausible_script %}
+  <script nonce="{{ csp_nonce }}" defer src="{{ plausible_script }}"></script>
   {% endif %}
   {% block extra_head %}{% endblock %}
 </head>

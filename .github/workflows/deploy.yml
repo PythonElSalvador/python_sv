@@ -83,4 +83,5 @@ jobs:
                 "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" \
                 "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" \
                 "NOTIFICATION_FROM=${{ secrets.NOTIFICATION_FROM }}" \
-                "NOTIFICATION_TO=${{ secrets.NOTIFICATION_TO }}"
+                "NOTIFICATION_TO=${{ secrets.NOTIFICATION_TO }}" \
+                "PLAUSIBLE_SCRIPT=${{ secrets.PLAUSIBLE_SCRIPT }}"

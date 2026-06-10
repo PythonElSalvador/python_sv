@@ -2,35 +2,35 @@
 
 Sitio web de la comunidad Python El Salvador — [pythonsv.com](https://pythonsv.com)
 
-Built with FastAPI, Jinja2, and uv.
+Hecho con FastAPI, Jinja2 y uv.
 
-## Prerequisites
+## Prerrequisitos
 
 - [Python 3.12+](https://www.python.org/downloads/)
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
-- [prek](https://github.com/j178/prek) — `brew install prek` or `uv tool install prek`
+- [prek](https://github.com/j178/prek) — `brew install prek` o `uv tool install prek`
 
-## Getting Started
+## Primeros pasos
 
 ```bash
-# Clone the repo
+# Clonar el repositorio
 git clone https://github.com/PythonElSalvador/python_sv.git
 cd python_sv
 
-# Install dependencies
+# Instalar dependencias
 uv sync
 
-# Copy the env file and edit as needed
+# Copiar el archivo de entorno y editar según sea necesario
 cp .env.example .env
 
-# Install pre-commit hooks
+# Instalar los hooks de pre-commit
 prek install
 
-# Run the dev server
+# Iniciar el servidor de desarrollo
 uv run uvicorn python_sv.main:app --reload
 ```
 
-The site will be at http://localhost:8000.
+El sitio estará disponible en http://localhost:8000.
 
 ## Docker
 
@@ -39,25 +39,25 @@ docker build -t pythonsv .
 docker run -p 8000:8000 --env-file .env pythonsv
 ```
 
-## Project Structure
+## Estructura del proyecto
 
 ```
 src/
 └── python_sv/
-    ├── main.py            # FastAPI app, middleware, lifespan
-    ├── config.py          # Settings (loaded from .env)
-    ├── dependencies.py    # Shared deps (templates, page content)
-    ├── notifications.py   # Email notifications via Resend
+    ├── main.py            # App FastAPI, middleware, lifespan
+    ├── config.py          # Configuración (cargada desde .env)
+    ├── dependencies.py    # Dependencias compartidas (templates, contenido de páginas)
+    ├── notifications.py   # Notificaciones por correo vía Resend
     ├── routers/
-    │   └── pages.py       # Page routes
-    ├── static/            # CSS, JS, images
-    └── templates/         # Jinja2 HTML templates
+    │   └── pages.py       # Rutas de páginas
+    ├── static/            # CSS, JS, imágenes
+    └── templates/         # Plantillas HTML con Jinja2
 content/
-└── index.md               # Homepage content (markdown + frontmatter)
-tests/                     # pytest test suite
+└── index.md               # Contenido de la página principal (markdown + frontmatter)
+tests/                     # Suite de pruebas con pytest
 ```
 
-## Tests
+## Pruebas
 
 ```bash
 uv run pytest
@@ -70,40 +70,40 @@ uv run ruff check .
 uv run ruff format --check .
 ```
 
-## Environment Variables
+## Variables de entorno
 
-See [`.env.example`](.env.example) for the full list. Key variables:
+Consulta [`.env.example`](.env.example) para la lista completa. Variables clave:
 
-| Variable | Description | Default |
+| Variable | Descripción | Valor por defecto |
 |---|---|---|
-| `BASE_URL` | Canonical site URL | `https://pythonsv.com` |
-| `WHATSAPP_URL` | WhatsApp group invite link | — |
-| `ALLOWED_HOSTS` | JSON list of allowed hostnames | `["localhost","127.0.0.1"]` |
-| `LOG_LEVEL` | Logging level | `INFO` |
-| `RESEND_API_KEY` | Resend API key for email notifications | — |
-| `WEB_CONCURRENCY` | Gunicorn worker count (Docker only) | `2` |
+| `BASE_URL` | URL canónica del sitio | `https://pythonsv.com` |
+| `WHATSAPP_URL` | Enlace de invitación al grupo de WhatsApp | — |
+| `ALLOWED_HOSTS` | Lista JSON de hostnames permitidos | `["localhost","127.0.0.1"]` |
+| `LOG_LEVEL` | Nivel de logging | `INFO` |
+| `RESEND_API_KEY` | API key de Resend para notificaciones por correo | — |
+| `WEB_CONCURRENCY` | Número de workers de Gunicorn (solo Docker) | `2` |
 
-## Contributing
+## Contribuir
 
-1. Create a branch off `main` and open a PR when ready
-2. Prek runs `ruff check` and `ruff format --check` on every commit, and `pytest` on push
-3. CI runs the same checks — format before committing: `uv run ruff format .`
-4. Run all checks manually: `prek run --all-files`
+1. Crea una rama desde `main` y abre un PR cuando esté lista
+2. Prek ejecuta `ruff check` y `ruff format --check` en cada commit, y `pytest` en cada push
+3. El CI corre las mismas verificaciones — formatea antes de hacer commit: `uv run ruff format .`
+4. Ejecuta todas las verificaciones manualmente: `prek run --all-files`
 
-### Adding a page
+### Agregar una página
 
-- **Content-driven pages** (like the homepage): add a markdown file in `content/` with YAML frontmatter, then load it in `src/python_sv/main.py` the same way `index.md` is loaded
-- **Template-only pages** (like `/calendario`): add an HTML template in `src/python_sv/templates/` and a route in `src/python_sv/routers/pages.py`
-- **Static assets** (CSS, JS, images, fonts): go in the matching subdirectory under `src/python_sv/static/`
+- **Páginas basadas en contenido** (como la página principal): agrega un archivo markdown en `content/` con frontmatter YAML, luego cárgalo en `src/python_sv/main.py` de la misma forma en que se carga `index.md`
+- **Páginas solo con template** (como `/calendario`): agrega una plantilla HTML en `src/python_sv/templates/` y una ruta en `src/python_sv/routers/pages.py`
+- **Recursos estáticos** (CSS, JS, imágenes, fuentes): van en el subdirectorio correspondiente dentro de `src/python_sv/static/`
 
 ## CI/CD
 
-GitHub Actions runs on every PR and push to `main`:
+GitHub Actions se ejecuta en cada PR y push a `main`:
 
-- **ci.yml** — Lint + tests on PRs
-- **deploy.yml** — Lint + tests + Docker build + push to ACR on merge to `main`
-- **staging.yml** — Same pipeline for the `staging` branch
+- **ci.yml** — Linting + pruebas en PRs
+- **deploy.yml** — Linting + pruebas + build de Docker + push a ACR al hacer merge a `main`
+- **staging.yml** — El mismo pipeline para la rama `staging`
 
-## Infrastructure
+## Infraestructura
 
-See [SETUP.md](SETUP.md) for the full infrastructure reference (Azure, MongoDB Atlas, DNS, etc.).
+Consulta [SETUP.md](SETUP.md) para la referencia completa de infraestructura (Azure, MongoDB Atlas, DNS, etc.).

@@ -1,72 +1,72 @@
-# PythonSV Infrastructure Setup
+# Configuración de infraestructura de PythonSV
 
-Step-by-step record of how the infrastructure was set up, so it can be reproduced or modified in the future.
+Registro paso a paso de cómo se configuró la infraestructura, para que pueda reproducirse o modificarse en el futuro.
 
 ## MongoDB Atlas
 
-### Account & Organization
+### Cuenta y organización
 
-1. Created a new MongoDB Atlas account at https://cloud.mongodb.com using Google sign-in with `kevinturcios@pythonsv.com`
-2. Renamed the auto-created organization from "Kevin's Org - 2026-04-23" to **PythonSV**
-   - Organization Settings > Edit Organization Name
-3. Renamed the auto-created project from "Project 0" to **pythonsv**
-   - Project Settings > Edit Project Name
+1. Se creó una nueva cuenta de MongoDB Atlas en https://cloud.mongodb.com usando Google con `kevinturcios@pythonsv.com`
+2. Se renombró la organización creada automáticamente de "Kevin's Org - 2026-04-23" a **PythonSV**
+   - Configuración de organización > Editar nombre de organización
+3. Se renombró el proyecto creado automáticamente de "Project 0" a **pythonsv**
+   - Configuración del proyecto > Editar nombre del proyecto
 
-### Cluster
+### Clúster
 
-1. Created a **Free** (M0) cluster:
-   - Name: `pythonsv` (cannot be changed after creation)
-   - Provider: AWS
-   - Region: N. Virginia (us-east-1) -- closest available free-tier region to El Salvador
-2. During setup, Atlas auto-created:
-   - DB user: `kevinturcios_db_user` with atlasAdmin permissions
-   - IP access list entry for the current IP address
-3. Connection string format: `mongodb+srv://kevinturcios_db_user:<password>@pythonsv.7ujjozc.mongodb.net/<database>?appName=pythonsv`
+1. Se creó un clúster **gratuito** (M0):
+   - Nombre: `pythonsv` (no se puede cambiar después de la creación)
+   - Proveedor: AWS
+   - Región: N. Virginia (us-east-1) -- región de nivel gratuito más cercana disponible a El Salvador
+2. Durante la configuración, Atlas creó automáticamente:
+   - Usuario de BD: `kevinturcios_db_user` con permisos de atlasAdmin
+   - Entrada en la lista de acceso por IP para la dirección IP actual
+3. Formato de cadena de conexión: `mongodb+srv://kevinturcios_db_user:<password>@pythonsv.7ujjozc.mongodb.net/<database>?appName=pythonsv`
 
-### Network Access
+### Acceso de red
 
-Added `0.0.0.0/0` to the IP access list (allow all) as a temporary measure. This will be replaced with the NAT Gateway's static IP once the VNet setup is complete (see Azure section below).
+Se agregó `0.0.0.0/0` a la lista de acceso por IP (permitir todo) como medida temporal. Será reemplazado con la IP estática del NAT Gateway una vez que la configuración de la VNet esté completa (ver sección de Azure más abajo).
 
-### Data Migration (from old cluster)
+### Migración de datos (desde el clúster anterior)
 
-Old cluster: `pythonsv.akiq03k.mongodb.net` (personal account, turcioskevinr@gmail.com)
-New cluster: `pythonsv.7ujjozc.mongodb.net` (PythonSV org account, kevinturcios@pythonsv.com)
+Clúster anterior: `pythonsv.akiq03k.mongodb.net` (cuenta personal, turcioskevinr@gmail.com)
+Nuevo clúster: `pythonsv.7ujjozc.mongodb.net` (cuenta de la org PythonSV, kevinturcios@pythonsv.com)
 
 ```bash
-# Dump from old cluster
+# Exportar desde el clúster anterior
 mongodump --uri="mongodb+srv://turcioskevinr:<old-password>@pythonsv.akiq03k.mongodb.net/pythonsv" --out=./mongodump-export
 
-# Restore to new cluster
+# Restaurar en el nuevo clúster
 mongorestore --uri="mongodb+srv://kevinturcios_db_user:<new-password>@pythonsv.7ujjozc.mongodb.net" ./mongodump-export
 ```
 
-Database: `pythonsv`, Collection: `signups` (fields: name, email, role)
+Base de datos: `pythonsv`, Colección: `signups` (campos: name, email, role)
 
-### Post-migration
+### Post-migración
 
-1. Update `MONGO_URI` in `.env` to point to the new cluster
-2. Update the `MONGO_URI` GitHub secret in PythonElSalvador/python_sv
-3. Verify scripts work: `python scripts/query_signups.py`
+1. Actualizar `MONGO_URI` en `.env` para apuntar al nuevo clúster
+2. Actualizar el secreto `MONGO_URI` de GitHub en PythonElSalvador/python_sv
+3. Verificar que los scripts funcionen: `python scripts/query_signups.py`
 
-## Azure Infrastructure
+## Infraestructura en Azure
 
-### Resource Group
+### Grupo de recursos
 
-- Name: `pythonsv`
-- Location: East US
+- Nombre: `pythonsv`
+- Ubicación: East US
 
 ### Azure Container Registry (ACR)
 
-- Name: `pythonsvcr`
+- Nombre: `pythonsvcr`
 - URL: `pythonsvcr.azurecr.io`
-- Image: `pythonsv` (tags: `latest`, `staging`, `staging-<sha>`, `<sha>`)
+- Imagen: `pythonsv` (etiquetas: `latest`, `staging`, `staging-<sha>`, `<sha>`)
 
-### VNet + NAT Gateway (for static outbound IP)
+### VNet + NAT Gateway (para IP de salida estática)
 
-Why: Azure Container Apps on the consumption plan use a shared pool of 300+ outbound IPs that can rotate. To restrict MongoDB Atlas access to a single IP (instead of `0.0.0.0/0`), all outbound traffic is routed through a NAT Gateway with a static public IP.
+Por qué: Las Container Apps de Azure en el plan de consumo usan un conjunto compartido de más de 300 IPs de salida que pueden rotar. Para restringir el acceso a MongoDB Atlas a una sola IP (en lugar de `0.0.0.0/0`), todo el tráfico saliente se enruta a través de un NAT Gateway con una IP pública estática.
 
 ```bash
-# 1. Create VNet with Container Apps subnet
+# 1. Crear VNet con subred para Container Apps
 az network vnet create \
   --name pythonsv-vnet \
   --resource-group pythonsv \
@@ -79,7 +79,7 @@ az network vnet subnet create \
   --vnet-name pythonsv-vnet \
   --address-prefix 10.0.0.0/23
 
-# 2. Create static public IP for NAT Gateway
+# 2. Crear IP pública estática para el NAT Gateway
 az network public-ip create \
   --name pythonsv-nat-ip \
   --resource-group pythonsv \
@@ -87,7 +87,7 @@ az network public-ip create \
   --sku Standard \
   --allocation-method Static
 
-# 3. Create NAT Gateway and attach the public IP
+# 3. Crear el NAT Gateway y asociar la IP pública
 az network nat gateway create \
   --name pythonsv-nat-gw \
   --resource-group pythonsv \
@@ -95,40 +95,40 @@ az network nat gateway create \
   --public-ip-addresses pythonsv-nat-ip \
   --idle-timeout 4
 
-# 4. Associate NAT Gateway with the subnet
+# 4. Asociar el NAT Gateway con la subred
 az network vnet subnet update \
   --name container-apps-subnet \
   --resource-group pythonsv \
   --vnet-name pythonsv-vnet \
   --nat-gateway pythonsv-nat-gw
 
-# 5. Get the subnet resource ID (needed for the Container Apps environment)
+# 5. Obtener el ID de recurso de la subred (necesario para el entorno de Container Apps)
 az network vnet subnet show \
   --name container-apps-subnet \
   --resource-group pythonsv \
   --vnet-name pythonsv-vnet \
   --query id -o tsv
 
-# 6. Get the static public IP (add this to Atlas IP access list)
+# 6. Obtener la IP pública estática (agregar esta IP a la lista de acceso de Atlas)
 az network public-ip show \
   --name pythonsv-nat-ip \
   --resource-group pythonsv \
   --query ipAddress -o tsv
 ```
 
-### Container Apps Environment
+### Entorno de Container Apps
 
-The environment must be created inside the VNet to use the NAT Gateway. Existing environments cannot be moved into a VNet -- they must be recreated.
+El entorno debe crearse dentro de la VNet para usar el NAT Gateway. Los entornos existentes no pueden moverse a una VNet — deben recrearse.
 
 ```bash
-# Delegate the subnet to Container Apps (required before creating the environment)
+# Delegar la subred a Container Apps (requerido antes de crear el entorno)
 az network vnet subnet update \
   --name container-apps-subnet \
   --resource-group pythonsv \
   --vnet-name pythonsv-vnet \
   --delegations Microsoft.App/environments
 
-# Create new environment in the VNet
+# Crear nuevo entorno en la VNet
 az containerapp env create \
   --name pythonsv-env-v2 \
   --resource-group pythonsv \
@@ -138,7 +138,7 @@ az containerapp env create \
 
 ### Container Apps
 
-#### Production (pythonsv)
+#### Producción (pythonsv)
 
 ```bash
 az containerapp create \
@@ -161,9 +161,9 @@ az containerapp create \
     RESEND_API_KEY=<resend-key>
 ```
 
-Custom domains (after the app is created):
+Dominios personalizados (después de crear la app):
 ```bash
-# Add managed certificates and bind domains
+# Agregar certificados administrados y vincular dominios
 az containerapp hostname add --name pythonsv --resource-group pythonsv --hostname pythonsv.com
 az containerapp hostname bind --name pythonsv --resource-group pythonsv --hostname pythonsv.com --environment pythonsv-env-v2 --validation-method HTTP
 
@@ -196,14 +196,14 @@ az containerapp create \
 
 ### DNS (Cloudflare)
 
-- `pythonsv.com` -> CNAME to `pythonsv.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io`
-- `www.pythonsv.com` -> CNAME to `pythonsv.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io`
+- `pythonsv.com` -> CNAME a `pythonsv.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io`
+- `www.pythonsv.com` -> CNAME a `pythonsv.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io`
 
-Cloudflare proxy (orange cloud) must be disabled for managed cert validation to work. Root domains use HTTP validation; subdomains use CNAME validation. After certs are provisioned, proxy can be re-enabled if desired.
+El proxy de Cloudflare (nube naranja) debe estar desactivado para que la validación del certificado administrado funcione. Los dominios raíz usan validación HTTP; los subdominios usan validación CNAME. Una vez aprovisionados los certificados, el proxy puede reactivarse si se desea.
 
-### Manual Deploy Commands
+### Comandos de despliegue manual
 
-Production:
+Producción:
 ```bash
 az containerapp update --name pythonsv --resource-group pythonsv --image pythonsvcr.azurecr.io/pythonsv:<sha>
 ```
@@ -215,45 +215,45 @@ az containerapp update --name pythonsv-staging --resource-group pythonsv --image
 
 ## CI/CD (GitHub Actions)
 
-Repository: `PythonElSalvador/python_sv`
+Repositorio: `PythonElSalvador/python_sv`
 
 ### Workflows
 
-| Workflow | Trigger | What it does |
+| Workflow | Disparador | Qué hace |
 |---|---|---|
-| `ci.yml` | PRs to main | Lint + test |
-| `deploy.yml` | Push to main | Lint + test + build + push to ACR |
-| `staging.yml` | Push to staging branch | Same pipeline, tags as `staging`/`staging-<sha>` |
+| `ci.yml` | PRs a main | Linting + pruebas |
+| `deploy.yml` | Push a main | Linting + pruebas + build + push a ACR |
+| `staging.yml` | Push a la rama staging | Mismo pipeline, etiquetas como `staging`/`staging-<sha>` |
 
-### GitHub Secrets
+### Secretos de GitHub
 
-| Secret | Description |
+| Secreto | Descripción |
 |---|---|
-| `ACR_USERNAME` | ACR admin username |
-| `ACR_PASSWORD` | ACR admin password |
-| `MONGO_URI` | MongoDB connection string |
-| `AZURE_CREDENTIALS` | Service principal JSON (for auto-deploy, pending) |
+| `ACR_USERNAME` | Usuario administrador del ACR |
+| `ACR_PASSWORD` | Contraseña del administrador del ACR |
+| `MONGO_URI` | Cadena de conexión a MongoDB |
+| `AZURE_CREDENTIALS` | JSON del service principal (para auto-despliegue, pendiente) |
 
-### Auto-deploy (pending)
+### Auto-despliegue (pendiente)
 
-Blocked on service principal role assignment. See ROADMAP.md for details.
+Bloqueado por la asignación de roles del service principal. Ver ROADMAP.md para más detalles.
 
-## Key Resources Reference
+## Referencia de recursos clave
 
-| Resource | Value |
+| Recurso | Valor |
 |---|---|
-| Production URL | https://pythonsv.com |
-| Staging URL | https://pythonsv-staging.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io |
+| URL de producción | https://pythonsv.com |
+| URL de staging | https://pythonsv-staging.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io |
 | ACR | pythonsvcr.azurecr.io |
-| Resource Group | pythonsv |
-| Location | South Central US |
+| Grupo de recursos | pythonsv |
+| Ubicación | South Central US |
 | VNet | pythonsv-vnet (10.0.0.0/16) |
-| Subnet | container-apps-subnet (10.0.0.0/23) |
+| Subred | container-apps-subnet (10.0.0.0/23) |
 | NAT Gateway | pythonsv-nat-gw |
-| NAT Public IP | pythonsv-nat-ip (4.151.106.157) |
+| IP pública NAT | pythonsv-nat-ip (4.151.106.157) |
 | Container App (prod) | pythonsv |
 | Container App (staging) | pythonsv-staging |
-| Environment | pythonsv-env-v2 |
-| Atlas Org | PythonSV (kevinturcios@pythonsv.com) |
-| Atlas Cluster | pythonsv.7ujjozc.mongodb.net |
-| GitHub Repo | PythonElSalvador/python_sv |
+| Entorno | pythonsv-env-v2 |
+| Org Atlas | PythonSV (kevinturcios@pythonsv.com) |
+| Clúster Atlas | pythonsv.7ujjozc.mongodb.net |
+| Repositorio GitHub | PythonElSalvador/python_sv |

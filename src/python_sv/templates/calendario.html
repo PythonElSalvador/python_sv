@@ -57,7 +57,9 @@
           {% endif %}
           {% if event.speaker_name %}
           <div class="pysv-event-speaker">
+            {% if event.speaker_photo %}
             <img class="pysv-event-speaker-photo" src="{{ static_url(event.speaker_photo) }}" alt="{{ event.speaker_name }}" width="36" height="36">
+            {% endif %}
             <div>
               <span class="pysv-event-speaker-name">{{ event.speaker_name }}</span>
               <span class="pysv-event-speaker-role">{{ event.speaker_role }}</span>

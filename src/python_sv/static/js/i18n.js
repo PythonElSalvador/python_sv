@@ -11,10 +11,20 @@
 
     // Homepage hero
     hero_title: 'We\'re building the <strong>Python</strong> community in El Salvador',
-    hero_date: 'Saturday May 9, 2PM–5PM — UEES, San Salvador',
+    hero_date: 'Saturday June 27, 2PM–5PM — UEES, San Salvador',
     talk_1_title: 'Image Processing with OpenCV',
     talk_1_desc: 'Learn to detect edges, filter colors, and track objects in real time using Python and OpenCV — with a live demo.',
     hero_meetup: 'RSVP on Meetup',
+
+    // Homepage upcoming events
+    upcoming_label: 'Upcoming',
+    upcoming_title: 'Upcoming events',
+    talk_2_date: 'Saturday July 18, 2PM–5PM — UEES, San Salvador',
+    talk_2_title: 'Introduction to FastAPI',
+    talk_2_desc: 'Build your first modern API with FastAPI: routes, Pydantic validation, automatic documentation, and basic deployment — all in one session.',
+    talk_3_date: 'Saturday August 22, 2PM–5PM — UEES, San Salvador',
+    talk_3_title: 'Data Processing with Pandas',
+    talk_3_desc: 'Learn to clean, transform, and analyze real data with Pandas: DataFrames, groupby, merges, and quick visualization — with a live demo.',
 
     // Homepage context
     ctx_label: 'Context',

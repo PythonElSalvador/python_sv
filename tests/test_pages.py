@@ -84,7 +84,7 @@ async def test_code_of_conduct_renders(client):
 async def test_calendar_renders(client):
     resp = await client.get("/calendario")
     assert resp.status_code == 200
-    assert "MAY" in resp.text
+    assert "JUN" in resp.text
 
 
 @pytest.mark.anyio

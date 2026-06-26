@@ -195,8 +195,7 @@ EVENTS = [
         "speaker_role": "Electrical Engineer · Python Developer",
         "speaker_photo": "img/emilio-serrano.webp",
         "image": "img/uees-building-640.webp",
-        "link": "#",
-        "link_text": "RSVP en Meetup",
+        # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
     },
     {
         "title": "Procesamiento de datos con Pandas",
@@ -211,8 +210,7 @@ EVENTS = [
         "speaker_role": "Founding SWE @ Codeflash",
         "speaker_photo": "img/kevin-turcios.webp",
         "image": "img/uees-building-640.webp",
-        "link": "#",
-        "link_text": "RSVP en Meetup",
+        # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
     },
     {
         "title": "Web Scraping en Python: Un Arsenal de Herramientas para la Extracción de Datos",
@@ -227,8 +225,7 @@ EVENTS = [
         "speaker_role": "Fullstack Developer · Python · Nodejs · Rust · AI automation",
         "speaker_photo": "img/demetrio-reyes.webp",
         "image": "img/uees-building-640.webp",
-        "link": "#",
-        "link_text": "RSVP en Meetup",
+        # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
     },
 ]
 

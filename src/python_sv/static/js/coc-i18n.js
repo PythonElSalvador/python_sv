@@ -59,19 +59,25 @@
   var esCache = {};
   var currentLang = document.documentElement.lang === 'en' ? 'en' : 'es';
   var btn = document.getElementById('langToggle');
+  var hasOwn = Object.prototype.hasOwnProperty;
 
-  function applyEN() {
+  function forEachCoCTranslation(callback) {
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
       var key = el.getAttribute('data-i18n');
-      if (!esCache[key]) esCache[key] = el.innerHTML;
-      if (en[key]) el.innerHTML = en[key];
+      if (hasOwn.call(en, key)) callback(el, key);
+    });
+  }
+
+  function applyEN() {
+    forEachCoCTranslation(function(el, key) {
+      if (!hasOwn.call(esCache, key)) esCache[key] = el.innerHTML;
+      el.innerHTML = en[key];
     });
   }
 
   function applyES() {
-    document.querySelectorAll('[data-i18n]').forEach(function(el) {
-      var key = el.getAttribute('data-i18n');
-      if (esCache[key]) el.innerHTML = esCache[key];
+    forEachCoCTranslation(function(el, key) {
+      if (hasOwn.call(esCache, key)) el.innerHTML = esCache[key];
     });
   }
 

@@ -37,6 +37,7 @@ def notify_signup(
             {
                 "from": settings.notification_from,
                 "to": [settings.notification_to],
+                "subject": f"Nuevo registro: {name}",
                 "html": (
                     f"<p><strong>{name}</strong> ({email})</p>"
                     f"<p>Ciudad: {city}<br>Tipo: {member_type_label}<br>Rol: {role_label}</p>"

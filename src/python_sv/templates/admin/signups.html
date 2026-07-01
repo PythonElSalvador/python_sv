@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block preload_hero %}{% endblock %}
 
-{% block title %}Admin — Signups — Python SV{% endblock %}
+{% block title %}Admin — Registros — Python SV{% endblock %}
 
 {% block extra_head %}
 <style nonce="{{ csp_nonce }}">
@@ -102,26 +102,26 @@
 <section class="pysv-section pysv-section-dark">
   <div class="container">
     <span class="pysv-section-label">Admin</span>
-    <h1 class="pysv-section-title">Signup Stats</h1>
+    <h1 class="pysv-section-title">Estadísticas de registros</h1>
 
     {% if db_unavailable %}
     <div class="admin-notice">
-      Database is not configured. Set the <code>MONGODB_URI</code> environment variable to enable this page.
+      La base de datos no está configurada. Define la variable de entorno <code>MONGODB_URI</code> para habilitar esta página.
     </div>
     {% else %}
 
     <div class="admin-stats-grid">
       <div class="admin-stat-card">
         <div class="admin-stat-value">{{ total }}</div>
-        <div class="admin-stat-label">Total signups</div>
+        <div class="admin-stat-label">Registros totales</div>
       </div>
       <div class="admin-stat-card">
         <div class="admin-stat-value">{{ by_city | length }}</div>
-        <div class="admin-stat-label">Cities represented</div>
+        <div class="admin-stat-label">Ciudades representadas</div>
       </div>
       <div class="admin-stat-card">
         <div class="admin-stat-value">{{ by_member_type | length }}</div>
-        <div class="admin-stat-label">Member types</div>
+        <div class="admin-stat-label">Tipos de miembro</div>
       </div>
       <div class="admin-stat-card">
         <div class="admin-stat-value">{{ by_role | length }}</div>
@@ -130,10 +130,10 @@
     </div>
 
     <div class="admin-group">
-      <h3>Signups by City (top 10)</h3>
+      <h3>Registros por ciudad (top 10)</h3>
       {% for item in by_city %}
       <div class="admin-bar">
-        <span class="admin-bar-label">{{ item._id or "Unknown" }}</span>
+        <span class="admin-bar-label">{{ item._id or "Desconocido" }}</span>
         <div class="admin-bar-track">
           <div class="admin-bar-fill" style="width: {{ (item.count / total * 100) | round(1) }}%"></div>
         </div>
@@ -143,10 +143,10 @@
     </div>
 
     <div class="admin-group">
-      <h3>Signups by Member Type</h3>
+      <h3>Registros por tipo de miembro</h3>
       {% for item in by_member_type %}
       <div class="admin-bar">
-        <span class="admin-bar-label">{{ item._id or "Unknown" }}</span>
+        <span class="admin-bar-label">{{ item._id or "Desconocido" }}</span>
         <div class="admin-bar-track">
           <div class="admin-bar-fill" style="width: {{ (item.count / total * 100) | round(1) }}%"></div>
         </div>
@@ -156,10 +156,10 @@
     </div>
 
     <div class="admin-group">
-      <h3>Signups by Role</h3>
+      <h3>Registros por rol</h3>
       {% for item in by_role %}
       <div class="admin-bar">
-        <span class="admin-bar-label">{{ item._id or "Unknown" }}</span>
+        <span class="admin-bar-label">{{ item._id or "Desconocido" }}</span>
         <div class="admin-bar-track">
           <div class="admin-bar-fill" style="width: {{ (item.count / total * 100) | round(1) }}%"></div>
         </div>
@@ -169,16 +169,16 @@
     </div>
 
     <div class="admin-group">
-      <h3>Recent Signups (last 20)</h3>
+      <h3>Registros recientes (últimos 20)</h3>
       {% if recent %}
       <div style="overflow-x: auto;">
         <table class="admin-table">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Nombre</th>
               <th>Email</th>
-              <th>City</th>
-              <th>Date</th>
+              <th>Ciudad</th>
+              <th>Fecha</th>
             </tr>
           </thead>
           <tbody>
@@ -194,7 +194,7 @@
         </table>
       </div>
       {% else %}
-      <p style="color: var(--pysv-white-55); font-size: 0.85rem;">No signups yet.</p>
+      <p style="color: var(--pysv-white-55); font-size: 0.85rem;">Todavía no hay registros.</p>
       {% endif %}
     </div>
 

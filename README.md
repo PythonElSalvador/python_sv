@@ -27,10 +27,21 @@ cp .env.example .env
 prek install
 
 # Iniciar el servidor de desarrollo
-uv run uvicorn python_sv.main:app --reload
+uv run uvicorn python_sv.main:app --reload --app-dir src
 ```
 
 El sitio estará disponible en http://localhost:8000.
+
+> **Nota (macOS + Python 3.13):** El flag `--app-dir src` es necesario porque uv marca los archivos `.pth` del venv como ocultos (`UF_HIDDEN`), y Python 3.13 omite los `.pth` ocultos por seguridad. Como resultado, `src/` no se agrega automáticamente a `sys.path` y `python_sv` no es importable sin ese flag. Alternativa: `export PYTHONPATH=src`.
+
+> **Opcional — hot reload para templates y JS:** Por defecto, `--reload` solo observa archivos `.py`. Si vas a editar `.html` o `.js` y quieres que el servidor se reinicie automáticamente, agrega los flags `--reload-include`:
+>
+> ```bash
+> uv run uvicorn python_sv.main:app --reload --app-dir src \
+>   --reload-include "*.html" --reload-include "*.js"
+> ```
+>
+> Si solo vas a tocar código Python, puedes omitir estos flags.
 
 ## Docker
 

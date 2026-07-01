@@ -10,6 +10,11 @@
 <meta name="description" content="Código de Conducta de la comunidad Python SV.">
 {% endblock %}
 
+{% block scripts_bottom %}
+{{ super() }}
+<script nonce="{{ csp_nonce }}" src="{{ static_url('js/coc-i18n.js') }}" defer></script>
+{% endblock %}
+
 {% block body %}
 <section class="pysv-section pysv-section-dark pysv-coc">
   <div class="container">
@@ -121,9 +126,4 @@
     </div>
   </div>
 </section>
-{% endblock %}
-
-{% block scripts_bottom %}
-{{ super() }}
-<script nonce="{{ csp_nonce }}" src="{{ static_url('js/coc-i18n.js') }}" defer></script>
 {% endblock %}

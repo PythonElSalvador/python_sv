@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import secrets
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -11,11 +12,34 @@ from python_sv.dependencies import templates
 
 security = HTTPBasic()
 
+MEMBER_TYPE_LABELS = {
+    "student": "Estudiante",
+    "professional": "Profesional",
+    "other": "Otro",
+}
+
+ROLE_LABELS = {
+    "attend": "Asistir a eventos",
+    "speak": "Dar charlas",
+    "organize": "Ayudar a organizar",
+}
+
+
+def _label_group(
+    items: list[dict[str, Any]], labels: dict[str, str]
+) -> list[dict[str, Any]]:
+    labeled = []
+    for item in items:
+        key = item.get("_id")
+        label = labels.get(key, key) if isinstance(key, str) else key
+        labeled.append({**item, "_id": label})
+    return labeled
+
 
 def verify_admin(credentials: HTTPBasicCredentials = Depends(security)) -> None:
     settings = get_settings()
     if not settings.admin_username or not settings.admin_password:
-        raise HTTPException(status_code=403, detail="Admin not configured")
+        raise HTTPException(status_code=403, detail="Admin no configurado")
     username_ok = secrets.compare_digest(
         credentials.username.encode(), settings.admin_username.encode()
     )
@@ -25,7 +49,7 @@ def verify_admin(credentials: HTTPBasicCredentials = Depends(security)) -> None:
     if not (username_ok and password_ok):
         raise HTTPException(
             status_code=401,
-            detail="Invalid credentials",
+            detail="Credenciales inválidas",
             headers={"WWW-Authenticate": "Basic"},
         )
 
@@ -61,7 +85,10 @@ async def signups(request: Request) -> HTMLResponse:
             {"$sort": {"count": -1}},
         ]
     )
-    by_member_type = [doc async for doc in by_member_type_cursor]
+    by_member_type = _label_group(
+        [doc async for doc in by_member_type_cursor],
+        MEMBER_TYPE_LABELS,
+    )
 
     by_role_cursor = db.signups.aggregate(
         [
@@ -69,7 +96,7 @@ async def signups(request: Request) -> HTMLResponse:
             {"$sort": {"count": -1}},
         ]
     )
-    by_role = [doc async for doc in by_role_cursor]
+    by_role = _label_group([doc async for doc in by_role_cursor], ROLE_LABELS)
 
     recent_cursor = (
         db.signups.find(

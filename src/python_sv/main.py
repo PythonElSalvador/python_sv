@@ -134,7 +134,17 @@ class SecurityHeadersMiddleware:
         state = scope.setdefault("state", {})
         state["csp_nonce"] = nonce
         state["request_start"] = time.perf_counter()
-        csp = self._csp_template.format(nonce).encode()
+
+        # Skip `upgrade-insecure-requests` for loopback hosts: Safari (and other
+        # browsers) obey the directive and upgrade subresource URLs to HTTPS, but
+        # the dev server only speaks HTTP, so images/scripts fail to load.
+        template = self._csp_template
+        for name, value in scope.get("headers", []):
+            if name == b"host":
+                if value.startswith((b"localhost", b"127.0.0.1", b"[::1]")):
+                    template = self._csp_base
+                break
+        csp = template.format(nonce).encode()
 
         hsts = self._hsts_header
 

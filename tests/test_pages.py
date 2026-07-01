@@ -84,7 +84,8 @@ async def test_code_of_conduct_renders(client):
 async def test_calendar_renders(client):
     resp = await client.get("/calendario")
     assert resp.status_code == 200
-    assert "JUN" in resp.text
+    assert "JUL" in resp.text
+    assert "Procesamiento de imágenes con OpenCV" not in resp.text
 
 
 @pytest.mark.anyio

@@ -53,13 +53,11 @@
     coc_contact_title: '<svg class="pysv-coc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Contact',
     coc_contact_body: 'If you witness or are subject to a violation of this code of conduct, or have any questions or comments, you can write to us at:',
     coc_contact_note: 'Email interactions will be kept confidential between the person writing and the organizers.',
-    coc_back: 'Back to home',
-    footer_coc: 'Code of Conduct',
-    nav_coc: 'Code of Conduct'
+    coc_back: 'Back to home'
   };
 
   var esCache = {};
-  var currentLang = 'es';
+  var currentLang = document.documentElement.lang === 'en' ? 'en' : 'es';
   var btn = document.getElementById('langToggle');
 
   function applyEN() {
@@ -77,31 +75,25 @@
     });
   }
 
-  var saved = localStorage.getItem('pysv-lang');
-  if (saved === 'en') {
+  if (btn && localStorage.getItem('pysv-lang') === 'en') {
     applyEN();
     currentLang = 'en';
     btn.textContent = 'ES';
     document.documentElement.lang = 'en';
   }
 
-  btn.addEventListener('click', function() {
-    if (currentLang === 'es') {
-      applyEN();
-      currentLang = 'en';
-      btn.textContent = 'ES';
-      document.documentElement.lang = 'en';
-      localStorage.setItem('pysv-lang', 'en');
-    } else {
-      applyES();
-      currentLang = 'es';
-      btn.textContent = 'EN';
-      document.documentElement.lang = 'es';
-      localStorage.setItem('pysv-lang', 'es');
-    }
-  });
+  if (btn) {
+    btn.addEventListener('click', function() {
+      if (currentLang === 'es') {
+        applyEN();
+        currentLang = 'en';
+      } else {
+        applyES();
+        currentLang = 'es';
+      }
+    });
+  }
 
-  // TOC active state on scroll
   var tocLinks = document.querySelectorAll('.pysv-coc-toc a');
   var sections = [];
   tocLinks.forEach(function(link) {

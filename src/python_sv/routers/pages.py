@@ -167,22 +167,6 @@ async def code_of_conduct(request: Request) -> Response:
 
 EVENTS = [
     {
-        "title": "Procesamiento de imágenes con OpenCV",
-        "month": "JUN",
-        "year": "2026",
-        "day": 27,
-        "date_display": "Sábado 27 de junio, 2PM–5PM",
-        "location": "UEES, San Salvador",
-        "topics": ["OpenCV", "Image Processing", "Python"],
-        "description": "Aprende a detectar bordes, filtrar colores y rastrear objetos en tiempo real usando Python y OpenCV — con demo en vivo.",
-        "speaker_name": "Kevin Turcios",
-        "speaker_role": "Founding SWE @ Codeflash",
-        "speaker_photo": "img/kevin-turcios.webp",
-        "image": "img/uees-building-640.webp",
-        "link": "https://www.meetup.com/python-sv_/events/314638127/",
-        "link_text": "RSVP en Meetup",
-    },
-    {
         "title": "Introducción a FastAPI",
         "month": "JUL",
         "year": "2026",
@@ -192,7 +176,7 @@ EVENTS = [
         "topics": ["FastAPI", "APIs", "Python"],
         "description": "Construye tu primera API moderna con FastAPI: rutas, validación con Pydantic, documentación automática y despliegue básico — todo en una sesión.",
         "speaker_name": "Emilio Serrano",
-        "speaker_role": "Electrical Engineer · Python Developer",
+        "speaker_role": "Ingeniero eléctrico · Desarrollador Python",
         "speaker_photo": "img/emilio-serrano.webp",
         "image": "img/uees-building-640.webp",
         # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
@@ -204,10 +188,10 @@ EVENTS = [
         "day": 22,
         "date_display": "Sábado 22 de agosto, 2PM–5PM",
         "location": "UEES, San Salvador",
-        "topics": ["Pandas", "Data Analysis", "Python"],
+        "topics": ["Pandas", "Análisis de datos", "Python"],
         "description": "Aprende a limpiar, transformar y analizar datos reales con Pandas: DataFrames, groupby, merges y visualización rápida — con demo en vivo.",
         "speaker_name": "Kevin Turcios",
-        "speaker_role": "Founding SWE @ Codeflash",
+        "speaker_role": "Ingeniero de software fundador @ Codeflash",
         "speaker_photo": "img/kevin-turcios.webp",
         "image": "img/uees-building-640.webp",
         # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
@@ -219,10 +203,10 @@ EVENTS = [
         "day": 19,
         "date_display": "Sábado 19 de septiembre, 2PM–5PM",
         "location": "UEES, San Salvador",
-        "topics": ["Web Scraping", "Data Extraction", "Python"],
+        "topics": ["Web scraping", "Extracción de datos", "Python"],
         "description": "Domina las principales herramientas de web scraping en Python: requests, BeautifulSoup, Scrapy y Playwright — con ejemplos prácticos para extraer datos de sitios reales.",
         "speaker_name": "Demetrio Reyes",
-        "speaker_role": "Fullstack Developer · Python · Nodejs · Rust · AI automation",
+        "speaker_role": "Desarrollador fullstack · Python · Nodejs · Rust · Automatización con IA",
         "speaker_photo": "img/demetrio-reyes.webp",
         "image": "img/uees-building-640.webp",
         # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup

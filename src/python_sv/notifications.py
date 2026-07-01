@@ -8,6 +8,18 @@ from python_sv.config import get_settings
 
 logger = logging.getLogger("pythonsv")
 
+MEMBER_TYPE_LABELS = {
+    "student": "Estudiante",
+    "professional": "Profesional",
+    "other": "Otro",
+}
+
+ROLE_LABELS = {
+    "attend": "Asistir a eventos",
+    "speak": "Dar charlas",
+    "organize": "Ayudar a organizar",
+}
+
 
 def notify_signup(
     name: str, email: str, city: str, member_type: str, role: str
@@ -17,21 +29,22 @@ def notify_signup(
         return
 
     resend.api_key = settings.resend_api_key
+    member_type_label = MEMBER_TYPE_LABELS.get(member_type, member_type)
+    role_label = ROLE_LABELS.get(role, role)
 
     try:
         resend.Emails.send(
             {
                 "from": settings.notification_from,
                 "to": [settings.notification_to],
-                "subject": f"New signup: {name}",
                 "html": (
                     f"<p><strong>{name}</strong> ({email})</p>"
-                    f"<p>City: {city}<br>Type: {member_type}<br>Role: {role}</p>"
+                    f"<p>Ciudad: {city}<br>Tipo: {member_type_label}<br>Rol: {role_label}</p>"
                 ),
             }
         )
     except Exception:
-        logger.exception("Failed to send signup notification")
+        logger.exception("No se pudo enviar la notificación de registro")
 
 
 def notify_proposal(
@@ -48,13 +61,13 @@ def notify_proposal(
             {
                 "from": settings.notification_from,
                 "to": [settings.notification_to],
-                "subject": f"Speaker proposal: {topic}",
+                "subject": f"Propuesta de charla: {topic}",
                 "html": (
                     f"<p><strong>{name}</strong> ({email})</p>"
-                    f"<p>Topic: {topic}<br>Level: {level}</p>"
-                    f"<p>Description: {description}</p>"
+                    f"<p>Tema: {topic}<br>Nivel: {level}</p>"
+                    f"<p>Descripción: {description}</p>"
                 ),
             }
         )
     except Exception:
-        logger.exception("Failed to send proposal notification")
+        logger.exception("No se pudo enviar la notificación de propuesta")

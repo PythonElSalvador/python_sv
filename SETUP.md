@@ -46,7 +46,7 @@ Base de datos: `pythonsv`, Colección: `signups` (campos: name, email, role)
 
 1. Actualizar `MONGO_URI` en `.env` para apuntar al nuevo clúster
 2. Actualizar el secreto `MONGO_URI` de GitHub en PythonElSalvador/python_sv
-3. Verificar que los scripts funcionen: `python scripts/query_signups.py`
+3. Verificar que los scripts funcionen: `uv run python scripts/query_signups.py`
 
 ## Infraestructura en Azure
 

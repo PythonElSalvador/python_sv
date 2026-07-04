@@ -63,6 +63,8 @@ src/
     │   └── pages.py       # Rutas de páginas
     ├── static/            # CSS, JS, imágenes
     └── templates/         # Plantillas HTML con Jinja2
+scripts/                  # Scripts operativos y tareas manuales
+deploy/                   # Configuración de despliegue, como Gunicorn
 content/
 └── index.md               # Contenido de la página principal (markdown + frontmatter)
 tests/                     # Suite de pruebas con pytest
@@ -106,6 +108,7 @@ Consulta [`.env.example`](.env.example) para la lista completa. Variables clave:
 - **Páginas basadas en contenido** (como la página principal): agrega un archivo markdown en `content/` con frontmatter YAML, luego cárgalo en `src/python_sv/main.py` de la misma forma en que se carga `index.md`
 - **Páginas solo con template** (como `/calendario`): agrega una plantilla HTML en `src/python_sv/templates/` y una ruta en `src/python_sv/routers/pages.py`
 - **Recursos estáticos** (CSS, JS, imágenes, fuentes): van en el subdirectorio correspondiente dentro de `src/python_sv/static/`
+- **Scripts operativos**: colócalos en `scripts/` y ejecútalos directamente, por ejemplo `uv run python scripts/query_signups.py`
 
 ## CI/CD
 

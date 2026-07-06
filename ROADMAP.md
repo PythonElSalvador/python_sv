@@ -9,12 +9,11 @@
 - [x] Calendar page with upcoming events
 - [x] WhatsApp group link
 - [x] SEO basics: sitemap.xml, robots.txt, Open Graph tags
-- [x] Production deploy on Azure Container Apps (pythonsv.com)
-- [x] CI: build + push to ACR on push to main
-- [ ] Auto-deploy from GitHub Actions (blocked — need Azure SP permissions)
-- [ ] Join form: collect name + email via Resend for announcements
-- [ ] Speaker proposal form (simple: name, topic, description, experience level)
-- [ ] /llms.txt page (reference: anthropic, openai, llmstxt.org for format)
+- [x] Production deploy on GitHub Pages (pythonsv.com)
+- [x] CI/CD: build static site + deploy to GitHub Pages on push to main
+- [x] Join form via Cloudflare Worker + Resend
+- [x] Speaker proposal form via Cloudflare Worker + Resend
+- [x] /llms.txt page
 
 ### Next
 
@@ -40,16 +39,15 @@
 ### Done
 
 - [x] Domain: pythonsv.com
-- [x] Hosting: Azure Container Apps (production + staging)
+- [x] Hosting: GitHub Pages
 - [x] CI/CD: GitHub Actions builds on push to main
-- [x] ACR: pythonsvcr.azurecr.io
+- [x] Forms backend: Cloudflare Worker
 - [x] Email: Google Workspace (pythonsv.com domain)
 - [x] Linear: linear.app/python-sv
 - [x] Notion: "Python SV" workspace
 
 ### Pending
 
-- [ ] Auto-deploy: grant Contributor role to SP `github-pythonsv` (appId: `4493f559-a697-4db9-b881-6a11851bbcd3`)
 - [ ] Email: create hola@pythonsv.com (general contact alias or mailbox)
 - [ ] Resend: configure for pythonsv.com domain (DNS records)
 - [ ] Monitoring/alerting: uptime checks, error tracking

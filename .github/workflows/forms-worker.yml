@@ -1,0 +1,26 @@
+name: Deploy Forms Worker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - workers/forms/**
+      - .github/workflows/forms-worker.yml
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - run: node --check workers/forms/src/index.js
+      - run: node --test workers/forms/test/worker.test.mjs
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: workers/forms
+          command: deploy

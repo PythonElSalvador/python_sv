@@ -24,7 +24,7 @@ RUN addgroup --system --gid 1001 appgroup && \
 COPY --from=builder /app/.venv /app/.venv
 COPY src/ src/
 COPY content/ content/
-COPY gunicorn.conf.py .
+COPY deploy/ deploy/
 
 ENV PATH="/app/.venv/bin:$PATH"
 
@@ -35,4 +35,4 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
 
-CMD ["gunicorn", "-c", "gunicorn.conf.py", "python_sv.main:app"]
+CMD ["gunicorn", "-c", "deploy/gunicorn.conf.py", "python_sv.main:app"]

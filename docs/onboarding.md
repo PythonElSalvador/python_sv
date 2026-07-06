@@ -52,7 +52,7 @@ The community WhatsApp group is the primary communication channel.
 
 ## 6. Website & Repo
 
-The website is https://pythonsv.com, hosted on Azure Container Apps.
+The website is https://pythonsv.com, hosted on GitHub Pages.
 
 ### Local setup
 
@@ -60,7 +60,7 @@ The website is https://pythonsv.com, hosted on Azure Container Apps.
 git clone git@github.com:PythonElSalvador/python_sv.git
 cd python_sv
 uv sync
-uv run fastapi dev app/main.py
+uv run uvicorn python_sv.main:app --reload --app-dir src
 ```
 
 The site runs at http://localhost:8000.
@@ -83,9 +83,10 @@ ROADMAP.md         — Full roadmap and status tracking
 
 ### Deploy
 
-- Pushes to `main` trigger a GitHub Actions build that pushes to Azure Container Registry (pythonsvcr.azurecr.io)
-- Auto-deploy to Azure Container Apps is pending (needs Azure SP permissions)
-- Staging environment exists for testing
+- Pushes to `main` trigger a GitHub Actions build that renders the static site into `dist/`
+- GitHub Pages publishes the generated artifact to https://pythonsv.com
+- Production form posts to `/api/signup` and `/api/proposal` are handled by the Cloudflare Worker in `workers/forms/`
+- `/admin/signups` remains local/backend-only unless a server-backed production app is reintroduced
 
 ## 7. Provisioning Checklist
 

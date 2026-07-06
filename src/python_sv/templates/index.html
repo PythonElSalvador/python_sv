@@ -104,6 +104,14 @@
       <p class="pysv-section-subtitle" data-i18n="signup_subtitle">Recibe novedades y accede al grupo de WhatsApp de la comunidad.</p>
     </div>
 
+    {% if api_forms_enabled is defined and not api_forms_enabled %}
+    <div class="pysv-signup-form reveal">
+      <p class="pysv-section-subtitle">Únete al grupo de WhatsApp para recibir anuncios de eventos y conectar con la comunidad.</p>
+      <div class="pysv-form-row">
+        <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="btn-pysv-gold pysv-signup-btn" data-i18n="form_whatsapp">Únete al grupo</a>
+      </div>
+    </div>
+    {% else %}
     <form id="signup-form" class="pysv-signup-form reveal"
           hx-post="/api/signup"
           hx-target="#signup-result"
@@ -137,6 +145,7 @@
     </form>
 
     <div id="signup-result"></div>
+    {% endif %}
   </div>
 </section>
 

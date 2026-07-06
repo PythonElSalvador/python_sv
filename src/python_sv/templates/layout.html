@@ -66,7 +66,7 @@
   <footer class="pysv-footer">
     <div class="container">
       <div class="pysv-footer-inner">
-        <span data-i18n="footer">Python SV &copy; {{ current_year }} — Hecho con Python y FastAPI en El Salvador.</span>
+        <span data-i18n="footer">Python SV &copy; {{ current_year }} — Hecho con Python en El Salvador.</span>
         <div class="pysv-footer-links">
           <a href="/calendario" data-i18n="footer_cal">Calendario</a>
           <a href="/propuestas" data-i18n="footer_proposals">Propuestas</a>
@@ -80,7 +80,9 @@
     </div>
   </footer>
 
+  {% if api_forms_enabled is not defined or api_forms_enabled %}
   <script nonce="{{ csp_nonce }}" src="{{ static_url('js/htmx.min.js') }}"></script>
+  {% endif %}
   <script nonce="{{ csp_nonce }}" src="{{ static_url('js/i18n.js') }}" defer></script>
   {% block scripts_bottom %}{% endblock %}
 </body>

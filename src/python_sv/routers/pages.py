@@ -176,7 +176,7 @@ EVENTS = [
         "topics": ["FastAPI", "APIs", "Python"],
         "description": "Construye tu primera API moderna con FastAPI: rutas, validación con Pydantic, documentación automática y despliegue básico — todo en una sesión.",
         "speaker_name": "Emilio Serrano",
-        "speaker_role": "Ingeniero eléctrico · Desarrollador Python",
+        "speaker_role": "Ingeniero de Software - Junior @ Core",
         "speaker_photo": "img/emilio-serrano.webp",
         "image": "img/uees-building-640.webp",
         # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
@@ -191,7 +191,7 @@ EVENTS = [
         "topics": ["Pandas", "Análisis de datos", "Python"],
         "description": "Aprende a limpiar, transformar y analizar datos reales con Pandas: DataFrames, groupby, merges y visualización rápida — con demo en vivo.",
         "speaker_name": "Kevin Turcios",
-        "speaker_role": "Ingeniero de software fundador @ Codeflash",
+        "speaker_role": "CEO & Founder @ Core",
         "speaker_photo": "img/kevin-turcios.webp",
         "image": "img/uees-building-640.webp",
         # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup

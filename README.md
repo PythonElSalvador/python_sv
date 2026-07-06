@@ -132,4 +132,4 @@ GitHub Actions se ejecuta en cada PR y push a `main`:
 
 ## Infraestructura
 
-Consulta [SETUP.md](SETUP.md) para la referencia de GitHub Pages y DNS.
+Consulta [docs/SETUP.md](docs/SETUP.md) para la referencia de GitHub Pages, DNS y el Worker de formularios.

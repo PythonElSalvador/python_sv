@@ -1,87 +1,43 @@
-name: Build & Deploy
+name: Deploy GitHub Pages
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  prek:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-      - run: uv sync --dev
-      - uses: j178/prek-action@v2
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-      - run: uv sync --dev
-      - run: uv run pytest -x -q
-
   build:
-    needs: [prek, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
-      - name: Log in to ACR
-        uses: docker/login-action@v4
+      - uses: astral-sh/setup-uv@v7
         with:
-          registry: pythonsvcr.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v7
+          enable-cache: true
+      - run: uv sync --dev
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest -x -q
+      - run: uv run python scripts/build_static.py
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
-          context: .
-          push: true
-          tags: |
-            pythonsvcr.azurecr.io/pythonsv:latest
-            pythonsvcr.azurecr.io/pythonsv:${{ github.sha }}
+          path: dist
 
   deploy:
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
-    env:
-      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Check credentials
-        id: check
-        run: |
-          if [ -z "$AZURE_CREDENTIALS" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "AZURE_CREDENTIALS not set, skipping deploy"
-          fi
-
-      - name: Log in to Azure
-        if: steps.check.outputs.skip != 'true'
-        uses: azure/login@v3
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Deploy to Container Apps
-        if: steps.check.outputs.skip != 'true'
-        uses: azure/cli@v3
-        with:
-          inlineScript: |
-            az containerapp update \
-              --name pythonsv \
-              --resource-group pythonsv \
-              --image pythonsvcr.azurecr.io/pythonsv:${{ github.sha }} \
-              --set-env-vars \
-                "MONGODB_URI=${{ secrets.MONGODB_URI }}" \
-                "ADMIN_USERNAME=${{ secrets.ADMIN_USERNAME }}" \
-                "ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }}" \
-                "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" \
-                "NOTIFICATION_FROM=${{ secrets.NOTIFICATION_FROM }}" \
-                "NOTIFICATION_TO=${{ secrets.NOTIFICATION_TO }}" \
-                "PLAUSIBLE_SCRIPT=${{ secrets.PLAUSIBLE_SCRIPT }}"
+      - id: deployment
+        uses: actions/deploy-pages@v5

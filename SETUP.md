@@ -1,259 +1,110 @@
 # Configuración de infraestructura de PythonSV
 
-Registro paso a paso de cómo se configuró la infraestructura, para que pueda reproducirse o modificarse en el futuro.
+El sitio público de Python SV se publica en GitHub Pages como HTML estático generado desde las plantillas Jinja2 del repositorio.
 
-## MongoDB Atlas
+## Hosting
 
-### Cuenta y organización
+- Producción: https://pythonsv.com
+- Repositorio: `PythonElSalvador/python_sv`
+- Hosting: GitHub Pages
+- Dominio personalizado: `pythonsv.com`
+- Build artifact: `dist/`
 
-1. Se creó una nueva cuenta de MongoDB Atlas en https://cloud.mongodb.com usando Google con `kevinturcios@pythonsv.com`
-2. Se renombró la organización creada automáticamente de "Kevin's Org - 2026-04-23" a **PythonSV**
-   - Configuración de organización > Editar nombre de organización
-3. Se renombró el proyecto creado automáticamente de "Project 0" a **pythonsv**
-   - Configuración del proyecto > Editar nombre del proyecto
+## GitHub Pages
 
-### Clúster
+En GitHub, configurar:
 
-1. Se creó un clúster **gratuito** (M0):
-   - Nombre: `pythonsv` (no se puede cambiar después de la creación)
-   - Proveedor: AWS
-   - Región: N. Virginia (us-east-1) -- región de nivel gratuito más cercana disponible a El Salvador
-2. Durante la configuración, Atlas creó automáticamente:
-   - Usuario de BD: `kevinturcios_db_user` con permisos de atlasAdmin
-   - Entrada en la lista de acceso por IP para la dirección IP actual
-3. Formato de cadena de conexión: `mongodb+srv://kevinturcios_db_user:<password>@pythonsv.7ujjozc.mongodb.net/<database>?appName=pythonsv`
+1. Repository settings > Pages.
+2. Source: GitHub Actions.
+3. Custom domain: `pythonsv.com`.
+4. Enforce HTTPS: enabled once GitHub finishes provisioning the certificate.
 
-### Acceso de red
+The Pages workflow writes a `CNAME` file into the published artifact, so the custom domain remains attached across deploys.
 
-Se agregó `0.0.0.0/0` a la lista de acceso por IP (permitir todo) como medida temporal. Será reemplazado con la IP estática del NAT Gateway una vez que la configuración de la VNet esté completa (ver sección de Azure más abajo).
+## DNS
 
-### Migración de datos (desde el clúster anterior)
+Set these records at the DNS provider for `pythonsv.com`:
 
-Clúster anterior: `pythonsv.akiq03k.mongodb.net` (cuenta personal, turcioskevinr@gmail.com)
-Nuevo clúster: `pythonsv.7ujjozc.mongodb.net` (cuenta de la org PythonSV, kevinturcios@pythonsv.com)
-
-```bash
-# Exportar desde el clúster anterior
-mongodump --uri="mongodb+srv://turcioskevinr:<old-password>@pythonsv.akiq03k.mongodb.net/pythonsv" --out=./mongodump-export
-
-# Restaurar en el nuevo clúster
-mongorestore --uri="mongodb+srv://kevinturcios_db_user:<new-password>@pythonsv.7ujjozc.mongodb.net" ./mongodump-export
-```
-
-Base de datos: `pythonsv`, Colección: `signups` (campos: name, email, role)
-
-### Post-migración
-
-1. Actualizar `MONGO_URI` en `.env` para apuntar al nuevo clúster
-2. Actualizar el secreto `MONGO_URI` de GitHub en PythonElSalvador/python_sv
-3. Verificar que los scripts funcionen: `uv run python scripts/query_signups.py`
-
-## Infraestructura en Azure
-
-### Grupo de recursos
-
-- Nombre: `pythonsv`
-- Ubicación: East US
-
-### Azure Container Registry (ACR)
-
-- Nombre: `pythonsvcr`
-- URL: `pythonsvcr.azurecr.io`
-- Imagen: `pythonsv` (etiquetas: `latest`, `staging`, `staging-<sha>`, `<sha>`)
-
-### VNet + NAT Gateway (para IP de salida estática)
-
-Por qué: Las Container Apps de Azure en el plan de consumo usan un conjunto compartido de más de 300 IPs de salida que pueden rotar. Para restringir el acceso a MongoDB Atlas a una sola IP (en lugar de `0.0.0.0/0`), todo el tráfico saliente se enruta a través de un NAT Gateway con una IP pública estática.
-
-```bash
-# 1. Crear VNet con subred para Container Apps
-az network vnet create \
-  --name pythonsv-vnet \
-  --resource-group pythonsv \
-  --location eastus \
-  --address-prefix 10.0.0.0/16
-
-az network vnet subnet create \
-  --name container-apps-subnet \
-  --resource-group pythonsv \
-  --vnet-name pythonsv-vnet \
-  --address-prefix 10.0.0.0/23
-
-# 2. Crear IP pública estática para el NAT Gateway
-az network public-ip create \
-  --name pythonsv-nat-ip \
-  --resource-group pythonsv \
-  --location eastus \
-  --sku Standard \
-  --allocation-method Static
-
-# 3. Crear el NAT Gateway y asociar la IP pública
-az network nat gateway create \
-  --name pythonsv-nat-gw \
-  --resource-group pythonsv \
-  --location eastus \
-  --public-ip-addresses pythonsv-nat-ip \
-  --idle-timeout 4
-
-# 4. Asociar el NAT Gateway con la subred
-az network vnet subnet update \
-  --name container-apps-subnet \
-  --resource-group pythonsv \
-  --vnet-name pythonsv-vnet \
-  --nat-gateway pythonsv-nat-gw
-
-# 5. Obtener el ID de recurso de la subred (necesario para el entorno de Container Apps)
-az network vnet subnet show \
-  --name container-apps-subnet \
-  --resource-group pythonsv \
-  --vnet-name pythonsv-vnet \
-  --query id -o tsv
-
-# 6. Obtener la IP pública estática (agregar esta IP a la lista de acceso de Atlas)
-az network public-ip show \
-  --name pythonsv-nat-ip \
-  --resource-group pythonsv \
-  --query ipAddress -o tsv
-```
-
-### Entorno de Container Apps
-
-El entorno debe crearse dentro de la VNet para usar el NAT Gateway. Los entornos existentes no pueden moverse a una VNet — deben recrearse.
-
-```bash
-# Delegar la subred a Container Apps (requerido antes de crear el entorno)
-az network vnet subnet update \
-  --name container-apps-subnet \
-  --resource-group pythonsv \
-  --vnet-name pythonsv-vnet \
-  --delegations Microsoft.App/environments
-
-# Crear nuevo entorno en la VNet
-az containerapp env create \
-  --name pythonsv-env-v2 \
-  --resource-group pythonsv \
-  --location southcentralus \
-  --infrastructure-subnet-resource-id <subnet-id-from-step-5>
-```
-
-### Container Apps
-
-#### Producción (pythonsv)
-
-```bash
-az containerapp create \
-  --name pythonsv \
-  --resource-group pythonsv \
-  --environment pythonsv-env-v2 \
-  --image pythonsvcr.azurecr.io/pythonsv:latest \
-  --registry-server pythonsvcr.azurecr.io \
-  --target-port 8000 \
-  --ingress external \
-  --cpu 0.25 \
-  --memory 0.5Gi \
-  --min-replicas 0 \
-  --max-replicas 2 \
-  --env-vars \
-    ALLOWED_HOSTS='["pythonsv.com","www.pythonsv.com"]' \
-    BASE_URL=https://pythonsv.com \
-    LOG_LEVEL=INFO \
-    WEB_CONCURRENCY=1 \
-    RESEND_API_KEY=<resend-key>
-```
-
-Dominios personalizados (después de crear la app):
-```bash
-# Agregar certificados administrados y vincular dominios
-az containerapp hostname add --name pythonsv --resource-group pythonsv --hostname pythonsv.com
-az containerapp hostname bind --name pythonsv --resource-group pythonsv --hostname pythonsv.com --environment pythonsv-env-v2 --validation-method HTTP
-
-az containerapp hostname add --name pythonsv --resource-group pythonsv --hostname www.pythonsv.com
-az containerapp hostname bind --name pythonsv --resource-group pythonsv --hostname www.pythonsv.com --environment pythonsv-env-v2 --validation-method CNAME
-```
-
-#### Staging (pythonsv-staging)
-
-```bash
-az containerapp create \
-  --name pythonsv-staging \
-  --resource-group pythonsv \
-  --environment pythonsv-env-v2 \
-  --image pythonsvcr.azurecr.io/pythonsv:latest \
-  --registry-server pythonsvcr.azurecr.io \
-  --target-port 8000 \
-  --ingress external \
-  --cpu 0.25 \
-  --memory 0.5Gi \
-  --min-replicas 0 \
-  --max-replicas 1 \
-  --env-vars \
-    ALLOWED_HOSTS='["pythonsv-staging.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io"]' \
-    BASE_URL=https://pythonsv-staging.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io \
-    LOG_LEVEL=DEBUG \
-    WEB_CONCURRENCY=1 \
-    RESEND_API_KEY=
-```
-
-### DNS (Cloudflare)
-
-- `pythonsv.com` -> CNAME a `pythonsv.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io`
-- `www.pythonsv.com` -> CNAME a `pythonsv.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io`
-
-El proxy de Cloudflare (nube naranja) debe estar desactivado para que la validación del certificado administrado funcione. Los dominios raíz usan validación HTTP; los subdominios usan validación CNAME. Una vez aprovisionados los certificados, el proxy puede reactivarse si se desea.
-
-### Comandos de despliegue manual
-
-Producción:
-```bash
-az containerapp update --name pythonsv --resource-group pythonsv --image pythonsvcr.azurecr.io/pythonsv:<sha>
-```
-
-Staging:
-```bash
-az containerapp update --name pythonsv-staging --resource-group pythonsv --image pythonsvcr.azurecr.io/pythonsv:staging-<sha>
-```
-
-## CI/CD (GitHub Actions)
-
-Repositorio: `PythonElSalvador/python_sv`
-
-### Workflows
-
-| Workflow | Disparador | Qué hace |
+| Host | Type | Value |
 |---|---|---|
-| `ci.yml` | PRs a main | Linting + pruebas |
-| `deploy.yml` | Push a main | Linting + pruebas + build + push a ACR |
-| `staging.yml` | Push a la rama staging | Mismo pipeline, etiquetas como `staging`/`staging-<sha>` |
+| `@` | `A` | `185.199.108.153` |
+| `@` | `A` | `185.199.109.153` |
+| `@` | `A` | `185.199.110.153` |
+| `@` | `A` | `185.199.111.153` |
+| `www` | `CNAME` | `PythonElSalvador.github.io` |
 
-### Secretos de GitHub
+If DNS is managed in Cloudflare, use DNS-only mode while GitHub provisions HTTPS. After Pages is working, enable Cloudflare proxying for `pythonsv.com` and `www.pythonsv.com` so the Worker route can intercept `/api/*`.
 
-| Secreto | Descripción |
+## Forms Worker
+
+GitHub Pages cannot store secrets or call Resend safely from browser JavaScript. The public site posts forms to same-origin `/api/signup` and `/api/proposal`; Cloudflare routes those paths to the `pythonsv-forms` Worker.
+
+Worker files:
+
+- `workers/forms/src/index.js`
+- `workers/forms/wrangler.toml`
+- `.github/workflows/forms-worker.yml`
+
+Required Cloudflare Worker secrets:
+
+```bash
+cd workers/forms
+npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put NOTIFICATION_TO
+```
+
+Required GitHub Actions secrets for Worker deploy:
+
+| Secret | Description |
 |---|---|
-| `ACR_USERNAME` | Usuario administrador del ACR |
-| `ACR_PASSWORD` | Contraseña del administrador del ACR |
-| `MONGO_URI` | Cadena de conexión a MongoDB |
-| `AZURE_CREDENTIALS` | JSON del service principal (para auto-despliegue, pendiente) |
+| `CLOUDFLARE_API_TOKEN` | Token with permission to deploy Workers and edit Worker routes for the `pythonsv.com` zone |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
 
-### Auto-despliegue (pendiente)
+The Worker uses these non-secret vars from `wrangler.toml`:
 
-Bloqueado por la asignación de roles del service principal. Ver ROADMAP.md para más detalles.
-
-## Referencia de recursos clave
-
-| Recurso | Valor |
+| Var | Value |
 |---|---|
-| URL de producción | https://pythonsv.com |
-| URL de staging | https://pythonsv-staging.agreeablefield-59184fdd.southcentralus.azurecontainerapps.io |
-| ACR | pythonsvcr.azurecr.io |
-| Grupo de recursos | pythonsv |
-| Ubicación | South Central US |
-| VNet | pythonsv-vnet (10.0.0.0/16) |
-| Subred | container-apps-subnet (10.0.0.0/23) |
-| NAT Gateway | pythonsv-nat-gw |
-| IP pública NAT | pythonsv-nat-ip (4.151.106.157) |
-| Container App (prod) | pythonsv |
-| Container App (staging) | pythonsv-staging |
-| Entorno | pythonsv-env-v2 |
-| Org Atlas | PythonSV (kevinturcios@pythonsv.com) |
-| Clúster Atlas | pythonsv.7ujjozc.mongodb.net |
-| Repositorio GitHub | PythonElSalvador/python_sv |
+| `ALLOWED_ORIGINS` | `https://pythonsv.com,https://www.pythonsv.com` |
+| `WHATSAPP_URL` | WhatsApp community invite URL |
+
+The Worker currently uses Resend's default onboarding sender in code. Add a configured sender later after `pythonsv.com` is verified in Resend.
+
+## Static Build
+
+Run the same static build locally:
+
+```bash
+uv run python scripts/build_static.py
+```
+
+The build:
+
+- copies `src/python_sv/static/` into `dist/static/`
+- renders `/`, `/calendario`, `/propuestas`, `/codigo-de-conducta`, and `/404.html`
+- writes `robots.txt`, `sitemap.xml`, `llms.txt`, `.nojekyll`, and `CNAME`
+- includes htmx forms that post to the Cloudflare Worker at `/api/signup` and `/api/proposal`
+
+To preview locally:
+
+```bash
+cd dist
+python -m http.server 8000
+```
+
+Then open http://localhost:8000.
+
+## CI/CD
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `ci.yml` | PRs to `main` | Linting and tests |
+| `deploy.yml` | Push to `main`, manual dispatch | Linting, tests, static build, deploy to GitHub Pages |
+| `forms-worker.yml` | Push to Worker files, manual dispatch | Deploy Cloudflare Worker for `/api/*` forms |
+
+No Azure, ACR, or container-app secrets are required for the public site.
+
+## Backend Notes
+
+The FastAPI app remains useful for local development and for any future server-backed version. Production form submissions are handled by the Cloudflare Worker, not FastAPI.
+
+The Worker sends Resend notifications but does not currently store submissions in MongoDB. `/admin/signups` remains local/backend-only unless a server-backed production app is reintroduced.

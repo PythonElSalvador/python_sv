@@ -19,6 +19,14 @@
       <p class="pysv-section-subtitle">¿Quieres compartir algo con la comunidad? No importa tu nivel — si te apasiona, queremos escucharte.</p>
     </div>
 
+    {% if api_forms_enabled is defined and not api_forms_enabled %}
+    <div class="pysv-signup-form reveal">
+      <p class="pysv-section-subtitle">Comparte tu idea en el grupo de WhatsApp de Python SV. El equipo organizador dará seguimiento desde ahí.</p>
+      <div class="pysv-form-row">
+        <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="btn-pysv-gold pysv-signup-btn">Compartir propuesta</a>
+      </div>
+    </div>
+    {% else %}
     <form id="proposal-form" class="pysv-signup-form reveal"
           hx-post="/api/proposal"
           hx-target="#proposal-result"
@@ -49,6 +57,7 @@
     </form>
 
     <div id="proposal-result"></div>
+    {% endif %}
 
     <div class="pysv-calendar-back">
       <a href="/" class="btn-pysv-gold">Volver al inicio</a>
@@ -72,7 +81,7 @@
   document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
 
   var form = document.getElementById('proposal-form');
-  if (form) {
+  if (form && window.htmx) {
     form.addEventListener('htmx:afterRequest', function(evt) {
       if (evt.detail.successful) form.style.display = 'none';
     });

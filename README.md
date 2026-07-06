@@ -2,7 +2,7 @@
 
 Sitio web de la comunidad Python El Salvador — [pythonsv.com](https://pythonsv.com)
 
-Hecho con FastAPI, Jinja2 y uv.
+Hecho con FastAPI, Jinja2 y uv. El sitio público se publica como HTML estático en GitHub Pages, con formularios servidos por un Cloudflare Worker.
 
 ## Prerrequisitos
 
@@ -50,6 +50,16 @@ docker build -t pythonsv .
 docker run -p 8000:8000 --env-file .env pythonsv
 ```
 
+## Build estático
+
+GitHub Pages publica el contenido generado en `dist/`.
+
+```bash
+uv run python scripts/build_static.py
+```
+
+Los formularios generados por el build estático usan htmx y hacen `POST` a `/api/signup` y `/api/proposal`. En producción, esas rutas las maneja el Cloudflare Worker en `workers/forms/`.
+
 ## Estructura del proyecto
 
 ```
@@ -58,13 +68,13 @@ src/
     ├── main.py            # App FastAPI, middleware, lifespan
     ├── config.py          # Configuración (cargada desde .env)
     ├── dependencies.py    # Dependencias compartidas (templates, contenido de páginas)
-    ├── notifications.py   # Notificaciones por correo vía Resend
+    ├── notifications.py   # Notificaciones por correo cuando se usa el backend local
     ├── routers/
     │   └── pages.py       # Rutas de páginas
     ├── static/            # CSS, JS, imágenes
     └── templates/         # Plantillas HTML con Jinja2
 scripts/                  # Scripts operativos y tareas manuales
-deploy/                   # Configuración de despliegue, como Gunicorn
+deploy/                   # Configuración opcional de Gunicorn para correr el backend
 content/
 └── index.md               # Contenido de la página principal (markdown + frontmatter)
 tests/                     # Suite de pruebas con pytest
@@ -93,7 +103,7 @@ Consulta [`.env.example`](.env.example) para la lista completa. Variables clave:
 | `WHATSAPP_URL` | Enlace de invitación al grupo de WhatsApp | — |
 | `ALLOWED_HOSTS` | Lista JSON de hostnames permitidos | `["localhost","127.0.0.1"]` |
 | `LOG_LEVEL` | Nivel de logging | `INFO` |
-| `RESEND_API_KEY` | API key de Resend para notificaciones por correo | — |
+| `RESEND_API_KEY` | API key de Resend para notificaciones por correo cuando se usa el backend | — |
 | `WEB_CONCURRENCY` | Número de workers de Gunicorn (solo Docker) | `2` |
 
 ## Contribuir
@@ -108,6 +118,8 @@ Consulta [`.env.example`](.env.example) para la lista completa. Variables clave:
 - **Páginas basadas en contenido** (como la página principal): agrega un archivo markdown en `content/` con frontmatter YAML, luego cárgalo en `src/python_sv/main.py` de la misma forma en que se carga `index.md`
 - **Páginas solo con template** (como `/calendario`): agrega una plantilla HTML en `src/python_sv/templates/` y una ruta en `src/python_sv/routers/pages.py`
 - **Recursos estáticos** (CSS, JS, imágenes, fuentes): van en el subdirectorio correspondiente dentro de `src/python_sv/static/`
+- **Build de GitHub Pages**: agrega la página a `scripts/build_static.py` para incluirla en `dist/`
+- **Endpoints de formularios públicos**: actualiza `workers/forms/src/index.js`
 - **Scripts operativos**: colócalos en `scripts/` y ejecútalos directamente, por ejemplo `uv run python scripts/query_signups.py`
 
 ## CI/CD
@@ -115,9 +127,9 @@ Consulta [`.env.example`](.env.example) para la lista completa. Variables clave:
 GitHub Actions se ejecuta en cada PR y push a `main`:
 
 - **ci.yml** — Linting + pruebas en PRs
-- **deploy.yml** — Linting + pruebas + build de Docker + push a ACR al hacer merge a `main`
-- **staging.yml** — El mismo pipeline para la rama `staging`
+- **deploy.yml** — Linting + pruebas + build estático + deploy a GitHub Pages al hacer merge a `main`
+- **forms-worker.yml** — Deploy del Cloudflare Worker para formularios
 
 ## Infraestructura
 
-Consulta [SETUP.md](SETUP.md) para la referencia completa de infraestructura (Azure, MongoDB Atlas, DNS, etc.).
+Consulta [SETUP.md](SETUP.md) para la referencia de GitHub Pages y DNS.

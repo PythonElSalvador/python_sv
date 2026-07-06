@@ -4,7 +4,7 @@
     nav_cal: 'Calendar',
     nav_proposals: 'Proposals',
     nav_coc: 'Code of Conduct',
-    footer: 'Python SV &copy; ' + new Date().getFullYear() + ' — Made with Python and FastAPI in El Salvador.',
+    footer: 'Python SV &copy; ' + new Date().getFullYear() + ' — Made with Python in El Salvador.',
     footer_cal: 'Calendar',
     footer_proposals: 'Proposals',
     footer_coc: 'Code of Conduct',

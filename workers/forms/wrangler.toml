@@ -1,0 +1,12 @@
+name = "pythonsv-forms"
+main = "src/index.js"
+compatibility_date = "2026-07-01"
+
+routes = [
+  { pattern = "pythonsv.com/api/*", zone_name = "pythonsv.com" },
+  { pattern = "www.pythonsv.com/api/*", zone_name = "pythonsv.com" },
+]
+
+[vars]
+ALLOWED_ORIGINS = "https://pythonsv.com,https://www.pythonsv.com"
+WHATSAPP_URL = "https://chat.whatsapp.com/Ly7exFkvNe0AJ8dFR2utwp"

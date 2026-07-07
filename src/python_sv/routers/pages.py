@@ -168,10 +168,10 @@ async def code_of_conduct(request: Request) -> Response:
 EVENTS = [
     {
         "title": "Introducción a FastAPI",
-        "month": "JUL",
+        "month": "TBD",
         "year": "2026",
-        "day": 18,
-        "date_display": "Sábado 18 de julio, 2PM–5PM",
+        "day": "",
+        "date_display": "TBD",
         "location": "UEES, San Salvador",
         "topics": ["FastAPI", "APIs", "Python"],
         "description": "Construye tu primera API moderna con FastAPI: rutas, validación con Pydantic, documentación automática y despliegue básico — todo en una sesión.",

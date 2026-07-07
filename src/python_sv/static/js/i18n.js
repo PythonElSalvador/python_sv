@@ -9,7 +9,7 @@
 
     // Homepage hero
     hero_title: 'We\'re building the <strong>Python</strong> community in El Salvador',
-    hero_date: 'Saturday July 18, 2PM–5PM — UEES, San Salvador',
+    hero_date: 'TBD — UEES, San Salvador',
     talk_1_title: 'Introduction to FastAPI',
     talk_1_desc: 'Build your first modern API with FastAPI: routes, Pydantic validation, automatic documentation, and basic deployment — all in one session.',
     talk_1_tag: '2:00 PM · Talk + Demo',

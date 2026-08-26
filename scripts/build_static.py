@@ -73,6 +73,9 @@ def main() -> None:
     pages: list[tuple[Path, str, dict[str, Any]]] = [
         (DIST_DIR / "index.html", "index.html", {}),
         (DIST_DIR / "propuestas" / "index.html", "propuestas.html", {}),
+        (DIST_DIR / "Pycon" / "index.html", "pycon.html", {}),
+        (DIST_DIR / "pycon" / "index.html", "pycon.html", {}),
+        (DIST_DIR / "cfp" / "index.html", "cfp.html", {}),
         (
             DIST_DIR / "calendario" / "index.html",
             "calendario.html",
@@ -103,6 +106,12 @@ def main() -> None:
         "  </url>\n"
         "  <url>\n"
         f"    <loc>{settings.base_url}/calendario</loc>\n"
+        "  </url>\n"
+        "  <url>\n"
+        f"    <loc>{settings.base_url}/pycon</loc>\n"
+        "  </url>\n"
+        "  <url>\n"
+        f"    <loc>{settings.base_url}/cfp</loc>\n"
         "  </url>\n"
         "  <url>\n"
         f"    <loc>{settings.base_url}/codigo-de-conducta</loc>\n"

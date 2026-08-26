@@ -23,6 +23,8 @@ _LLMS_TXT = """\
 
 - [Inicio](https://pythonsv.com/): Página principal con información del próximo evento y formulario para unirse.
 - [Calendario](https://pythonsv.com/calendario): Próximos meetups y eventos.
+- [PyCon El Salvador](https://pythonsv.com/pycon): Conferencia del 11 y 12 de diciembre de 2026.
+- [Call for Proposals](https://pythonsv.com/cfp): Envía una propuesta de charla para PyCon El Salvador 2026.
 - [Código de Conducta](https://pythonsv.com/codigo-de-conducta): Reglas de convivencia de la comunidad.
 
 ## Contacto
@@ -46,6 +48,12 @@ _SITEMAP_XML = (
     "  </url>\n"
     "  <url>\n"
     f"    <loc>{_settings.base_url}/calendario</loc>\n"
+    "  </url>\n"
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/pycon</loc>\n"
+    "  </url>\n"
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/cfp</loc>\n"
     "  </url>\n"
     "  <url>\n"
     f"    <loc>{_settings.base_url}/codigo-de-conducta</loc>\n"
@@ -165,37 +173,18 @@ async def code_of_conduct(request: Request) -> Response:
     return _serve_cached(request, "codigo-de-conducta")
 
 
+@router.get("/Pycon", response_class=HTMLResponse)
+@router.get("/pycon", response_class=HTMLResponse)
+async def pycon(request: Request) -> Response:
+    return _serve_cached(request, "Pycon")
+
+
+@router.get("/cfp", response_class=HTMLResponse)
+async def cfp(request: Request) -> Response:
+    return _serve_cached(request, "cfp")
+
+
 EVENTS = [
-    {
-        "title": "Introducción a FastAPI",
-        "month": "TBD",
-        "year": "2026",
-        "day": "",
-        "date_display": "TBD",
-        "location": "UEES, San Salvador",
-        "topics": ["FastAPI", "APIs", "Python"],
-        "description": "Construye tu primera API moderna con FastAPI: rutas, validación con Pydantic, documentación automática y despliegue básico — todo en una sesión.",
-        "speaker_name": "Emilio Serrano",
-        "speaker_role": "Ingeniero de Software - Junior @ Core",
-        "speaker_photo": "img/emilio-serrano.webp",
-        "image": "img/uees-building-640.webp",
-        # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
-    },
-    {
-        "title": "Procesamiento de datos con Pandas",
-        "month": "AGO",
-        "year": "2026",
-        "day": 22,
-        "date_display": "Sábado 22 de agosto, 2PM–5PM",
-        "location": "TBD",
-        "topics": ["Pandas", "Análisis de datos", "Python"],
-        "description": "Aprende a limpiar, transformar y analizar datos reales con Pandas: DataFrames, groupby, merges y visualización rápida — con demo en vivo.",
-        "speaker_name": "Kevin Turcios",
-        "speaker_role": "CEO & Founder @ Core",
-        "speaker_photo": "img/kevin-turcios.webp",
-        "image": "img/uees-building-640.webp",
-        # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
-    },
     {
         "title": "Web Scraping en Python: Un Arsenal de Herramientas para la Extracción de Datos",
         "month": "SEP",
@@ -210,6 +199,23 @@ EVENTS = [
         "speaker_photo": "img/demetrio-reyes.webp",
         "image": "img/uees-building-640.webp",
         # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
+    },
+    {
+        "title": "PyCon El Salvador 2026",
+        "month": "DIC",
+        "year": "2026",
+        "day": "11–12",
+        "date_display": "Viernes 11 y sábado 12 de diciembre",
+        "location": "San Salvador · sede por anunciar",
+        "topics": ["Python", "Comunidad", "Conferencia"],
+        "description": "Dos días para aprender, crear y conectar con las personas que están construyendo con Python en El Salvador.",
+        "speaker_name": None,
+        "speaker_role": None,
+        "speaker_photo": None,
+        "image": "img/og-pycon-2026.png",
+        "link": "/pycon",
+        "link_text": "Conocer PyCon",
+        "external": False,
     },
 ]
 

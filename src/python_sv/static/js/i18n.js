@@ -9,20 +9,9 @@
 
     // Homepage hero
     hero_title: 'We\'re building the <strong>Python</strong> community in El Salvador',
-    hero_date: 'TBD — UEES, San Salvador',
-    talk_1_title: 'Introduction to FastAPI',
-    talk_1_desc: 'Build your first modern API with FastAPI: routes, Pydantic validation, automatic documentation, and basic deployment — all in one session.',
-    talk_1_tag: '2:00 PM · Talk + Demo',
-
-    // Homepage upcoming events
-    upcoming_label: 'Upcoming',
-    upcoming_title: 'Upcoming events',
-    talk_2_date: 'Saturday August 22, 2PM–5PM — UEES, San Salvador',
-    talk_2_title: 'Data Processing with Pandas',
-    talk_2_desc: 'Learn to clean, transform, and analyze real data with Pandas: DataFrames, groupby, merges, and quick visualization — with a live demo.',
-    talk_3_date: 'Saturday September 19, 2PM–5PM — UEES, San Salvador',
-    talk_3_title: 'Web Scraping in Python: A Toolkit for Data Extraction',
-    talk_3_desc: 'Master the main Python web scraping tools: requests, BeautifulSoup, Scrapy, and Playwright — with hands-on examples for extracting data from real sites.',
+    hero_date: 'Saturday September 19, 2PM–5PM — UEES, San Salvador',
+    talk_1_title: 'Web Scraping in Python: A Toolkit for Data Extraction',
+    talk_1_desc: 'Master the main Python web scraping tools: requests, BeautifulSoup, Scrapy, and Playwright — with hands-on examples for extracting data from real sites.',
 
     // Homepage context
     ctx_label: 'Context',

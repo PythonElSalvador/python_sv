@@ -223,6 +223,8 @@ def _prerender_pages(app: FastAPI) -> None:
         ("index", "index.html", {}),
         ("propuestas", "propuestas.html", {}),
         ("calendario", "calendario.html", {"events": EVENTS}),
+        ("Pycon", "pycon.html", {}),
+        ("cfp", "cfp.html", {}),
         ("codigo-de-conducta", "codigo-de-conducta.html", {}),
     ]
     for slug, template_name, extra_ctx in page_defs:

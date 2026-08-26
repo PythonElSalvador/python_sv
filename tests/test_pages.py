@@ -85,7 +85,26 @@ async def test_calendar_renders(client):
     resp = await client.get("/calendario")
     assert resp.status_code == 200
     assert "TBD" in resp.text
+    assert "PyCon El Salvador 2026" in resp.text
+    assert 'href="/pycon"' in resp.text
+    assert "Viernes 11 y sábado 12 de diciembre" in resp.text
     assert "Procesamiento de imágenes con OpenCV" not in resp.text
+
+
+@pytest.mark.anyio
+async def test_pycon_renders(client):
+    for path in ("/Pycon", "/pycon"):
+        resp = await client.get(path)
+        assert resp.status_code == 200
+        assert "11 y 12 de diciembre de 2026" in resp.text
+
+
+@pytest.mark.anyio
+async def test_cfp_renders(client):
+    resp = await client.get("/cfp")
+    assert resp.status_code == 200
+    assert "Call for Proposals" in resp.text
+    assert 'hx-post="/api/proposal"' in resp.text
 
 
 @pytest.mark.anyio

@@ -67,7 +67,7 @@
           </div>
           {% endif %}
           {% if event.link %}
-          <a href="{{ event.link }}" target="_blank" rel="noopener" class="btn-pysv-gold pysv-event-btn">{{ event.link_text }}</a>
+          <a href="{{ event.link }}"{% if event.get('external', false) %} target="_blank" rel="noopener"{% endif %} class="btn-pysv-gold pysv-event-btn">{{ event.link_text }}</a>
           {% endif %}
         </div>
       </div>

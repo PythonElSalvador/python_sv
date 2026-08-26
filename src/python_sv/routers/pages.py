@@ -24,6 +24,7 @@ _LLMS_TXT = """\
 - [Inicio](https://pythonsv.com/): Página principal con información del próximo evento y formulario para unirse.
 - [Calendario](https://pythonsv.com/calendario): Próximos meetups y eventos.
 - [PyCon El Salvador](https://pythonsv.com/pycon): Conferencia del 11 y 12 de diciembre de 2026.
+- [Call for Proposals](https://pythonsv.com/cfp): Envía una propuesta de charla para PyCon El Salvador 2026.
 - [Código de Conducta](https://pythonsv.com/codigo-de-conducta): Reglas de convivencia de la comunidad.
 
 ## Contacto
@@ -50,6 +51,9 @@ _SITEMAP_XML = (
     "  </url>\n"
     "  <url>\n"
     f"    <loc>{_settings.base_url}/pycon</loc>\n"
+    "  </url>\n"
+    "  <url>\n"
+    f"    <loc>{_settings.base_url}/cfp</loc>\n"
     "  </url>\n"
     "  <url>\n"
     f"    <loc>{_settings.base_url}/codigo-de-conducta</loc>\n"
@@ -175,6 +179,11 @@ async def pycon(request: Request) -> Response:
     return _serve_cached(request, "Pycon")
 
 
+@router.get("/cfp", response_class=HTMLResponse)
+async def cfp(request: Request) -> Response:
+    return _serve_cached(request, "cfp")
+
+
 EVENTS = [
     {
         "title": "Web Scraping en Python: Un Arsenal de Herramientas para la Extracción de Datos",
@@ -190,6 +199,23 @@ EVENTS = [
         "speaker_photo": "img/demetrio-reyes.webp",
         "image": "img/uees-building-640.webp",
         # TODO: agregar "link" y "link_text" cuando el evento se publique en Meetup
+    },
+    {
+        "title": "PyCon El Salvador 2026",
+        "month": "DIC",
+        "year": "2026",
+        "day": "11–12",
+        "date_display": "Viernes 11 y sábado 12 de diciembre",
+        "location": "San Salvador · sede por anunciar",
+        "topics": ["Python", "Comunidad", "Conferencia"],
+        "description": "Dos días para aprender, crear y conectar con las personas que están construyendo con Python en El Salvador.",
+        "speaker_name": None,
+        "speaker_role": None,
+        "speaker_photo": None,
+        "image": "img/og-pycon-2026.png",
+        "link": "/pycon",
+        "link_text": "Conocer PyCon",
+        "external": False,
     },
 ]
 

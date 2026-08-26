@@ -89,6 +89,14 @@ async def test_calendar_renders(client):
 
 
 @pytest.mark.anyio
+async def test_pycon_renders(client):
+    for path in ("/Pycon", "/pycon"):
+        resp = await client.get(path)
+        assert resp.status_code == 200
+        assert "11 y 12 de diciembre de 2026" in resp.text
+
+
+@pytest.mark.anyio
 async def test_non_http_scope_passthrough(app):
     received: dict[str, object] = {}
 

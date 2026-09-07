@@ -84,7 +84,8 @@ async def test_code_of_conduct_renders(client):
 async def test_calendar_renders(client):
     resp = await client.get("/calendario")
     assert resp.status_code == 200
-    assert "TBD" in resp.text
+    assert "Sábado 19 de septiembre, 2PM–3PM" in resp.text
+    assert "YouTube" in resp.text
     assert "PyCon El Salvador 2026" in resp.text
     assert 'href="/pycon"' in resp.text
     assert "Viernes 11 y sábado 12 de diciembre" in resp.text

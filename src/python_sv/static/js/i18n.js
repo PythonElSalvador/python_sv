@@ -9,7 +9,7 @@
 
     // Homepage hero
     hero_title: 'We\'re building the <strong>Python</strong> community in El Salvador',
-    hero_date: 'Saturday September 19, 2PM–5PM — UEES, San Salvador',
+    hero_date: 'Saturday September 19, 2PM–3PM — YouTube',
     talk_1_title: 'Web Scraping in Python: A Toolkit for Data Extraction',
     talk_1_desc: 'Master the main Python web scraping tools: requests, BeautifulSoup, Scrapy, and Playwright — with hands-on examples for extracting data from real sites.',
 
